@@ -54,7 +54,7 @@ class UserController extends Controller
         $user->image = basename($image_path);
         $user->update();
 
-        return redirect()->route('Profile.profile');
+        return redirect()->route('Profile.account');
     }
 
     // ログイン画面
