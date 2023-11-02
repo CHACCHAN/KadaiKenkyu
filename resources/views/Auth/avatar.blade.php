@@ -2,20 +2,9 @@
 @section('title', 'アバター登録')
 @section('CSS')
 <style>
-#AccountForm {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 .cropper-area img {
   display: block;
   max-width: 100%;
-}
-
-#Design {
-    box-shadow: 0 0 20px rgb(98, 0, 255);
 }
 </style>
 @endsection

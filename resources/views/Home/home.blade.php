@@ -13,60 +13,61 @@
     <div class="mt-3">
         <div class="row">
             @php
-                // カードタイトル
-                $CardTitle = array(
-                    1 => 'CHaserOnline',
-                    2 => '三工技チャット',
-                    3 => 'ローカルメモ',
-                    4 => 'カレンダー',
+                // カードコンテンツ
+                $CardContents = array(
+                    array(
+                        'Card_Title'  => 'CHaserOnline',
+                        'Card_Body'   => 'CHaserOnlineをすべてここに',
+                        'Card_Date'   => '最終更新日: 2023年11月01日',
+                        'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                        'Card_Link'   => route('Home.chaser'),
+                    ),
+                    array(
+                        'Card_Title'  => '三工技チャット',
+                        'Card_Body'   => 'わからないことを共有しよう!',
+                        'Card_Date'   => '最終更新日: 2023年11月01日',
+                        'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                        'Card_Link'   => '',
+                    ),
+                    array(
+                        'Card_Title'  => 'ローカルメモ',
+                        'Card_Body'   => 'ここだけをメモしよう!',
+                        'Card_Date'   => '最終更新日: 2023年11月01日',
+                        'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                        'Card_Link'   => route('Home.localmemo'),
+                    ), 
+                    array(
+                        'Card_Title'  => 'カレンダー',
+                        'Card_Body'   => 'Googleカレンダーとも連携!',
+                        'Card_Date'   => '最終更新日: 2023年11月01日',
+                        'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                        'Card_Link'   => '',
+                    ), 
                 );
-                // カード説明
-                $CardBody = array(
-                    1 => 'CHaserOnlineをすべてここに',
-                    2 => 'わからないことを共有しよう!',
-                    3 => 'ここだけをメモしよう!',
-                    4 => 'Googleカレンダーとも連携!',
-                );
-                // カード更新日
-                $CardLatest = array(
-                    1 => '最終更新日: 2023年11月01日',
-                    2 => '最終更新日: 2023年11月01日',
-                    3 => '最終更新日: 2023年11月01日',
-                    4 => '最終更新日: 2023年11月01日',
-                );
-                // カード写真
-                $CardImage = array(
-                    1 => asset('Home/Images/CHaserOnline.jpg'),
-                    2 => asset('Home/Images/CHaserOnline.jpg'),
-                    3 => asset('Home/Images/CHaserOnline.jpg'),
-                    4 => asset('Home/Images/CHaserOnline.jpg'),
-                );
-                // カード最大数
-                $MAX = 4;
             @endphp
             {{-- カード --}}
-            @for($i=1;$i<=$MAX;$i++)
+            @foreach($CardContents as $CardContent)
                 <div class="col-12 col-md-3">
-                    <a class="text-decoration-none" href="#">
+                    <a class="text-decoration-none" href="{{ $CardContent['Card_Link'] }}">
                         <div id="CardHover" class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <div class="border-end">
-                                        <img src="{{ $CardImage[$i] }}" class="img-fluid rounded-start" alt="...">
+                                        <img src="{{ $CardContent['Card_Image'] }}" class="img-fluid rounded-start" alt="...">
                                     </div>                           
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h4 class="card-title">{{ $CardTitle[$i] }}</h4>
-                                        <p class="card-text">{{ $CardBody[$i] }}</p>
-                                        <p class="card-text"><small class="text-body-secondary">{{ $CardLatest[$i] }}</small></p>
+                                        <h4 class="card-title">{{ $CardContent['Card_Title'] }}</h4>
+                                        <p class="card-text">{{ $CardContent['Card_Body'] }}</p>
+                                        <p class="card-text"><small class="text-body-secondary">{{ $CardContent['Card_Date'] }}</small></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 </div>

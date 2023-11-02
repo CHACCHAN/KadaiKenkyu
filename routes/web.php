@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 
@@ -22,18 +22,27 @@ use App\Http\Controllers\HomeController;
 
 // Auth
 // Auth->新規登録
-Route::get('/register', [UserController::class, 'showRegister'])->name('Auth.register');
-Route::post('/register', [UserController::class, 'register']);
-// Auth->アバター登録
+Route::get('/register', [AuthController::class, 'showRegister'])->name('Auth.register');
+Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth')->group(function (){
-    Route::get('/register/avatar', [UserController::class, 'showAvatar'])->name('Auth.avatar');
-    Route::post('/register/avatar', [UserCOntroller::class, 'avatar']);
+    // Auth->アバター登録
+    Route::get('/register/avatar', [AuthController::class, 'showAvatar'])->name('Auth.avatar');
+    Route::post('/register/avatar', [AuthCOntroller::class, 'avatar']);
+    // Auth->メールアドレス変更
+    Route::get('/register/email', [AuthController::class, 'showEmail'])->name('Auth.email');
+    Route::post('/register/email', [AuthController::class, 'email']);
+    // Auth->CHaserOnline変更
+    Route::get('/register/chaser', [AuthController::class, 'showChaser'])->name('Auth.chaser');
+    Route::post('/register/chaser', [AuthController::class, 'chaser']);
+    // Auth->学科番号変更
+    Route::get('/register/class', [AuthController::class, 'showClass'])->name('Auth.class');
+    Route::post('/register/class', [AuthController::class, 'class']);
 });
 // Auth->ログイン
-Route::get('/login', [UserController::class, 'showLogin'])->name('Auth.login');
-Route::post('/login', [UserController::class, 'login']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('Auth.login');
+Route::post('/login', [AuthController::class, 'login']);
 // Auth->ログアウト
-Route::post('logout', [UserController::class, 'logout'])->name('Auth.logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('Auth.logout');
 
 // Profile
 Route::middleware('auth')->group(function (){
@@ -46,6 +55,7 @@ Route::middleware('auth')->group(function (){
 // Home
 // Home->ホーム
 Route::get('/', [HomeController::class, 'showHome'])->name('Home.home');
-
-// CHaserOnline
-// CHaserOnline->ホーム
+// Home->CHaserOnline
+Route::get('/chaseronline', [HomeController::class, 'showCHaser'])->name('Home.chaser');
+// Home->ローカルメモ
+Route::get('/localmemo', [HomeController::class, 'showLocalMemo'])->name('Home.localmemo');

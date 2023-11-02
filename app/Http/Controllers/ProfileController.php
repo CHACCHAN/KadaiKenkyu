@@ -15,6 +15,6 @@ class ProfileController extends Controller
     // セキュリティ画面
     public function showSecure()
     {
-
+        return view('Profile.secure');
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     // 新規登録画面
     public function showRegister()
@@ -30,7 +30,7 @@ class UserController extends Controller
             'password'  =>  Hash::make($request['password']),
             'class_id'  =>  $request['class_id'],
             'chaser_id' =>  $request['chaser_id'],
-            'chaser_password' => Hash::make($request['chaser_password']),
+            'chaser_password' => $request['chaser_password'],
         ]);
 
         Auth::login($user);
@@ -92,5 +92,57 @@ class UserController extends Controller
         Auth::logout();
         
         return back();
+    }
+
+    // メールアドレス変更画面
+    public function showEmail()
+    {
+        return view('Auth.email');
+    }
+
+    // メールアドレス変更処理
+    public function email(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $user->update([
+            'email' => $request['email'],
+        ]);
+
+        return redirect()->route('Profile.account')->with('message', 'メールアドレスを更新しました');;
+    }
+
+    // CHaserOnline変更画面
+    public function showChaser()
+    {
+        return view('Auth.chaser');
+    }
+
+    // CHaserOnline変更処理
+    public function chaser(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $user->update([
+            'chaser_id' => $request['chaser_id'],
+            'chaser_password' => $request['chaser_password'],
+        ]);
+
+        return redirect()->route('Profile.account')->with('message', 'CHaserOnlineを更新しました');;
+    }
+
+    // 学科番号変更画面
+    public function showClass()
+    {
+        return view('Auth.class');
+    }
+
+    // 学科番号変更処理
+    public function class(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $user->update([
+            'class_id' => $request['class_id'],
+        ]);
+
+        return redirect()->route('Profile.account')->with('message', '学科番号を更新しました');
     }
 }

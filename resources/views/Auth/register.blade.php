@@ -1,20 +1,5 @@
 @extends('Layouts.Account')
 @section('title', '新規登録')
-@section('CSS')
-<style>
-#AccountForm {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#Design {
-    box-shadow: 0 0 20px rgb(98, 0, 255);
-}
-</style>
-@endsection
 @section('content')
 <div id="AccountForm">
     <div id="Design" class="card overflow-auto p-3 w-50 h-50">
@@ -53,7 +38,7 @@
                         <div id="EmailInput" class="form-text text-danger" id="basic-addon4">{{ session('message') }}</div>
                     @endif
                 </div>
-                {{-- クラスID --}}
+                {{-- 学科番号 --}}
                 <div class="mb-3">
                     <label for="RegisterPasswordFormControlInput1" class="form-label">
                         <div class="d-flex">

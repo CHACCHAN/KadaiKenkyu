@@ -7,6 +7,8 @@
     <title>@yield('title')</title>
     {{-- Vite --}}
     @vite('resources/sass/app.scss')
+    {{-- JS --}}
+    <script src="https://riversun.github.io/jsframe/jsframe.js"></script>
     {{-- CSS --}}
     <style>
         #Hover:hover {
