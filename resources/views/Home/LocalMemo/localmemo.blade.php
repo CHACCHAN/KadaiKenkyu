@@ -2,6 +2,6 @@
 @section('title', 'ローカルメモ')
 @section('content')
 <div class="container-fluid">
-
+s
 </div>
 @endsection
