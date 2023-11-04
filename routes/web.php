@@ -59,3 +59,5 @@ Route::get('/', [HomeController::class, 'showHome'])->name('Home.home');
 Route::get('/chaseronline', [HomeController::class, 'showCHaser'])->name('Home.chaser');
 // Home->ローカルメモ
 Route::get('/localmemo', [HomeController::class, 'showLocalMemo'])->name('Home.localmemo');
+Route::post('/localmemo', [HomeController::class, 'localmemo']);
+Route::post('/localmemo/update', [HomeController::class, 'updateLocalMemo'])->name('Home.localmemo.update');
