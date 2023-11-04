@@ -16,9 +16,9 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/laravel', function () {
+    return view('welcome');
+});
 
 // Auth
 // Auth->新規登録
@@ -60,4 +60,9 @@ Route::get('/chaseronline', [HomeController::class, 'showCHaser'])->name('Home.c
 // Home->ローカルメモ
 Route::get('/localmemo', [HomeController::class, 'showLocalMemo'])->name('Home.localmemo');
 Route::post('/localmemo', [HomeController::class, 'localmemo']);
+// Home->ローカルメモ->更新
 Route::post('/localmemo/update', [HomeController::class, 'updateLocalMemo'])->name('Home.localmemo.update');
+// Home->ローカルメモ->削除
+Route::get('/localmemo/delete/id={delete_id}', [HomeController::class, 'deleteLocalMemo'])->name('Home.localmemo.delete');
+// Home->ローカルメモ->削除->画像のみ
+Route::get('/localmemo/only_image_delete/id={delete_id}', [HomeController::class, 'deleteLocalMemoImage'])->name('Home.localmemo.delete.image');

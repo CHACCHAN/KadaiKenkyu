@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\LocalMemo;
 
@@ -27,7 +28,7 @@ class HomeController extends Controller
     {  
         if(Auth::check() == true)
         {
-            $localmemos = LocalMemo::where('user_id', '=', Auth::id())->get();
+            $localmemos = LocalMemo::where('user_id', '=', Auth::id())->latest()->get();
             return view('Home.LocalMemo.localmemo',[
                 'localmemos' => $localmemos,
             ]);
@@ -60,9 +61,53 @@ class HomeController extends Controller
         return redirect()->route('Home.localmemo');
     }
 
-    // ローカルメモ更新処理
+    // ローカルメモ更新処理 : Ajax
     public function updateLocalMemo(Request $request)
     {
-        
+        $localmemo = LocalMemo::find($request->id);
+        if($request->image)
+        {
+            $image_path = $request->file('image')->store('public/localmemo/');
+            if($localmemo->image)
+            {
+                Storage::disk('public')->delete('localmemo/'. $localmemo->image);
+            }
+            $localmemo->image = basename($image_path);
+            $localmemo->update();
+
+            return redirect()->route('Home.localmemo');
+        }
+
+        $localmemo->update([
+            'title'   =>  $request->title,
+            'content' =>  $request->content,
+        ]);
+
+        return response()->json([
+            'title'   =>  $localmemo->title,
+            'content' =>  $localmemo->content,
+        ]);
+    }
+
+    // ローカルメモ削除処理
+    public function deleteLocalMemo($delete_id)
+    {
+        $localmemo = LocalMemo::find($delete_id);
+        Storage::disk('public')->delete('localmemo/'. $localmemo->image);
+        $localmemo->delete();
+
+        return redirect()->route('Home.localmemo');
+    }
+
+    // ローカルメモ画像のみ削除処理
+    public function deleteLocalMemoImage($delete_id)
+    {
+        $localmemo = LocalMemo::find($delete_id);
+        Storage::disk('public')->delete('localmemo/'. $localmemo->image);
+        $localmemo->update([
+            'image' => null,
+        ]);
+
+        return redirect()->route('Home.localmemo');
     }
 }
