@@ -11,18 +11,33 @@ use App\Models\LocalMemo;
 
 class HomeController extends Controller
 {
+    /************************************************/
+    /*                                              */
+    /*                  ホーム                      */
+    /*                                              */
+    /************************************************/
     // ホーム画面
     public function showHome()
     {
         return view('Home.home');
     }
 
+    /************************************************/
+    /*                                              */
+    /*               CHaserOnline                   */
+    /*                                              */
+    /************************************************/
     // CHaserOnline画面
     public function showCHaser()
     {
         return view('Home.CHaserOnline.chaser');
     }
 
+    /************************************************/
+    /*                                              */
+    /*                ローカルメモ                   */
+    /*                                              */
+    /************************************************/
     // ローカルメモ画面
     public function showLocalMemo()
     {  
@@ -84,8 +99,9 @@ class HomeController extends Controller
         ]);
 
         return response()->json([
-            'title'   =>  $localmemo->title,
-            'content' =>  $localmemo->content,
+            'title'      =>  $localmemo->title,
+            'content'    =>  $localmemo->content,
+            'updated_at' =>  $localmemo->updated_at->format('Y-m-d H:i:s'),
         ]);
     }
 
@@ -109,5 +125,15 @@ class HomeController extends Controller
         ]);
 
         return redirect()->route('Home.localmemo');
+    }
+
+    /************************************************/
+    /*                                              */
+    /*                三工技チャット                 */
+    /*                                              */
+    /************************************************/
+    public function showSankougiChat()
+    {
+        return view('Home.SankougiChat.sankougichat');
     }
 }

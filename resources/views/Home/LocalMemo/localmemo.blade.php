@@ -64,7 +64,7 @@
                 <div class="card mb-3">
                     @if($localmemo->image)
                         <div class="card-header p-0" data-bs-toggle="modal" data-bs-target="#Count-@php echo $Count @endphp">
-                            <img src="{{ asset('storage/localmemo/'. $localmemo->image) }}" alt="" width="100%">
+                            <img id="HoverHeader" src="{{ asset('storage/localmemo/'. $localmemo->image) }}" alt="" width="100%">
                         </div>
                     @endif
                     <div class="card-body" data-bs-toggle="modal" data-bs-target="#Count-@php echo $Count @endphp">
@@ -115,16 +115,20 @@
                     </div>
                 </div>
                 {{-- カードモーダル --}}
-                <div class="modal fade" id="Count-@php echo $Count @endphp" tabindex="-1" aria-labelledby="Count-@php echo $Count @endphp-Label" aria-hidden="true">
+                <div class="modal modal-xl fade" id="Count-@php echo $Count @endphp" tabindex="-1" aria-labelledby="Count-@php echo $Count @endphp-Label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             @if($localmemo->image)
                                 <div class="modal-header p-0">
                                     {{-- 画像 --}}
-                                    <img src="{{ asset('storage/localmemo/'. $localmemo->image) }}" class="position-relative" alt="" width="100%">
+                                    <img src="{{ asset('storage/localmemo/'. $localmemo->image) }}" alt="" width="100%">
+                                </div>
+                            @endif
+                            <div class="modal-body">
+                                @if($localmemo->image)
                                     {{-- 画像削除ボタン --}}
                                     <div id="imageDelete" class="dropdown">
-                                        <div id="imageDelete" class="position-absolute text-light text-center btn btn-danger p-0 px-1 pb-1" style="top: -100px;right: 10px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div id="imageDelete" class="position-absolute text-light text-center btn btn-danger p-0 px-1 pb-1" style="top:-40px;right: 0px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                                 <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                             </svg>
@@ -133,20 +137,21 @@
                                             <li><a class="dropdown-item" href="{{ route('Home.localmemo.delete.image', $localmemo->id) }}">画像を削除</a></li>
                                         </ul>
                                     </div>
-                                </div>
-                            @endif
-                            <div class="modal-body">
+                                @endif
                                 <div class="card-title">
                                     <div class="mb-3">
-                                        <textarea type="text" id="Title-Input-@php echo $Count @endphp" class="form-control border-0 m-0 p-0 py-2 px-2" placeholder="タイトルを入力" rows=1 style="resize: none;" name="title" required>{{$localmemo->title }}</textarea>
+                                        {{-- タイトル --}}
+                                        <textarea type="text" id="Title-Input-@php echo $Count @endphp" class="form-control border-0 m-0 p-0 py-2 px-2" placeholder="タイトルを入力" rows=1 style="resize: none;" name="title" maxlength="150" required>{{$localmemo->title }}</textarea>
                                     </div>
                                 </div>
                                 <div class="card-text">
                                     <div class="mb-3">
-                                        <textarea type="text" id="Content-Input-@php echo $Count @endphp" class="form-control border-0 m-0 p-0 py-2 px-2" placeholder="内容を入力" rows=15 style="resize: none;" name="content" required>{{ $localmemo->content }}</textarea>
+                                        {{-- コンテンツ --}}
+                                        <textarea type="text" id="Content-Input-@php echo $Count @endphp" class="form-control border-0 m-0 p-0 py-2 px-2" placeholder="内容を入力" rows=15 style="resize: none;" name="content" maxlength="19000" required>{{ $localmemo->content }}</textarea>
                                     </div>
                                 </div>
                                 <div class="text-end">
+                                    <p id="Card-Updated-@php echo $Count; @endphp" class="text-start text-secondary">最終更新日: {{ $localmemo->updated_at}}</p>
                                     <div class="row">
                                         {{-- 画像を差し込み --}}
                                         <div class="col-9">
@@ -157,7 +162,7 @@
                                             </form>
                                         </div>
                                         <div class="col-3">
-                                            <div class="text-center d-flex">
+                                            <div class="justify-content-center d-flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise mt-2" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                                                     <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
@@ -182,16 +187,20 @@
                                 const contentInput = document.querySelector('#Content-Input-@php echo $Count; @endphp');
                                 const cardTitle = document.querySelector('#Card-Title-@php echo $Count; @endphp');
                                 const cardContent = document.querySelector('#Card-Content-@php echo $Count; @endphp');
+                                const cardUpdated = document.querySelector('#Card-Updated-@php echo $Count; @endphp');
 
-                                titleInput.addEventListener("input", function () {
+                                titleInput.addEventListener("input", function () 
+                                {
                                     sendAjaxRequest();
                                 });
 
-                                contentInput.addEventListener("input", function () {
+                                contentInput.addEventListener("input", function () 
+                                {
                                     sendAjaxRequest();
                                 });
 
-                                function sendAjaxRequest() {
+                                function sendAjaxRequest() 
+                                {
                                     const id = {{ $localmemo->id }};
                                     const title = titleInput.value;
                                     const content = contentInput.value;
@@ -219,6 +228,7 @@
                                         console.log(data);
                                         cardTitle.innerHTML = escapeHTML(data.title);
                                         cardContent.innerHTML = nl2br(escapeHTML(data.content));
+                                        cardUpdated.innerHTML = '最終更新日: ' + data.updated_at;
                                     })
                                     .catch((error) => {
                                         console.error("エラーが発生しました", error);
@@ -251,15 +261,29 @@
     $(document).ready(function() {
         // カードをホバーしたときの処理
         $('.card').hover(function() {
-            $(this).find('#Card-Header').css('display', 'block');
+            $(this).find('#Card-Header').fadeIn(300);
         }, function() {
-            $(this).find('#Card-Header').css('display', 'none');
+            $(this).find('#Card-Header').fadeOut(100);
         });
 
-        $('.modal-header').hover(function() {
-            $(this).find('#imageDelete').css('display', 'block');
-        }, function() {
-            $(this).find('#imageDelete').css('display', 'none');
+        var maxCharCount = parseInt($("#myTextarea").attr("maxlength"));
+        var textarea = $("#myTextarea");
+        var charCount = $("#charCount");
+        var remainingChars = $("#remaining");
+
+        // 初期表示
+        remainingChars.text(maxCharCount - textarea.val().length);
+
+        // テキストエリアに入力があるたびに残り文字数を更新
+        textarea.on("input", function() {
+            var currentCount = maxCharCount - textarea.val().length;
+            remainingChars.text(currentCount);
+
+            // 文字数が最大文字数を超えた場合にテキストを切り詰める
+            if (currentCount < 0) {
+                textarea.val(textarea.val().substring(0, maxCharCount));
+                remainingChars.text(0);
+            }
         });
     });
 </script>

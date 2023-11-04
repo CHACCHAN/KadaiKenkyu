@@ -27,7 +27,7 @@
                         'Card_Body'   => 'わからないことを共有しよう!',
                         'Card_Date'   => '最終更新日: 2023年11月01日',
                         'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
-                        'Card_Link'   => '',
+                        'Card_Link'   => route('Home.sankougichat'),
                     ),
                     array(
                         'Card_Title'  => 'ローカルメモ',
@@ -49,7 +49,7 @@
             @foreach($CardContents as $CardContent)
                 <div class="col-12 col-md-3">
                     <a class="text-decoration-none" href="{{ $CardContent['Card_Link'] }}">
-                        <div id="CardHover" class="card mb-3" style="max-width: 540px;">
+                        <div id="CardHover" class="card mb-3 w-100">
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <div class="border-end">
