@@ -35,7 +35,7 @@
                                                     </div>
                                                     <div class="card-body p-0">
                                                         <div class="input-group input-group-lg">
-                                                            <input type="text" id="nameInput" class="form-control border-0" name="name" required>
+                                                            <input type="text" id="nameInput" class="form-control border-0" name="name" maxlength=20 required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -48,7 +48,7 @@
                                                     </div>
                                                     <div class="card-body p-0">
                                                         <div class="input-group input-group-lg">
-                                                            <textarea type="text" id="contentInput" class="form-control border-0" name="content" required></textarea>
+                                                            <textarea type="text" id="contentInput" class="form-control border-0" name="content" rows=8 style="resize: none;" maxlength=160 required></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
