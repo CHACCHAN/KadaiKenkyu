@@ -105,3 +105,8 @@ Route::get('/localmemo/only_image_delete/id={delete_id}', [HomeController::class
 // Home->三工技チャット
 Route::get('/sankougichat', [HomeController::class, 'showSankougiChat'])->name('Home.sankougichat');
 Route::post('/sankougichat', [HomeController::class, 'sankougichat']);
+// Home->三工技チャット->プロフィール登録
+Route::get('/sankougichat/adduser', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile.adduser');
+Route::post('/sankougichat/adduser', [HomeController::class, 'sankougichatprofile']);
+// Home->三工技チャット->検索IDの生成
+Route::get('/sankougichat/userid', [HomeController::class, 'createSankougiChatProfileID'])->name('Home.sankougichat.profile.userid');

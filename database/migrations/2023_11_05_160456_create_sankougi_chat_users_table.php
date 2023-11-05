@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('sankougi_chat_users', function (Blueprint $table) {
             $table->bigIncrements('chat_user_id')->uniqid();
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->comment('Auth側のID');
+            $table->text('name')->comment('ニックネーム');
+            $table->text('name_id')->comment('検索ID');
             $table->text('content')->nullable()->comment('自己紹介');
             $table->bigInteger('follow_count')->nullable()->comment('フォロー数');
             $table->bigInteger('follower_count')->nullable()->comment('フォロワー数');

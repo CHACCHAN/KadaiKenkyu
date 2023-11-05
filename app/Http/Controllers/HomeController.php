@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\LocalMemo;
 use App\Models\SankougiChat;
 use App\Models\SankougiChatUser;
@@ -151,5 +152,27 @@ class HomeController extends Controller
     public function sankougichat(Request $request)
     {
         
+    }
+
+    // プロフィール登録画面
+    public function showSankougiChatProfile()
+    {
+        return view('Home.SankougiChat.sankougichat_user');
+    }
+
+    // プロフィール登録処理
+    public function sankougichatprofile(Request $request)
+    {
+
+    }
+
+    // 検索IDの生成処理
+    public function createSankougiChatProfileID()
+    {
+        do {
+            $name_id = Str::random(16); // 16文字のランダムな16進数のIDを生成
+        } while (SankougiChatUser::where('name_id', '=', $name_id)->exists());
+
+        return response()->json(['name_id' => $name_id]);
     }
 }
