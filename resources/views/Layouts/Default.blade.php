@@ -18,7 +18,7 @@
     </style>
     @yield('CSS')
 </head>
-<body>
+<body id="body" style="overflow-x: hidden;">
 {{-- Header --}}
 <header>
 <div class="container-fluid p-0 border-bottom">

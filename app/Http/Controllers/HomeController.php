@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
 use App\Models\LocalMemo;
+use App\Models\SankougiChat;
+use App\Models\SankougiChatUser;
+use App\Models\SankougiChatComment;
+use App\Models\SankougiChatFollow;
 
 
 class HomeController extends Controller
@@ -132,8 +135,21 @@ class HomeController extends Controller
     /*                三工技チャット                 */
     /*                                              */
     /************************************************/
+    // 投稿ホーム画面
     public function showSankougiChat()
     {
-        return view('Home.SankougiChat.sankougichat');
+        $sankougi_chats = SankougiChat::all();
+        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first();
+
+        return view('Home.SankougiChat.sankougichat', [
+            'sankougi_chats'     =>  $sankougi_chats,
+            'sankougi_chat_user' =>  $sankougi_chat_user,
+        ]);
+    }
+
+    // 投稿処理
+    public function sankougichat(Request $request)
+    {
+        
     }
 }

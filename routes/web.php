@@ -104,3 +104,4 @@ Route::get('/localmemo/only_image_delete/id={delete_id}', [HomeController::class
 /************************************************/
 // Home->三工技チャット
 Route::get('/sankougichat', [HomeController::class, 'showSankougiChat'])->name('Home.sankougichat');
+Route::post('/sankougichat', [HomeController::class, 'sankougichat']);
