@@ -8,8 +8,8 @@
     <title>@yield('title')</title>
     {{-- Vite --}}
     @vite('resources/sass/app.scss')
-    {{-- JS --}}
-    <script src="https://riversun.github.io/jsframe/jsframe.js"></script>
+    {{-- Cropper --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css">
     {{-- CSS --}}
     <style>
         #Hover:hover {
@@ -111,6 +111,8 @@
 
 {{-- Vite --}}
 @vite('resources/js/app.js')
+{{-- Cropper --}}
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
 @yield('jQuery')
 </body>
 </html>

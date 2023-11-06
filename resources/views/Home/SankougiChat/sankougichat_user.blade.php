@@ -57,15 +57,51 @@
                                             <p class="text-secondary m-0">ヘッダーを登録</p>
                                             {{-- ヘッダー --}}
                                             <div class="mb-3">
-                                                <div class="input-group">
-                                                    <input type="file" id="image_headerInput" class="form-control" name="image_header" required>
+                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
+                                                {{-- ヘッダーモーダル　トリミング用 --}}
+                                                <div class="modal fade" id="HeaderBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            {{-- トリミング画像 --}}
+                                                            <div class="card-header">
+                                                                <div class="cropper-area">
+                                                                    <img src="" id="cropper-image" width="100%">
+                                                                </div>
+                                                            </div>
+                                                            {{-- インプット --}}
+                                                            <div class="modal-body">
+                                                                <input type="file" id="image_headerInput" class="form-control" name="image_header">
+                                                            </div>
+                                                            <div class="modal-footer border-0">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                                                <button type="button" class="btn btn-primary">保存</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <p class="text-secondary m-0">アバターを登録</p>
                                             {{-- アバター --}}
                                             <div class="mb-3">
-                                                <div class="input-group">
-                                                    <input type="file" id="image_avatarInput" class="form-control" name="image_avatar" required>
+                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
+                                                {{-- アバターモーダル　トリミング用 --}}
+                                                <div class="modal fade" id="AvatarBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            {{-- トリミング画像 --}}
+                                                            <div class="card-header">
+                                                                <div id="Avatar-Image"></div>
+                                                            </div>
+                                                            {{-- インプット --}}
+                                                            <div class="modal-body">
+                                                                <input type="file" id="image_avatarInput" class="form-control" name="image_avatar">
+                                                            </div>
+                                                            <div class="modal-footer border-0">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                                                <button type="button" class="btn btn-primary">保存</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="text-end">
@@ -116,6 +152,10 @@
 <script type="module">
     // 検索IDを取得して非同期で反映
     $(document).ready(function(){
+        var target = document.getElementById('cropper-image');
+        var cropper = new Cropper(target, {
+            aspectRatio: 16 / 3, // アスペクト比
+        });
         $.ajax({
             type: "GET",
             url: "{{ route('Home.sankougichat.profile.userid') }}",
@@ -127,6 +167,21 @@
         .fail((error) => {
             console.log(error.statusText);
         });
+    });
+    // ヘッダー画像トリミング用
+    $('image_headerInput').on('change', function(e) {
+        var selectedFile = this.files[0];
+
+        if (selectedFile) {
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                var fileData = event.target.result;
+                cropper.replace(fileData);
+                $('#cropper-image').attr('src', fileData);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
     });
     // 名前の入力を非同期で反映
     $('#nameInput').on('input', function(){
