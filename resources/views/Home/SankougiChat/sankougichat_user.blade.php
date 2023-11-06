@@ -65,7 +65,7 @@
                                                             {{-- トリミング画像 --}}
                                                             <div class="card-header">
                                                                 <div class="cropper-area">
-                                                                    <img src="" id="cropper-image" width="100%">
+                                                                    <img src="" id="imageHeader" width="100%">
                                                                 </div>
                                                             </div>
                                                             {{-- インプット --}}
@@ -150,12 +150,14 @@
 @endsection
 @section('jQuery')
 <script type="module">
-    // 検索IDを取得して非同期で反映
+    
     $(document).ready(function(){
-        var target = document.getElementById('cropper-image');
+        // アバターのトリミング
+        var target = document.getElementById('imageHeader');
         var cropper = new Cropper(target, {
             aspectRatio: 16 / 3, // アスペクト比
         });
+        // 検索IDを取得して非同期で反映
         $.ajax({
             type: "GET",
             url: "{{ route('Home.sankougichat.profile.userid') }}",
@@ -178,7 +180,7 @@
             reader.onload = function(event) {
                 var fileData = event.target.result;
                 cropper.replace(fileData);
-                $('#cropper-image').attr('src', fileData);
+                $('#imageHeader').attr('src', fileData);
             };
             reader.readAsDataURL(selectedFile);
         }
