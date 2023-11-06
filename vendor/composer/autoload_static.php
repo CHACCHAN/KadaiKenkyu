@@ -9,26 +9,28 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
-        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
-        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
+        '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
+        'ebf8799635f67b5d7248946fe2154f4a' => __DIR__ . '/..' . '/ringcentral/psr7/src/functions_include.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
         '47e1160838b5e5a10346ac4084b58c23' => __DIR__ . '/..' . '/laravel/prompts/src/helpers.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -86,6 +88,7 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
             'Symfony\\Component\\ErrorHandler\\' => 31,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
+            'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Spatie\\LaravelIgnition\\' => 23,
             'Spatie\\Ignition\\' => 16,
             'Spatie\\FlareClient\\' => 19,
@@ -93,9 +96,11 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         ),
         'R' => 
         array (
+            'RingCentral\\Psr7\\' => 17,
             'React\\Stream\\' => 13,
             'React\\Socket\\' => 13,
             'React\\Promise\\' => 14,
+            'React\\Http\\' => 11,
             'React\\EventLoop\\' => 16,
             'React\\Dns\\' => 10,
             'React\\Cache\\' => 12,
@@ -106,6 +111,7 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         ),
         'P' => 
         array (
+            'Pusher\\' => 7,
             'Psy\\' => 4,
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
@@ -157,7 +163,9 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'F' => 
         array (
             'Fruitcake\\Cors\\' => 15,
+            'Fig\\Http\\Message\\' => 17,
             'Faker\\' => 6,
+            'Facade\\IgnitionContracts\\' => 25,
         ),
         'E' => 
         array (
@@ -182,6 +190,7 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'B' => 
         array (
             'Brick\\Math\\' => 11,
+            'BeyondCode\\LaravelWebSockets\\' => 29,
         ),
         'A' => 
         array (
@@ -326,6 +335,10 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'Symfony\\Bridge\\PsrHttpMessage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/psr-http-message-bridge',
+        ),
         'Spatie\\LaravelIgnition\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
@@ -342,6 +355,10 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         array (
             0 => __DIR__ . '/..' . '/spatie/backtrace/src',
         ),
+        'RingCentral\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ringcentral/psr7/src',
+        ),
         'React\\Stream\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/stream/src',
@@ -353,6 +370,10 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'React\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
+        ),
+        'React\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/http/src',
         ),
         'React\\EventLoop\\' => 
         array (
@@ -381,6 +402,10 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'Ramsey\\Collection\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
+        ),
+        'Pusher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pusher/pusher-php-server/src',
         ),
         'Psy\\' => 
         array (
@@ -517,9 +542,17 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         array (
             0 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
         ),
+        'Fig\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fig/http-message-util/src',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
+        ),
+        'Facade\\IgnitionContracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facade/ignition-contracts/src',
         ),
         'Evenement\\' => 
         array (
@@ -571,6 +604,10 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
+        'BeyondCode\\LaravelWebSockets\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -607,6 +644,61 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'BeyondCode\\LaravelWebSockets\\Apps\\App' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Apps/App.php',
+        'BeyondCode\\LaravelWebSockets\\Apps\\AppProvider' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Apps/AppProvider.php',
+        'BeyondCode\\LaravelWebSockets\\Apps\\ConfigAppProvider' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Apps/ConfigAppProvider.php',
+        'BeyondCode\\LaravelWebSockets\\Console\\CleanStatistics' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Console/CleanStatistics.php',
+        'BeyondCode\\LaravelWebSockets\\Console\\RestartWebSocketServer' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Console/RestartWebSocketServer.php',
+        'BeyondCode\\LaravelWebSockets\\Console\\StartWebSocketServer' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Console/StartWebSocketServer.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\DashboardLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/DashboardLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\Http\\Controllers\\AuthenticateDashboard' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/Http/Controllers/AuthenticateDashboard.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\Http\\Controllers\\DashboardApiController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/Http/Controllers/DashboardApiController.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\Http\\Controllers\\SendMessage' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/Http/Controllers/SendMessage.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\Http\\Controllers\\ShowDashboard' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/Http/Controllers/ShowDashboard.php',
+        'BeyondCode\\LaravelWebSockets\\Dashboard\\Http\\Middleware\\Authorize' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Dashboard/Http/Middleware/Authorize.php',
+        'BeyondCode\\LaravelWebSockets\\Exceptions\\InvalidApp' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Exceptions/InvalidApp.php',
+        'BeyondCode\\LaravelWebSockets\\Exceptions\\InvalidWebSocketController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Exceptions/InvalidWebSocketController.php',
+        'BeyondCode\\LaravelWebSockets\\Facades\\StatisticsLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Facades/StatisticsLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Facades\\WebSocketsRouter' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Facades/WebSocketsRouter.php',
+        'BeyondCode\\LaravelWebSockets\\HttpApi\\Controllers\\Controller' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/HttpApi/Controllers/Controller.php',
+        'BeyondCode\\LaravelWebSockets\\HttpApi\\Controllers\\FetchChannelController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/HttpApi/Controllers/FetchChannelController.php',
+        'BeyondCode\\LaravelWebSockets\\HttpApi\\Controllers\\FetchChannelsController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/HttpApi/Controllers/FetchChannelsController.php',
+        'BeyondCode\\LaravelWebSockets\\HttpApi\\Controllers\\FetchUsersController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/HttpApi/Controllers/FetchUsersController.php',
+        'BeyondCode\\LaravelWebSockets\\HttpApi\\Controllers\\TriggerEventController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/HttpApi/Controllers/TriggerEventController.php',
+        'BeyondCode\\LaravelWebSockets\\QueryParameters' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/QueryParameters.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\HttpServer' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/HttpServer.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\Logger\\ConnectionLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/Logger/ConnectionLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\Logger\\HttpLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/Logger/HttpLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\Logger\\Logger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/Logger/Logger.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\Logger\\WebsocketsLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/Logger/WebsocketsLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\OriginCheck' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/OriginCheck.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\Router' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/Router.php',
+        'BeyondCode\\LaravelWebSockets\\Server\\WebSocketServerFactory' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Server/WebSocketServerFactory.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\DnsResolver' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/DnsResolver.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Events\\StatisticsUpdated' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Events/StatisticsUpdated.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Http\\Controllers\\WebSocketStatisticsEntriesController' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Http/Controllers/WebSocketStatisticsEntriesController.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Http\\Middleware\\Authorize' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Http/Middleware/Authorize.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Logger\\HttpStatisticsLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Logger/HttpStatisticsLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Logger\\StatisticsLogger' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Logger/StatisticsLogger.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Models\\WebSocketsStatisticsEntry' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Models/WebSocketsStatisticsEntry.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Rules\\AppId' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Rules/AppId.php',
+        'BeyondCode\\LaravelWebSockets\\Statistics\\Statistic' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/Statistics/Statistic.php',
+        'BeyondCode\\LaravelWebSockets\\WebSocketsServiceProvider' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSocketsServiceProvider.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Channels\\Channel' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Channels/Channel.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Channels\\ChannelManager' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Channels/ChannelManager.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Channels\\ChannelManagers\\ArrayChannelManager' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Channels/ChannelManagers/ArrayChannelManager.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Channels\\PresenceChannel' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Channels/PresenceChannel.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Channels\\PrivateChannel' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Channels/PrivateChannel.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Exceptions\\ConnectionsOverCapacity' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Exceptions/ConnectionsOverCapacity.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Exceptions\\InvalidConnection' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Exceptions/InvalidConnection.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Exceptions\\InvalidSignature' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Exceptions/InvalidSignature.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Exceptions\\UnknownAppKey' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Exceptions/UnknownAppKey.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Exceptions\\WebSocketException' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Exceptions/WebSocketException.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Messages\\PusherChannelProtocolMessage' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Messages/PusherChannelProtocolMessage.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Messages\\PusherClientMessage' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Messages/PusherClientMessage.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Messages\\PusherMessage' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Messages/PusherMessage.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\Messages\\PusherMessageFactory' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/Messages/PusherMessageFactory.php',
+        'BeyondCode\\LaravelWebSockets\\WebSockets\\WebSocketHandler' => __DIR__ . '/..' . '/beyondcode/laravel-websockets/src/WebSockets/WebSocketHandler.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
         'Brick\\Math\\BigNumber' => __DIR__ . '/..' . '/brick/math/src/BigNumber.php',
@@ -932,6 +1024,12 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitter.php',
         'Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterInterface.php',
         'Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterTrait.php',
+        'Facade\\IgnitionContracts\\BaseSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/BaseSolution.php',
+        'Facade\\IgnitionContracts\\HasSolutionsForThrowable' => __DIR__ . '/..' . '/facade/ignition-contracts/src/HasSolutionsForThrowable.php',
+        'Facade\\IgnitionContracts\\ProvidesSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/ProvidesSolution.php',
+        'Facade\\IgnitionContracts\\RunnableSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/RunnableSolution.php',
+        'Facade\\IgnitionContracts\\Solution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/Solution.php',
+        'Facade\\IgnitionContracts\\SolutionProviderRepository' => __DIR__ . '/..' . '/facade/ignition-contracts/src/SolutionProviderRepository.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Inn.php',
@@ -1438,6 +1536,8 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'Faker\\Provider\\zh_TW\\Text' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Provider/zh_TW/Text.php',
         'Faker\\UniqueGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/UniqueGenerator.php',
         'Faker\\ValidGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/ValidGenerator.php',
+        'Fig\\Http\\Message\\RequestMethodInterface' => __DIR__ . '/..' . '/fig/http-message-util/src/RequestMethodInterface.php',
+        'Fig\\Http\\Message\\StatusCodeInterface' => __DIR__ . '/..' . '/fig/http-message-util/src/StatusCodeInterface.php',
         'Fruitcake\\Cors\\CorsService' => __DIR__ . '/..' . '/fruitcake/php-cors/src/CorsService.php',
         'Fruitcake\\Cors\\Exceptions\\InvalidOptionException' => __DIR__ . '/..' . '/fruitcake/php-cors/src/Exceptions/InvalidOptionException.php',
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
@@ -5032,6 +5132,13 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'Psy\\VersionUpdater\\IntervalChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/IntervalChecker.php',
         'Psy\\VersionUpdater\\NoopChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/NoopChecker.php',
         'Psy\\VersionUpdater\\SelfUpdate' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/SelfUpdate.php',
+        'Pusher\\ApiErrorException' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/ApiErrorException.php',
+        'Pusher\\Pusher' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/Pusher.php',
+        'Pusher\\PusherCrypto' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherCrypto.php',
+        'Pusher\\PusherException' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherException.php',
+        'Pusher\\PusherInstance' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherInstance.php',
+        'Pusher\\PusherInterface' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherInterface.php',
+        'Pusher\\Webhook' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/Webhook.php',
         'Ramsey\\Collection\\AbstractArray' => __DIR__ . '/..' . '/ramsey/collection/src/AbstractArray.php',
         'Ramsey\\Collection\\AbstractCollection' => __DIR__ . '/..' . '/ramsey/collection/src/AbstractCollection.php',
         'Ramsey\\Collection\\AbstractSet' => __DIR__ . '/..' . '/ramsey/collection/src/AbstractSet.php',
@@ -5266,6 +5373,39 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'React\\EventLoop\\TimerInterface' => __DIR__ . '/..' . '/react/event-loop/src/TimerInterface.php',
         'React\\EventLoop\\Timer\\Timer' => __DIR__ . '/..' . '/react/event-loop/src/Timer/Timer.php',
         'React\\EventLoop\\Timer\\Timers' => __DIR__ . '/..' . '/react/event-loop/src/Timer/Timers.php',
+        'React\\Http\\Browser' => __DIR__ . '/..' . '/react/http/src/Browser.php',
+        'React\\Http\\Client\\Client' => __DIR__ . '/..' . '/react/http/src/Client/Client.php',
+        'React\\Http\\HttpServer' => __DIR__ . '/..' . '/react/http/src/HttpServer.php',
+        'React\\Http\\Io\\BufferedBody' => __DIR__ . '/..' . '/react/http/src/Io/BufferedBody.php',
+        'React\\Http\\Io\\ChunkedDecoder' => __DIR__ . '/..' . '/react/http/src/Io/ChunkedDecoder.php',
+        'React\\Http\\Io\\ChunkedEncoder' => __DIR__ . '/..' . '/react/http/src/Io/ChunkedEncoder.php',
+        'React\\Http\\Io\\ClientConnectionManager' => __DIR__ . '/..' . '/react/http/src/Io/ClientConnectionManager.php',
+        'React\\Http\\Io\\ClientRequestState' => __DIR__ . '/..' . '/react/http/src/Io/ClientRequestState.php',
+        'React\\Http\\Io\\ClientRequestStream' => __DIR__ . '/..' . '/react/http/src/Io/ClientRequestStream.php',
+        'React\\Http\\Io\\Clock' => __DIR__ . '/..' . '/react/http/src/Io/Clock.php',
+        'React\\Http\\Io\\CloseProtectionStream' => __DIR__ . '/..' . '/react/http/src/Io/CloseProtectionStream.php',
+        'React\\Http\\Io\\EmptyBodyStream' => __DIR__ . '/..' . '/react/http/src/Io/EmptyBodyStream.php',
+        'React\\Http\\Io\\HttpBodyStream' => __DIR__ . '/..' . '/react/http/src/Io/HttpBodyStream.php',
+        'React\\Http\\Io\\IniUtil' => __DIR__ . '/..' . '/react/http/src/Io/IniUtil.php',
+        'React\\Http\\Io\\LengthLimitedStream' => __DIR__ . '/..' . '/react/http/src/Io/LengthLimitedStream.php',
+        'React\\Http\\Io\\MiddlewareRunner' => __DIR__ . '/..' . '/react/http/src/Io/MiddlewareRunner.php',
+        'React\\Http\\Io\\MultipartParser' => __DIR__ . '/..' . '/react/http/src/Io/MultipartParser.php',
+        'React\\Http\\Io\\PauseBufferStream' => __DIR__ . '/..' . '/react/http/src/Io/PauseBufferStream.php',
+        'React\\Http\\Io\\ReadableBodyStream' => __DIR__ . '/..' . '/react/http/src/Io/ReadableBodyStream.php',
+        'React\\Http\\Io\\RequestHeaderParser' => __DIR__ . '/..' . '/react/http/src/Io/RequestHeaderParser.php',
+        'React\\Http\\Io\\Sender' => __DIR__ . '/..' . '/react/http/src/Io/Sender.php',
+        'React\\Http\\Io\\StreamingServer' => __DIR__ . '/..' . '/react/http/src/Io/StreamingServer.php',
+        'React\\Http\\Io\\Transaction' => __DIR__ . '/..' . '/react/http/src/Io/Transaction.php',
+        'React\\Http\\Io\\UploadedFile' => __DIR__ . '/..' . '/react/http/src/Io/UploadedFile.php',
+        'React\\Http\\Message\\Request' => __DIR__ . '/..' . '/react/http/src/Message/Request.php',
+        'React\\Http\\Message\\Response' => __DIR__ . '/..' . '/react/http/src/Message/Response.php',
+        'React\\Http\\Message\\ResponseException' => __DIR__ . '/..' . '/react/http/src/Message/ResponseException.php',
+        'React\\Http\\Message\\ServerRequest' => __DIR__ . '/..' . '/react/http/src/Message/ServerRequest.php',
+        'React\\Http\\Middleware\\LimitConcurrentRequestsMiddleware' => __DIR__ . '/..' . '/react/http/src/Middleware/LimitConcurrentRequestsMiddleware.php',
+        'React\\Http\\Middleware\\RequestBodyBufferMiddleware' => __DIR__ . '/..' . '/react/http/src/Middleware/RequestBodyBufferMiddleware.php',
+        'React\\Http\\Middleware\\RequestBodyParserMiddleware' => __DIR__ . '/..' . '/react/http/src/Middleware/RequestBodyParserMiddleware.php',
+        'React\\Http\\Middleware\\StreamingRequestMiddleware' => __DIR__ . '/..' . '/react/http/src/Middleware/StreamingRequestMiddleware.php',
+        'React\\Http\\Server' => __DIR__ . '/..' . '/react/http/src/Server.php',
         'React\\Promise\\Deferred' => __DIR__ . '/..' . '/react/promise/src/Deferred.php',
         'React\\Promise\\Exception\\CompositeException' => __DIR__ . '/..' . '/react/promise/src/Exception/CompositeException.php',
         'React\\Promise\\Exception\\LengthException' => __DIR__ . '/..' . '/react/promise/src/Exception/LengthException.php',
@@ -5304,6 +5444,25 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'React\\Stream\\Util' => __DIR__ . '/..' . '/react/stream/src/Util.php',
         'React\\Stream\\WritableResourceStream' => __DIR__ . '/..' . '/react/stream/src/WritableResourceStream.php',
         'React\\Stream\\WritableStreamInterface' => __DIR__ . '/..' . '/react/stream/src/WritableStreamInterface.php',
+        'RingCentral\\Psr7\\AppendStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/AppendStream.php',
+        'RingCentral\\Psr7\\BufferStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/BufferStream.php',
+        'RingCentral\\Psr7\\CachingStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/CachingStream.php',
+        'RingCentral\\Psr7\\DroppingStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/DroppingStream.php',
+        'RingCentral\\Psr7\\FnStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/FnStream.php',
+        'RingCentral\\Psr7\\InflateStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/InflateStream.php',
+        'RingCentral\\Psr7\\LazyOpenStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/LazyOpenStream.php',
+        'RingCentral\\Psr7\\LimitStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/LimitStream.php',
+        'RingCentral\\Psr7\\MessageTrait' => __DIR__ . '/..' . '/ringcentral/psr7/src/MessageTrait.php',
+        'RingCentral\\Psr7\\MultipartStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/MultipartStream.php',
+        'RingCentral\\Psr7\\NoSeekStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/NoSeekStream.php',
+        'RingCentral\\Psr7\\PumpStream' => __DIR__ . '/..' . '/ringcentral/psr7/src/PumpStream.php',
+        'RingCentral\\Psr7\\Request' => __DIR__ . '/..' . '/ringcentral/psr7/src/Request.php',
+        'RingCentral\\Psr7\\Response' => __DIR__ . '/..' . '/ringcentral/psr7/src/Response.php',
+        'RingCentral\\Psr7\\ServerRequest' => __DIR__ . '/..' . '/ringcentral/psr7/src/ServerRequest.php',
+        'RingCentral\\Psr7\\Stream' => __DIR__ . '/..' . '/ringcentral/psr7/src/Stream.php',
+        'RingCentral\\Psr7\\StreamDecoratorTrait' => __DIR__ . '/..' . '/ringcentral/psr7/src/StreamDecoratorTrait.php',
+        'RingCentral\\Psr7\\StreamWrapper' => __DIR__ . '/..' . '/ringcentral/psr7/src/StreamWrapper.php',
+        'RingCentral\\Psr7\\Uri' => __DIR__ . '/..' . '/ringcentral/psr7/src/Uri.php',
         'SebastianBergmann\\CliParser\\AmbiguousOptionException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/AmbiguousOptionException.php',
         'SebastianBergmann\\CliParser\\Exception' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/Exception.php',
         'SebastianBergmann\\CliParser\\OptionDoesNotAllowArgumentException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/OptionDoesNotAllowArgumentException.php',
@@ -5684,6 +5843,14 @@ class ComposerStaticInit66b44858f01bafb8a3c48cdbaeafcd5c
         'Spatie\\LaravelIgnition\\Views\\BladeSourceMapCompiler' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Views/BladeSourceMapCompiler.php',
         'Spatie\\LaravelIgnition\\Views\\ViewExceptionMapper' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Views/ViewExceptionMapper.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\ArgumentValueResolver\\PsrServerRequestResolver' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/ArgumentValueResolver/PsrServerRequestResolver.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\ArgumentValueResolver\\ValueResolverInterface' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/ArgumentValueResolver/ValueResolverInterface.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\EventListener\\PsrResponseListener' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/EventListener/PsrResponseListener.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\Factory\\HttpFoundationFactory' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/Factory/HttpFoundationFactory.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\Factory\\PsrHttpFactory' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/Factory/PsrHttpFactory.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\Factory\\UploadedFile' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/Factory/UploadedFile.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\HttpFoundationFactoryInterface' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/HttpFoundationFactoryInterface.php',
+        'Symfony\\Bridge\\PsrHttpMessage\\HttpMessageFactoryInterface' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/HttpMessageFactoryInterface.php',
         'Symfony\\Component\\Console\\Application' => __DIR__ . '/..' . '/symfony/console/Application.php',
         'Symfony\\Component\\Console\\Attribute\\AsCommand' => __DIR__ . '/..' . '/symfony/console/Attribute/AsCommand.php',
         'Symfony\\Component\\Console\\CI\\GithubActionReporter' => __DIR__ . '/..' . '/symfony/console/CI/GithubActionReporter.php',
