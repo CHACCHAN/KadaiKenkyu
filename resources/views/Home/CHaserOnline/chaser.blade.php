@@ -7,13 +7,17 @@
     }
 </style>
 @endsection
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 @section('content')
 {{-- メニューボタン --}}
 <div id="CHaserOnline">
-    <div class="position-fixed" style="top: 8px;left:60px;">
+    <div class="row">
+        <div class="col-3">
         <button id="user" class="btn btn-secondary" type="button">
             ユーザ
         </button>
+</div>
+</div>
         <button id="server" class="btn btn-secondary" type="button">
             サーバ
         </button>
@@ -37,6 +41,8 @@
     </div>
 </div>
 @endsection
+
+
 @section('jQuery')
 <script type="module">
     $(document).ready(function() {
