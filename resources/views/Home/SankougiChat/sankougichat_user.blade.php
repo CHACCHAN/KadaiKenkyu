@@ -65,16 +65,9 @@
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             {{-- トリミング画像 --}}
-<<<<<<< HEAD
-                                                            <div class="card-header">
-                                                                <div class="cropper-area">
-                                                                    <img src="" id="imageHeader" width="100%">
-                                                                </div>
-=======
                                                             <div class="card-header p-0">
                                                                 <div id="HeaderEdit" class="fs-6 text-secondary text-center">画像エディター</div>
                                                                 <img src="" id="HeaderImage" width="100%">
->>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
                                                             </div>
                                                             {{-- インプット --}}
                                                             <div class="modal-body">
@@ -161,17 +154,8 @@
 @endsection
 @section('jQuery')
 <script type="module">
-    
+    // 検索IDを取得して非同期で反映
     $(document).ready(function(){
-<<<<<<< HEAD
-        // アバターのトリミング
-        var target = document.getElementById('imageHeader');
-        var cropper = new Cropper(target, {
-            aspectRatio: 16 / 3, // アスペクト比
-        });
-        // 検索IDを取得して非同期で反映
-=======
->>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
         $.ajax({
             type: "GET",
             url: "{{ route('Home.sankougichat.profile.userid') }}",
@@ -185,18 +169,6 @@
         });
     });
 
-<<<<<<< HEAD
-        if (selectedFile) {
-            var reader = new FileReader();
-
-            reader.onload = function(event) {
-                var fileData = event.target.result;
-                cropper.replace(fileData);
-                $('#imageHeader').attr('src', fileData);
-            };
-            reader.readAsDataURL(selectedFile);
-        }
-=======
     // ヘッダー画像の編集
     $('#image_headerInput').on('change', function(e) {
         // 保存ボタンを表示する
@@ -228,7 +200,6 @@
                 document.querySelector('input[name="image_header"]').files = dt.files;
             });
         });
->>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
     });
 
     // アバター画像の編集
