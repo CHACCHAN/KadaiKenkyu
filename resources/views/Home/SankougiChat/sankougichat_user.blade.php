@@ -25,7 +25,7 @@
                                     <div class="col-5 pb-3">
                                         <p class="text-secondary m-0">プロフィールの編集</p>
                                         {{-- フォーム --}}
-                                        <form action="" method="POST">
+                                        <form action="" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             {{-- 名前 --}}
                                             <div class="mb-3">
@@ -58,23 +58,31 @@
                                             {{-- ヘッダー --}}
                                             <div class="mb-3">
                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
+                                                {{-- トリミング済みの画像を入力用 --}}
+                                                <input type="file" class="form-control" name="image_header" style="display: none;">
                                                 {{-- ヘッダーモーダル　トリミング用 --}}
                                                 <div class="modal fade" id="HeaderBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             {{-- トリミング画像 --}}
+<<<<<<< HEAD
                                                             <div class="card-header">
                                                                 <div class="cropper-area">
                                                                     <img src="" id="imageHeader" width="100%">
                                                                 </div>
+=======
+                                                            <div class="card-header p-0">
+                                                                <div id="HeaderEdit" class="fs-6 text-secondary text-center">画像エディター</div>
+                                                                <img src="" id="HeaderImage" width="100%">
+>>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
                                                             </div>
                                                             {{-- インプット --}}
                                                             <div class="modal-body">
                                                                 <input type="file" id="image_headerInput" class="form-control" name="image_header">
                                                             </div>
                                                             <div class="modal-footer border-0">
+                                                                <button type="button" id="HeaderSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                                                <button type="button" class="btn btn-primary">保存</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -84,21 +92,24 @@
                                             {{-- アバター --}}
                                             <div class="mb-3">
                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
+                                                {{-- トリミング済みの画像を入力用 --}}
+                                                <input type="file" class="form-control" name="image_avatar" style="display: none;">
                                                 {{-- アバターモーダル　トリミング用 --}}
                                                 <div class="modal fade" id="AvatarBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             {{-- トリミング画像 --}}
-                                                            <div class="card-header">
-                                                                <div id="Avatar-Image"></div>
+                                                            <div class="card-header p-0">
+                                                                <div id="AvatarEdit" class="fs-6 text-secondary text-center">画像エディター</div>
+                                                                <img src="" id="AvatarImage" width="100%">
                                                             </div>
                                                             {{-- インプット --}}
                                                             <div class="modal-body">
                                                                 <input type="file" id="image_avatarInput" class="form-control" name="image_avatar">
                                                             </div>
                                                             <div class="modal-footer border-0">
+                                                                <button type="button" id="AvatarSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                                                <button type="button" class="btn btn-primary">保存</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -152,12 +163,15 @@
 <script type="module">
     
     $(document).ready(function(){
+<<<<<<< HEAD
         // アバターのトリミング
         var target = document.getElementById('imageHeader');
         var cropper = new Cropper(target, {
             aspectRatio: 16 / 3, // アスペクト比
         });
         // 検索IDを取得して非同期で反映
+=======
+>>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
         $.ajax({
             type: "GET",
             url: "{{ route('Home.sankougichat.profile.userid') }}",
@@ -170,10 +184,8 @@
             console.log(error.statusText);
         });
     });
-    // ヘッダー画像トリミング用
-    $('image_headerInput').on('change', function(e) {
-        var selectedFile = this.files[0];
 
+<<<<<<< HEAD
         if (selectedFile) {
             var reader = new FileReader();
 
@@ -184,7 +196,74 @@
             };
             reader.readAsDataURL(selectedFile);
         }
+=======
+    // ヘッダー画像の編集
+    $('#image_headerInput').on('change', function(e) {
+        // 保存ボタンを表示する
+        $('#HeaderSubmit').show();
+        $('#HeaderEdit').html('画像をトリミングする<hr>');
+        // 1枚だけ表示する
+        var file = e.target.files[0];
+        // ファイルのブラウザ上でのURLを取得する
+        var blobUrl = window.URL.createObjectURL(file);
+        // img要素に表示
+        $('#HeaderImage').attr('src', blobUrl);
+        var target = document.getElementById('HeaderImage');
+        var cropper = new Cropper(target,{aspectRatio: 16 / 5});
+        // トリミングボタンを押したとき
+        $('#HeaderSubmit').on('click', function() {
+            // トリミングパネル内のcanvasを取得
+            var canvas = cropper.getCroppedCanvas()
+            // canvasをbase64に変換
+            var data = canvas.toDataURL();
+            var preview = document.getElementById('PreviewHeader');
+            // previewにセットする
+            preview.src = data;
+            // inputタグに適用する
+            canvas.toBlob(function(imgBlob){
+                // Blob を元に File 化
+                const croppedImgFile = new File([imgBlob], 'EditedHeader.png' , {type: "image/png"});
+                const dt = new DataTransfer();
+                dt.items.add(croppedImgFile);
+                document.querySelector('input[name="image_header"]').files = dt.files;
+            });
+        });
+>>>>>>> 61dd16d54d8443991803f8acae5e6b6f3811b9ac
     });
+
+    // アバター画像の編集
+    $('#image_avatarInput').on('change', function(e) {
+        // 保存ボタンを表示する
+        $('#AvatarSubmit').show();
+        $('#AvatarEdit').html('画像をトリミングする<hr>');
+        // 1枚だけ表示する
+        var file = e.target.files[0];
+        // ファイルのブラウザ上でのURLを取得する
+        var blobUrl = window.URL.createObjectURL(file);
+        // img要素に表示
+        $('#AvatarImage').attr('src', blobUrl);
+        var target = document.getElementById('AvatarImage');
+        var cropper = new Cropper(target,{aspectRatio: 1 / 1});
+        // トリミングボタンを押したとき
+        $('#AvatarSubmit').on('click', function() {
+            // トリミングパネル内のcanvasを取得
+            var canvas = cropper.getCroppedCanvas()
+            // canvasをbase64に変換
+            var data = canvas.toDataURL();
+            var preview = document.getElementById('PreviewAvatar');
+            // previewにセットする
+            preview.src = data;
+            // inputタグに適用する
+            canvas.toBlob(function(imgBlob){
+                // Blob を元に File 化
+                const croppedImgFile = new File([imgBlob], 'EditedAvatar.png' , {type: "image/png"});
+                const dt = new DataTransfer();
+                dt.items.add(croppedImgFile);
+                document.querySelector('input[name="image_avatar"]').files = dt.files;
+            });
+        });
+    });
+
     // 名前の入力を非同期で反映
     $('#nameInput').on('input', function(){
         var Base = 'ソビエト社会主義共和国連邦くん';
@@ -194,6 +273,7 @@
             $(Target).html(Base);
         }
     });
+
     // 自己紹介の入力を非同期で反映
     $('#contentInput').on('input', function(){
         var Base = 'ソビエト（ロシア語: Совет [sɐˈvʲet] ( 音声ファイル)、発音は「サヴィェート」）は、ロシア革命時のロシア帝国において、社会主義者の働きかけもありながら、主として自然発生的に形成された労働者・農民・兵士の評議会（理事会）。もしくはそれらの（建前ないし名目上の）後継組織であるソビエト連邦の議会。ラテン文字表記や英語では「Soviet」が一般的である。日本語のカタカナ表記としては「ソビエト」や「ソヴィエト」が比較的よく用いられるが、古い資料などでは「ソヴェト」「ソヴェート」という表記もある。';
