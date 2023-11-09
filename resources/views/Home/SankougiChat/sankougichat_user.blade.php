@@ -243,6 +243,7 @@
 
     // フォームの送信
     document.getElementById("formSubmit").onclick = function() {
+        this.disabled = true;
         fetch('', {
             method: 'POST',
             headers: {
