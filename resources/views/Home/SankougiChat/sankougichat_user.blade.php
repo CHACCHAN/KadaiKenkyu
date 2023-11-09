@@ -55,8 +55,6 @@
                                         {{-- ヘッダー --}}
                                         <div class="mb-3">
                                             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
-                                            {{-- トリミング済みの画像を入力用 --}}
-                                            <input type="file" class="form-control" name="image_header" style="display: none;">
                                             {{-- ヘッダーモーダル　トリミング用 --}}
                                             <div class="modal fade" id="HeaderBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
@@ -82,8 +80,6 @@
                                         {{-- アバター --}}
                                         <div class="mb-3">
                                             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
-                                            {{-- トリミング済みの画像を入力用 --}}
-                                            <input type="file" class="form-control" name="image_avatar" style="display: none;">
                                             {{-- アバターモーダル　トリミング用 --}}
                                             <div class="modal fade" id="AvatarBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
@@ -116,9 +112,9 @@
                                         <div class="card w-100">
                                             <div class="card-header position-relative p-0">
                                                 <img id="PreviewHeader" src="{{ asset('Home/Images/Header.png') }}" alt="" width="100%">
-                                                <img id="PreviewAvatar" src="https://images-ext-1.discordapp.net/external/K_k8DiDzLRy2cWzIBpGtor-pkriHzDcUHFkdz1zUbio/https/pbs.twimg.com/media/F-DaMcyWUAAMKSA.png" class="position-absolute rounded-circle" style="top: 60%; left: 5%;" width="20%">
+                                                <img id="PreviewAvatar" src="https://images-ext-1.discordapp.net/external/K_k8DiDzLRy2cWzIBpGtor-pkriHzDcUHFkdz1zUbio/https/pbs.twimg.com/media/F-DaMcyWUAAMKSA.png" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%">
                                             </div>
-                                            <div class="body">
+                                            <div class="card-body">
                                                 <div class="ms-4">
                                                     <div id="PreviewName" class="fs-3 mt-5 pt-3">ソビエト社会主義共和国連邦くん</div>
                                                     <div id="PreviewNameID" class="fs-5 text-secondary"></div>
@@ -189,20 +185,12 @@
             // トリミングパネル内のcanvasを取得
             var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
-            var data = canvas.toDataURL();
+            var data = canvas.toDataURL("image/png");
             var preview = document.getElementById('PreviewHeader');
             // previewにセットする
             preview.src = data;
             // グローバル変数に代入
             image_header = data;
-
-            // canvas.toBlob(function(imgBlob){
-            //     // Blob を元に File 化
-            //     const croppedImgFile = new File([imgBlob], 'EditedHeader.png' , {type: "image/png"});
-            //     const dt = new DataTransfer();
-            //     dt.items.add(croppedImgFile);
-            //     document.querySelector('input[name="image_header"]').files = dt.files;
-            // });
         });
     });
 
@@ -224,31 +212,25 @@
             // トリミングパネル内のcanvasを取得
             var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
-            var data = canvas.toDataURL();
+            var data = canvas.toDataURL("image/png");
             var preview = document.getElementById('PreviewAvatar');
             // previewにセットする
             preview.src = data;
             // グローバル変数に代入
             image_avatar = data;
-
-            // canvas.toBlob(function(imgBlob){
-            //     // Blob を元に File 化
-            //     const croppedImgFile = new File([imgBlob], 'EditedAvatar.png' , {type: "image/png"});
-            //     const dt = new DataTransfer();
-            //     dt.items.add(croppedImgFile);
-            //     document.querySelector('input[name="image_avatar"]').files = dt.files;
-            // });
         });
     });
 
     // フォームの送信
     document.getElementById("formSubmit").onclick = function() {
+        // 連続入力防止
         this.disabled = true;
         fetch('', {
             method: 'POST',
             headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'Content-Type': 'application/json'
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'enctype': 'multipart/form-data',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 // user_idはControllerで保存

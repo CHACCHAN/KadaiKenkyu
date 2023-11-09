@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use App\Models\LocalMemo;
 use App\Models\SankougiChat;
@@ -139,12 +140,9 @@ class HomeController extends Controller
     // 投稿ホーム画面
     public function showSankougiChat()
     {
-        $sankougi_chats = SankougiChat::all();
-        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first();
-
         return view('Home.SankougiChat.sankougichat', [
-            'sankougi_chats'     =>  $sankougi_chats,
-            'sankougi_chat_user' =>  $sankougi_chat_user,
+            'sankougi_chats'     =>  SankougiChat::all(),
+            'sankougi_chat_user' =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
         ]);
     }
 
@@ -154,8 +152,63 @@ class HomeController extends Controller
         
     }
 
+    // プロフィール画面
+    public function showSankougiChatProfile($id)
+    {
+        return view('Home.SankougiChat.sankougichat_profile', [
+            'sankougi_chats'     =>  SankougiChat::all(),
+            'sankougi_chat_user' =>  SankougiChatUser::where('user_id', '=', $id)->first(),
+        ]);
+    }
+
+    // プロフィール更新処理 : Fetch
+    public function updateSankougiChatProfile(Request $request)
+    {
+        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first();
+
+        // ヘッダー画像を保存
+        if($request->image_header)
+        {
+            // Data-URLの削除とデコード
+            $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_header)));
+            $image_path = 'HeaderImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+
+            // 画像の保存処理
+            Storage::disk('public/sankougichat_user/header')->delete($sankougi_chat_user->image_header);
+            Storage::put('public/sankougichat_user/header/' . $image_path, $image);
+            $sankougi_chat_user->update([
+                'image_header' => $image_path,
+            ]);
+        }
+
+        // アバター画像を保存
+        if($request->image_avatar)
+        {
+            // Data-URLの削除とデコード
+            $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_avatar)));
+            $image_path = 'AvatarImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+
+            // 画像の保存処理
+            Storage::disk('public/sankougichat_user/avatar')->delete($sankougi_chat_user->image_avatar);
+            Storage::put('public/sankougichat_user/avatar/' . $image_path, $image);
+            $sankougi_chat_user->update([
+                'image_avatar' => $image_path,
+            ]);
+        }
+
+        if($request->name && $request->content)
+        {
+            $sankougi_chat_user->update([
+                'name'         =>  $request->name,
+                'content'      =>  $request->content,
+            ]);
+        }
+
+        return response()->json(['res' => 'aaaaa']);
+    }
+
     // プロフィール登録画面
-    public function showSankougiChatProfile()
+    public function showSankougiChatProfileCreate()
     {
         // キャンセル処理
         if(SankougiChatUser::where('user_id', '=', Auth::id())->exists() == true)
@@ -167,24 +220,36 @@ class HomeController extends Controller
     }
 
     // プロフィール登録処理 : Fetch
-    public function sankougichatprofile(Request $request)
+    public function sankougichatprofilecreate(Request $request)
     {
         $sankougi_chat_user = new SankougiChatUser;
         $sankougi_chat_user->user_id = Auth::id();
         $sankougi_chat_user->name = $request->name;
         $sankougi_chat_user->name_id = $request->name_id;
         $sankougi_chat_user->content = $request->content;
+
         // ヘッダー画像を保存
         if($request->image_header)
         {
-            $image_path = $request->file('image_header')->store('public/sankougichat_user/header/');
-            $sankougi_chat_user->image_header = basename($image_path);
+            // Data-URLの削除とデコード
+            $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_header)));
+            $image_path = 'HeaderImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+
+            // 画像の保存処理
+            Storage::put('public/sankougichat_user/header/' . $image_path, $image);
+            $sankougi_chat_user->image_header = $image_path;
         }
+
         // アバター画像を保存
         if($request->image_avatar)
         {
-            $image_path = $request->file('image_avatar')->store('public/sankougichat_user/avatar/');
-            $sankougi_chat_user->image_avatar = basename($image_path);
+            // Data-URLの削除とデコード
+            $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_avatar)));
+            $image_path = 'AvatarImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+
+            // 画像の保存処理
+            Storage::put('public/sankougichat_user/avatar/' . $image_path, $image);
+            $sankougi_chat_user->image_avatar = $image_path;
         }
         $sankougi_chat_user->save();
     }
