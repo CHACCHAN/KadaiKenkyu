@@ -24,94 +24,90 @@
                                     {{-- 左側コンテンツ --}}
                                     <div class="col-5 pb-3">
                                         <p class="text-secondary m-0">プロフィールの編集</p>
-                                        {{-- フォーム --}}
-                                        <form action="" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            {{-- 名前 --}}
-                                            <div class="mb-3">
-                                                <div class="card">
-                                                    <div class="card-header border-0 bg-light ms-1 mt-1 p-0">
-                                                        名前
+                                        {{-- 名前 --}}
+                                        <div class="mb-3">
+                                            <div class="card">
+                                                <div class="card-header border-0 bg-light ms-1 mt-1 p-0">
+                                                    名前
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="input-group input-group-lg">
+                                                        <input type="text" id="nameInput" class="form-control border-0" name="name" maxlength=20 required>
                                                     </div>
-                                                    <div class="card-body p-0">
-                                                        <div class="input-group input-group-lg">
-                                                            <input type="text" id="nameInput" class="form-control border-0" name="name" maxlength=20 required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- 自己紹介 --}}
+                                        <div class="mb-3">
+                                            <div class="card">
+                                                <div class="card-header border-0 bg-light ms-1 mt-1 p-0">
+                                                    自己紹介
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="input-group input-group-lg">
+                                                        <textarea type="text" id="contentInput" class="form-control border-0" name="content" rows=8 style="resize: none;" maxlength=160 required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p class="text-secondary m-0">ヘッダーを登録</p>
+                                        {{-- ヘッダー --}}
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
+                                            {{-- トリミング済みの画像を入力用 --}}
+                                            <input type="file" class="form-control" name="image_header" style="display: none;">
+                                            {{-- ヘッダーモーダル　トリミング用 --}}
+                                            <div class="modal fade" id="HeaderBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        {{-- トリミング画像 --}}
+                                                        <div class="card-header p-0">
+                                                            <div id="HeaderEdit" class="fs-6 text-secondary text-center">画像エディター</div>
+                                                            <img src="" id="HeaderImage" width="100%">
+                                                        </div>
+                                                        {{-- インプット --}}
+                                                        <div class="modal-body">
+                                                            <input type="file" id="image_headerInput" class="form-control" name="image_header">
+                                                        </div>
+                                                        <div class="modal-footer border-0">
+                                                            <button type="button" id="HeaderSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- 自己紹介 --}}
-                                            <div class="mb-3">
-                                                <div class="card">
-                                                    <div class="card-header border-0 bg-light ms-1 mt-1 p-0">
-                                                        自己紹介
-                                                    </div>
-                                                    <div class="card-body p-0">
-                                                        <div class="input-group input-group-lg">
-                                                            <textarea type="text" id="contentInput" class="form-control border-0" name="content" rows=8 style="resize: none;" maxlength=160 required></textarea>
+                                        </div>
+                                        <p class="text-secondary m-0">アバターを登録</p>
+                                        {{-- アバター --}}
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
+                                            {{-- トリミング済みの画像を入力用 --}}
+                                            <input type="file" class="form-control" name="image_avatar" style="display: none;">
+                                            {{-- アバターモーダル　トリミング用 --}}
+                                            <div class="modal fade" id="AvatarBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        {{-- トリミング画像 --}}
+                                                        <div class="card-header p-0">
+                                                            <div id="AvatarEdit" class="fs-6 text-secondary text-center">画像エディター</div>
+                                                            <img src="" id="AvatarImage" width="100%">
+                                                        </div>
+                                                        {{-- インプット --}}
+                                                        <div class="modal-body">
+                                                            <input type="file" id="image_avatarInput" class="form-control" name="image_avatar">
+                                                        </div>
+                                                        <div class="modal-footer border-0">
+                                                            <button type="button" id="AvatarSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr>
-                                            <p class="text-secondary m-0">ヘッダーを登録</p>
-                                            {{-- ヘッダー --}}
-                                            <div class="mb-3">
-                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
-                                                {{-- トリミング済みの画像を入力用 --}}
-                                                <input type="file" class="form-control" name="image_header" style="display: none;">
-                                                {{-- ヘッダーモーダル　トリミング用 --}}
-                                                <div class="modal fade" id="HeaderBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            {{-- トリミング画像 --}}
-                                                            <div class="card-header p-0">
-                                                                <div id="HeaderEdit" class="fs-6 text-secondary text-center">画像エディター</div>
-                                                                <img src="" id="HeaderImage" width="100%">
-                                                            </div>
-                                                            {{-- インプット --}}
-                                                            <div class="modal-body">
-                                                                <input type="file" id="image_headerInput" class="form-control" name="image_header">
-                                                            </div>
-                                                            <div class="modal-footer border-0">
-                                                                <button type="button" id="HeaderSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p class="text-secondary m-0">アバターを登録</p>
-                                            {{-- アバター --}}
-                                            <div class="mb-3">
-                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
-                                                {{-- トリミング済みの画像を入力用 --}}
-                                                <input type="file" class="form-control" name="image_avatar" style="display: none;">
-                                                {{-- アバターモーダル　トリミング用 --}}
-                                                <div class="modal fade" id="AvatarBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            {{-- トリミング画像 --}}
-                                                            <div class="card-header p-0">
-                                                                <div id="AvatarEdit" class="fs-6 text-secondary text-center">画像エディター</div>
-                                                                <img src="" id="AvatarImage" width="100%">
-                                                            </div>
-                                                            {{-- インプット --}}
-                                                            <div class="modal-body">
-                                                                <input type="file" id="image_avatarInput" class="form-control" name="image_avatar">
-                                                            </div>
-                                                            <div class="modal-footer border-0">
-                                                                <button type="button" id="AvatarSubmit" class="btn btn-primary" style="display: none;" data-bs-dismiss="modal">保存</button>
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">保存</button>
-                                            </div>
-                                        </form>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="button" id="formSubmit" class="btn btn-primary">保存</button>
+                                        </div>
                                     </div>
                                     {{-- 右側コンテンツ --}}
                                     <div class="col-7 border-start pb-3">
@@ -154,6 +150,11 @@
 @endsection
 @section('jQuery')
 <script type="module">
+    // グローバル変数
+    var image_header;
+    var image_avatar;
+    var name_id;
+
     // 検索IDを取得して非同期で反映
     $(document).ready(function(){
         $.ajax({
@@ -163,6 +164,7 @@
         })
         .done((res) => {
             $("#PreviewNameID").html('@' + res.name_id);
+            name_id = res.name_id;
         })
         .fail((error) => {
             console.log(error.statusText);
@@ -185,20 +187,22 @@
         // トリミングボタンを押したとき
         $('#HeaderSubmit').on('click', function() {
             // トリミングパネル内のcanvasを取得
-            var canvas = cropper.getCroppedCanvas()
+            var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
             var data = canvas.toDataURL();
             var preview = document.getElementById('PreviewHeader');
             // previewにセットする
             preview.src = data;
-            // inputタグに適用する
-            canvas.toBlob(function(imgBlob){
-                // Blob を元に File 化
-                const croppedImgFile = new File([imgBlob], 'EditedHeader.png' , {type: "image/png"});
-                const dt = new DataTransfer();
-                dt.items.add(croppedImgFile);
-                document.querySelector('input[name="image_header"]').files = dt.files;
-            });
+            // グローバル変数に代入
+            image_header = data;
+
+            // canvas.toBlob(function(imgBlob){
+            //     // Blob を元に File 化
+            //     const croppedImgFile = new File([imgBlob], 'EditedHeader.png' , {type: "image/png"});
+            //     const dt = new DataTransfer();
+            //     dt.items.add(croppedImgFile);
+            //     document.querySelector('input[name="image_header"]').files = dt.files;
+            // });
         });
     });
 
@@ -218,22 +222,49 @@
         // トリミングボタンを押したとき
         $('#AvatarSubmit').on('click', function() {
             // トリミングパネル内のcanvasを取得
-            var canvas = cropper.getCroppedCanvas()
+            var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
             var data = canvas.toDataURL();
             var preview = document.getElementById('PreviewAvatar');
             // previewにセットする
             preview.src = data;
-            // inputタグに適用する
-            canvas.toBlob(function(imgBlob){
-                // Blob を元に File 化
-                const croppedImgFile = new File([imgBlob], 'EditedAvatar.png' , {type: "image/png"});
-                const dt = new DataTransfer();
-                dt.items.add(croppedImgFile);
-                document.querySelector('input[name="image_avatar"]').files = dt.files;
-            });
+            // グローバル変数に代入
+            image_avatar = data;
+
+            // canvas.toBlob(function(imgBlob){
+            //     // Blob を元に File 化
+            //     const croppedImgFile = new File([imgBlob], 'EditedAvatar.png' , {type: "image/png"});
+            //     const dt = new DataTransfer();
+            //     dt.items.add(croppedImgFile);
+            //     document.querySelector('input[name="image_avatar"]').files = dt.files;
+            // });
         });
     });
+
+    // フォームの送信
+    document.getElementById("formSubmit").onclick = function() {
+        fetch('', {
+            method: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // user_idはControllerで保存
+                name: $('#nameInput').val(),
+                name_id: name_id,
+                content: $('#contentInput').val(),
+                image_header: image_header,
+                image_avatar: image_avatar,
+            }),
+        })
+        .then(res => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
 
     // 名前の入力を非同期で反映
     $('#nameInput').on('input', function(){

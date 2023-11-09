@@ -157,26 +157,36 @@ class HomeController extends Controller
     // プロフィール登録画面
     public function showSankougiChatProfile()
     {
+        // キャンセル処理
+        if(SankougiChatUser::where('user_id', '=', Auth::id())->exists() == true)
+        {
+            return redirect()->route('Home.sankougichat');
+        }
+
         return view('Home.SankougiChat.sankougichat_user');
     }
 
-    // プロフィール登録処理
+    // プロフィール登録処理 : Fetch
     public function sankougichatprofile(Request $request)
     {
         $sankougi_chat_user = new SankougiChatUser;
         $sankougi_chat_user->user_id = Auth::id();
         $sankougi_chat_user->name = $request->name;
-        $sankougi_chat_user->name_id = '1234';
+        $sankougi_chat_user->name_id = $request->name_id;
         $sankougi_chat_user->content = $request->content;
         // ヘッダー画像を保存
-        $image_path = $request->file('image_header')->store('public/sankougichat_user/header/');
-        $sankougi_chat_user->image_header = basename($image_path);
+        if($request->image_header)
+        {
+            $image_path = $request->file('image_header')->store('public/sankougichat_user/header/');
+            $sankougi_chat_user->image_header = basename($image_path);
+        }
         // アバター画像を保存
-        $image_path = $request->file('image_avatar')->store('public/sankougichat_user/avatar/');
-        $sankougi_chat_user->image_avatar = basename($image_path);
+        if($request->image_avatar)
+        {
+            $image_path = $request->file('image_avatar')->store('public/sankougichat_user/avatar/');
+            $sankougi_chat_user->image_avatar = basename($image_path);
+        }
         $sankougi_chat_user->save();
-
-        return redirect()->route('Home.sankougichat');
     }
 
     // 検索IDの生成処理
