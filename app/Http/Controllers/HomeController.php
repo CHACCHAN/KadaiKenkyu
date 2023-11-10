@@ -149,7 +149,31 @@ class HomeController extends Controller
     // 投稿処理
     public function sankougichat(Request $request)
     {
+        $sankougi_chat = new SankougiChat;
+        $sankougi_chat->chat_user_id = Auth::id();
+        $sankougi_chat->title = $request->title;
+        $sankougi_chat->content = $request->content;
+        // 画像の保存
+        for($i = 0; $i < 5; $i++)
+        {
+            $data = array(
+                1 => $request->image,
+                2 => $request->image_two,
+                3 => $request->image_three,
+                4 => $request->image_four,
+                5 => $request->image_five,
+            );
+            
+            if($data[$i])
+            {
+                $image_path = 'PostImage-'. Date::now()->format('Y-m-d-H-i-s-'). $i .'.png';
+                Storage::put('public/sankougichat_user/post/' . $image_path, $data[$i]);
+                $sankougi_chat->image = $image_path;
+            }
+        }
+        $sankougi_chat->save();
         
+        return redirect()->route('Home.sankougichat');
     }
 
     // プロフィール画面

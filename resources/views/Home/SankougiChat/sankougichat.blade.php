@@ -43,7 +43,7 @@
                         </svg>   プロフィール
                     </a>
                     {{-- 投稿ボタン --}}
-                    <button class="btn btn-primary mt-5 mx-2" @if(!isset($sankougi_chat_user)) disabled @endif>
+                    <button class="btn btn-primary mt-5 mx-2" data-bs-toggle="modal" data-bs-target="#PostModal" @if(!isset($sankougi_chat_user)) disabled @endif>
                         <div class="fs-5">投稿する</div>
                     </button>
                 </div>
@@ -68,6 +68,34 @@
                 </div>
             @endguest
         </div>
+        {{-- 投稿モーダル --}}
+        @if(isset($sankougi_chat_user))
+            <div class="modal fade" id="PostModal" tabindex="-1" aria-labelledby="PostModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header p-1 border-0">
+                            <div class="text-start pt-2">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img src="{{ asset('storage/sankougichat_user/avatar/'. $sankougi_chat_user->image_avatar) }}" class="rounded-circle border w-100" alt="">
+                                </div>
+                                <div class="col-10">
+                                    <textarea type="text" class="border-0 bg-light w-100 h-100 mt-3 js-1" name="content" style="outline: none;resize: both;" placeholder="いまどうしてる？" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-primary">投稿する</button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        @endif
+        
 
 
         
@@ -87,15 +115,15 @@
                 </div>
                 @if(!Request::is('sankougichat/profile/*'))
                     {{-- 投稿カード --}}
-                    {{-- @foreach($sankougi_chats as $sankougi_chat) --}}
+                    @foreach($sankougi_chats as $sankougi_chat)
                     <div class="col-12">
                         <div class="border-bottom px-3">
                             <div class="card w-75 mx-auto my-3 border-0">
                                 <div class="card-header border-0 bg-light">
-                                    ヘッダー
+                                    {{ $sankougi_chat->title }}
                                 </div>
                                 <div class="card-body">
-                                    ボディ
+                                    {{ $sankougi_chat->content }}
                                 </div>
                                 <div class="card-footer border-0 bg-light">
                                     フッター
@@ -103,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- @endforeach --}}
+                    @endforeach
                 @endif
             </div>
         </div>
@@ -114,14 +142,14 @@
     </div>
     {{-- 投稿ボタン2 --}}
     @if(!isset($sankougi_chat_user))
-    <div id="elm" class="btn btn-primary position-fixed" style="right: 10px; bottom: 10px; display: none;">
-        <div class="h3 mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-sticky-fill" viewBox="0 0 16 16">
-                <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1h-11zm6 8.5a1 1 0 0 1 1-1h4.396a.25.25 0 0 1 .177.427l-5.146 5.146a.25.25 0 0 1-.427-.177V9.5z"/>
-            </svg>  投稿する
+        <div id="elm" class="btn btn-primary position-fixed" style="right: 10px; bottom: 10px; display: none;">
+            <div class="h3 mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-sticky-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1h-11zm6 8.5a1 1 0 0 1 1-1h4.396a.25.25 0 0 1 .177.427l-5.146 5.146a.25.25 0 0 1-.427-.177V9.5z"/>
+                </svg>  投稿する
+            </div>
         </div>
-    </div>
-@endif
+    @endif
 </div>
 @endsection
 @section('jQuery')
@@ -141,6 +169,20 @@
                 $("#elm").hide();
             }
         });
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const textareaEls = document.querySelectorAll("textarea");
+
+        textareaEls.forEach((textareaEl) => {
+            textareaEl.setAttribute("style", `height: ${textareaEl.scrollHeight}px;`);
+            textareaEl.addEventListener("input", setTextareaHeight);
+        });
+
+        function setTextareaHeight() {
+            this.style.height = "auto";
+            this.style.height = `${this.scrollHeight}px`;
+        }
     });
 </script>
 @endsection

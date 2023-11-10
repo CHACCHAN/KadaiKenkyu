@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('sankougi_chats', function (Blueprint $table) {
             $table->bigIncrements('chat_id')->uniqid();
             $table->bigInteger('chat_user_id')->comment('作った人ChatUserID');
-            $table->longText('title')->comment('投稿タイトル');
             $table->longText('content')->comment('投稿コンテンツ');
             // ファイルは最大5枚まで投稿可能にする
             $table->text('image')->nullable()->comment('投稿ファイル');

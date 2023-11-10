@@ -55,7 +55,7 @@
                                     {{-- 自己紹介 --}}
                                     <div class="mb-3">
                                         <label for="contentInput" class="form-label">自己紹介</label>
-                                        <textarea class="form-control" id="contentInput" rows="15" style="resize: none;" maxlength=160 required>{{ $sankougi_chat_user->content }}</textarea>
+                                        <textarea class="form-control" id="contentInput" rows="15" style="resize: none;" maxlength=160 required>{!! nl2br($sankougi_chat_user->content) !!}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +121,6 @@
 @endsection
 @section('jQuery')
 <script type="module">
-    // グローバル変数
-    var image_header;
-    var image_avatar;
-
     // 名前と自己紹介の送信
     document.getElementById("profileUpdateSubmit").onclick = function() {
         // 連続入力防止
@@ -167,9 +163,7 @@
             var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
             var data = canvas.toDataURL("image/png");
-            // グローバル変数
-            image_header = data;
-            console.log(image_header);
+            console.log(data);
             // Fetchで送信
             fetch('{{ route('Home.sankougichat.profile.update') }}', {
                 method: 'POST',
@@ -179,11 +173,11 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    image_header: image_header,
+                    image_header: data,
                 }),
             })
             .then(res => {
-                window.location.reload();
+                // window.location.reload();
             })
             .catch(error => {
                 console.log(error);
@@ -210,9 +204,7 @@
             var canvas = cropper.getCroppedCanvas();
             // canvasをbase64に変換
             var data = canvas.toDataURL("image/png");
-            // グローバル変数に代入
-            image_avatar = data;
-            console.log(image_avatar);
+            console.log(data);
             // Fetchで送信
             fetch('{{ route('Home.sankougichat.profile.update') }}', {
                 method: 'POST',
@@ -222,7 +214,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    image_avatar: image_avatar,
+                    image_avatar: data,
                 }),
             })
             .then(res => {
