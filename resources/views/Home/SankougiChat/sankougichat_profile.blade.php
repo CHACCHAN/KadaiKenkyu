@@ -121,6 +121,117 @@
 @endsection
 @section('jQuery')
 <script type="module">
- 
+    // グローバル変数
+    var image_header;
+    var image_avatar;
+
+    // 名前と自己紹介の送信
+    document.getElementById("profileUpdateSubmit").onclick = function() {
+        // 連続入力防止
+        this.disabled = true;
+        fetch('{{ route('Home.sankougichat.profile.update') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: document.getElementById("nameInput").value,
+                content: document.getElementById("contentInput").value,
+            }),
+        })
+        .then(res => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    };
+
+    // ヘッダー画像の編集
+    $('#image_headerInput').on('change', function(e) {
+        // 保存ボタンを表示する
+        $('#HeaderSubmit').show();
+        $('#HeaderEdit').html('画像をトリミングする<hr>');
+        // 1枚だけ表示する
+        var file = e.target.files[0];
+        // ファイルのブラウザ上でのURLを取得する
+        var blobUrl = window.URL.createObjectURL(file);
+        // img要素に表示
+        $('#HeaderImage').attr('src', blobUrl);
+        var target = document.getElementById('HeaderImage');
+        var cropper = new Cropper(target,{aspectRatio: 16 / 5});
+        // トリミングボタンを押したとき
+        $('#HeaderSubmit').on('click', function() {
+            // トリミングパネル内のcanvasを取得
+            var canvas = cropper.getCroppedCanvas();
+            // canvasをbase64に変換
+            var data = canvas.toDataURL("image/png");
+            // グローバル変数
+            image_header = data;
+            console.log(image_header);
+            // Fetchで送信
+            fetch('{{ route('Home.sankougichat.profile.update') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'enctype': 'multipart/form-data',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image_header: image_header,
+                }),
+            })
+            .then(res => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        });
+    });
+
+    // アバター画像の編集
+    $('#image_avatarInput').on('change', function(e) {
+        // 保存ボタンを表示する
+        $('#AvatarSubmit').show();
+        $('#AvatarEdit').html('画像をトリミングする<hr>');
+        // 1枚だけ表示する
+        var file = e.target.files[0];
+        // ファイルのブラウザ上でのURLを取得する
+        var blobUrl = window.URL.createObjectURL(file);
+        // img要素に表示
+        $('#AvatarImage').attr('src', blobUrl);
+        var target = document.getElementById('AvatarImage');
+        var cropper = new Cropper(target,{aspectRatio: 1 / 1});
+        // トリミングボタンを押したとき
+        $('#AvatarSubmit').on('click', function() {
+            // トリミングパネル内のcanvasを取得
+            var canvas = cropper.getCroppedCanvas();
+            // canvasをbase64に変換
+            var data = canvas.toDataURL("image/png");
+            // グローバル変数に代入
+            image_avatar = data;
+            console.log(image_avatar);
+            // Fetchで送信
+            fetch('{{ route('Home.sankougichat.profile.update') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'enctype': 'multipart/form-data',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image_avatar: image_avatar,
+                }),
+            })
+            .then(res => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        });
+    });
 </script>
 @endsection

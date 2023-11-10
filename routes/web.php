@@ -109,6 +109,7 @@ Route::get('/sankougichat', [HomeController::class, 'showSankougiChat'])->name('
 Route::post('/sankougichat', [HomeController::class, 'sankougichat']);
 // Home->三工技チャット->プロフィール
 Route::get('/sankougichat/profile/id={user_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
+// Home->三工技チャット->プロフィール更新
 Route::post('/sankougichat/profile/update', [HomeController::class, 'updateSankougiChatProfile'])->name('Home.sankougichat.profile.update');
 // Home->三工技チャット->プロフィール登録
 Route::get('/sankougichat/adduser', [HomeController::class, 'showSankougiChatProfileCreate'])->name('Home.sankougichat.profile.adduser');

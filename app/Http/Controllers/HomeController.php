@@ -164,14 +164,14 @@ class HomeController extends Controller
     // プロフィール更新処理 : Fetch
     public function updateSankougiChatProfile(Request $request)
     {
-        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first();
+        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id());
 
         // ヘッダー画像を保存
         if($request->image_header)
         {
             // Data-URLの削除とデコード
             $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_header)));
-            $image_path = 'HeaderImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+            $image_path = 'HeaderImage-'. Date::now()->format('Y-m-d-H-i-s'). '.png';
 
             // 画像の保存処理
             Storage::disk('public/sankougichat_user/header')->delete($sankougi_chat_user->image_header);
@@ -186,7 +186,7 @@ class HomeController extends Controller
         {
             // Data-URLの削除とデコード
             $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image_avatar)));
-            $image_path = 'AvatarImage-'.Date::now()->format('Y-m-d-H-i-s').'.png';
+            $image_path = 'AvatarImage-'. Date::now()->format('Y-m-d-H-i-s'). '.png';
 
             // 画像の保存処理
             Storage::disk('public/sankougichat_user/avatar')->delete($sankougi_chat_user->image_avatar);
@@ -203,8 +203,6 @@ class HomeController extends Controller
                 'content'      =>  $request->content,
             ]);
         }
-
-        return response()->json(['res' => 'aaaaa']);
     }
 
     // プロフィール登録画面
