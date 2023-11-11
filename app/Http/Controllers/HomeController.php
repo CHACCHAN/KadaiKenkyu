@@ -141,8 +141,9 @@ class HomeController extends Controller
     public function showSankougiChat()
     {
         return view('Home.SankougiChat.sankougichat', [
-            'sankougi_chats'     =>  SankougiChat::all(),
-            'sankougi_chat_user' =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chats'      =>  SankougiChat::latest()->get(),
+            'sankougi_chat_users' =>  SankougiChatUser::get(),
+            'sankougi_chat_user'  =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
         ]);
     }
 
@@ -151,25 +152,12 @@ class HomeController extends Controller
     {
         $sankougi_chat = new SankougiChat;
         $sankougi_chat->chat_user_id = Auth::id();
-        $sankougi_chat->title = $request->title;
         $sankougi_chat->content = $request->content;
         // 画像の保存
-        for($i = 0; $i < 5; $i++)
+        if($request->image)
         {
-            $data = array(
-                1 => $request->image,
-                2 => $request->image_two,
-                3 => $request->image_three,
-                4 => $request->image_four,
-                5 => $request->image_five,
-            );
-            
-            if($data[$i])
-            {
-                $image_path = 'PostImage-'. Date::now()->format('Y-m-d-H-i-s-'). $i .'.png';
-                Storage::put('public/sankougichat_user/post/' . $image_path, $data[$i]);
-                $sankougi_chat->image = $image_path;
-            }
+            $image_path = $request->file('image')->store('public/sankougichat/post/');
+            $sankougi_chat->image = basename($image_path);
         }
         $sankougi_chat->save();
         
@@ -181,7 +169,7 @@ class HomeController extends Controller
     {
         return view('Home.SankougiChat.sankougichat_profile', [
             'sankougi_chats'     =>  SankougiChat::all(),
-            'sankougi_chat_user' =>  SankougiChatUser::where('user_id', '=', $id)->first(),
+            'sankougi_chat_user' =>  SankougiChatUser::where('name_id', '=', $id)->first(),
         ]);
     }
 
