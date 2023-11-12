@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use App\Models\LocalMemo;
 use App\Models\SankougiChat;
-use App\Models\SankougiChatUser;
 use App\Models\SankougiChatComment;
+use App\Models\SankougiChatEvaluation;
 use App\Models\SankougiChatFollow;
+use App\Models\SankougiChatUser;
 
 
 class HomeController extends Controller
@@ -141,15 +142,18 @@ class HomeController extends Controller
     public function showSankougiChat()
     {
         return view('Home.SankougiChat.sankougichat', [
-            'sankougi_chats'      =>  SankougiChat::latest()->get(),
-            'sankougi_chat_users' =>  SankougiChatUser::get(),
-            'sankougi_chat_user'  =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chats'            =>  SankougiChat::latest()->get(),
+            'sankougi_chat_users'       =>  SankougiChatUser::get(),
+            'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_evaluations' =>  SankougiChatEvaluation::where('user_id', '=', Auth::id())->get(),
+            'sankougi_chat_comments'    =>  SankougiChatComment::get(),
         ]);
     }
 
     // 投稿処理
     public function sankougichat(Request $request)
     {
+        // 投稿データをDBに保存
         $sankougi_chat = new SankougiChat;
         $sankougi_chat->chat_user_id = Auth::id();
         $sankougi_chat->content = $request->content;
@@ -164,12 +168,118 @@ class HomeController extends Controller
         return redirect()->route('Home.sankougichat');
     }
 
+    // 投稿ピックアップ画面
+    public function showSankougiChatPickup($name_id, $chat_id)
+    {
+        return view('Home.SankougiChat.sankougichat_pickup', [
+            'sankougi_chat'             =>  SankougiChat::where('chat_id', '=', $chat_id)->first(),
+            'sankougi_chat_users'       =>  SankougiChatUser::get(),
+            'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_user'        =>  SankougiChatUser::where('name_id', '=', $name_id)->first(),
+            'sankougi_chat_evaluations' =>  SankougiChatEvaluation::where('user_id', '=', Auth::id())->get(),
+            'sankougi_chat_comments'    =>  SankougiChatComment::latest()->get(),
+        ]);
+    }
+
+    // いいねわるい処理 : Fetch
+    public function evaluationSankougiChat(Request $request)
+    {
+        // 登録処理
+        if(SankougiChatEvaluation::where([
+            ['user_id', '=', $request->user_id],
+            ['chat_id', '=', $request->chat_id],
+        ])->exists() == false)
+        {
+            // いいねだったら
+            if($request->good_count)
+            {
+                // いいね数の更新
+                SankougiChat::where('chat_id', '=', $request->chat_id)->update([
+                    'good_count' => $request->good_count - 1,
+                ]);
+                // ユーザの入力済みDBを作成
+                $sankougi_chat_evaluation = new SankougiChatEvaluation;
+                $sankougi_chat_evaluation->user_id   = $request->user_id;
+                $sankougi_chat_evaluation->chat_id   = $request->chat_id;
+                $sankougi_chat_evaluation->good_flag = 1;
+                $sankougi_chat_evaluation->save();
+            }
+            // わるいだったら
+            else if($request->bad_count)
+            {
+                // わるい数の更新
+                SankougiChat::where('chat_id', '=', $request->chat_id)->update([
+                    'bad_count' => $request->bad_count - 1,
+                ]);
+                // ユーザの入力済みDBを作成
+                $sankougi_chat_evaluation = new SankougiChatEvaluation;
+                $sankougi_chat_evaluation->user_id   = $request->user_id;
+                $sankougi_chat_evaluation->chat_id   = $request->chat_id;
+                $sankougi_chat_evaluation->bad_flag = 1;
+                $sankougi_chat_evaluation->save();
+            }
+        }
+        // 取り消し処理
+        else if(SankougiChatEvaluation::where([
+            ['user_id', '=', $request->user_id],
+            ['chat_id', '=', $request->chat_id],
+        ])->exists() == true)
+        {
+            // いいねだったら
+            if($request->good_count)
+            {
+                // いいね数の更新
+                SankougiChat::where('chat_id', '=', $request->chat_id)->update([
+                    'good_count' => $request->good_count - 1,
+                ]);
+                // ユーザの入力済みDBを削除
+                SankougiChatEvaluation::where([
+                    ['user_id', '=', $request->user_id],
+                    ['chat_id', '=', $request->chat_id],
+                ])->delete();
+            }
+            // わるいだったら
+            else if($request->bad_count)
+            {
+                // いいね数の更新
+                SankougiChat::where('chat_id', '=', $request->chat_id)->update([
+                    'bad_count' => $request->bad_count - 1,
+                ]);
+                // ユーザの入力済みDBを削除
+                SankougiChatEvaluation::where([
+                    ['user_id', '=', $request->user_id],
+                    ['chat_id', '=', $request->chat_id],
+                ])->delete();
+            }
+        }
+    }
+
+    // コメント処理
+    public function storeSankougiChatComment(Request $request, $name_id, $chat_id)
+    {
+        $sankougi_chat_user = SankougiChatUser::where('name_id', '=', $name_id)->first();
+        $sankougi_chat_comment = new SankougiChatComment;
+        $sankougi_chat_comment->chat_user_id = $sankougi_chat_user->chat_user_id;
+        $sankougi_chat_comment->chat_id = $chat_id;
+        $sankougi_chat_comment->content = $request->content;
+        // 画像の保存
+        if($request->image)
+        {
+            $image_path = $request->file('image')->store('public/sankougichat_comment/post/');
+            $sankougi_chat_comment->image = basename($image_path);
+        }
+        $sankougi_chat_comment->save();
+
+        return back();
+    }
+
     // プロフィール画面
-    public function showSankougiChatProfile($id)
+    public function showSankougiChatProfile($name_id)
     {
         return view('Home.SankougiChat.sankougichat_profile', [
             'sankougi_chats'     =>  SankougiChat::all(),
-            'sankougi_chat_user' =>  SankougiChatUser::where('name_id', '=', $id)->first(),
+            'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_user' =>  SankougiChatUser::where('name_id', '=', $name_id)->first(),
         ]);
     }
 

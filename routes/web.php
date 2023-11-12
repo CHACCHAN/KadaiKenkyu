@@ -107,8 +107,14 @@ Route::get('/localmemo/only_image_delete/id={delete_id}', [HomeController::class
 // Home->三工技チャット
 Route::get('/sankougichat', [HomeController::class, 'showSankougiChat'])->name('Home.sankougichat');
 Route::post('/sankougichat', [HomeController::class, 'sankougichat']);
+// Home->三工技チャット->投稿ピックアップ
+Route::get('/sankougichat/pickup/id={name_id}/post={chat_id}', [HomeCOntroller::class, 'showSankougiChatPickup'])->name('Home.sankougi.pickup');
+// Home->三工技チャット->いいねわるい
+Route::post('/sankougichat/evaluation', [HomeController::class, 'evaluationSankougiChat'])->name('Home.sankougichat.evaluation');
+// Home->三工技チャット->コメント
+Route::post('/sankougichat/comment/id={name_id}/post={chat_id}', [HomeController::class, 'storeSankougiChatComment'])->name('Home.sankougichat.comment');
 // Home->三工技チャット->プロフィール
-Route::get('/sankougichat/profile/id={user_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
+Route::get('/sankougichat/profile/id={name_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
 // Home->三工技チャット->プロフィール更新
 Route::post('/sankougichat/profile/update', [HomeController::class, 'updateSankougiChatProfile'])->name('Home.sankougichat.profile.update');
 // Home->三工技チャット->プロフィール登録
