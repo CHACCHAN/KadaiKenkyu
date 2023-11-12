@@ -469,15 +469,15 @@
         $(window).scroll(function() {
             var scrollTop = $(window).scrollTop();
             if (scrollTop > 50) {
-                $("#elm").show();
+                $("#elm").fadeIn();
             } else {
-                $("#elm").hide();
+                $("#elm").fadeOut();
             }
         });
 
         $(window).on('scroll', function() {
             if ($(window).scrollTop() === 0) {
-                $("#elm").hide();
+                $("#elm").fadeOut();
             }
         });
     });
