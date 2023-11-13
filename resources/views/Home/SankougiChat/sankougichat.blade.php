@@ -19,7 +19,7 @@
                         </svg>   掲示板ホーム
                     </a>
                     {{-- スレッド --}}
-                    <a @if(isset($sankougi_chat_none_user))href="#"@endif class="list-group-item h4 @if(Request::is('sankougichat/a')) list-group-item-secondary @endif">
+                    <a @if(isset($sankougi_chat_none_user))href="{{ route('Home.sankougichat.thread') }}"@endif class="list-group-item h4 @if(Request::is('sankougichat/thread')) list-group-item-secondary @endif">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-square-dots-fill" viewBox="0 0 16 16">
                             <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2V2zm5 4a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                         </svg>   スレッド
@@ -118,7 +118,7 @@
                 <div class="col-12">
                     @yield('view')
                 </div>
-                @if(!Request::is('sankougichat/profile/*') && !Request::is('sankougichat/pickup/*'))
+                @if(!Request::is('sankougichat/profile/*') && !Request::is('sankougichat/pickup/*') && !Request::is('sankougichat/thread'))
                     {{-- 投稿カード --}}
                     @foreach($sankougi_chats as $sankougi_chat)
                         <div class="col-9">
@@ -333,6 +333,7 @@
 
                                                                 //{{-- Fetch いいねのみ --}}
                                                                 function send_{{ $sankougi_chat->chat_id }}(e) {
+                                                                    console.log(e);
                                                                     fetch('{{ route('Home.sankougichat.evaluation') }}', {
                                                                         method: 'POST',
                                                                         headers: {
