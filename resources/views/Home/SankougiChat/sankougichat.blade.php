@@ -118,7 +118,7 @@
                 <div class="col-12">
                     @yield('view')
                 </div>
-                @if(!Request::is('sankougichat/profile/*') && !Request::is('sankougichat/pickup/*') && !Request::is('sankougichat/thread'))
+                @if(Request::is('sankougichat'))
                     {{-- 投稿カード --}}
                     @foreach($sankougi_chats as $sankougi_chat)
                         <div class="col-9">

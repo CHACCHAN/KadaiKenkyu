@@ -282,12 +282,15 @@ class HomeController extends Controller
     // スレッド画面
     public function showSankougiChatThread()
     {
+        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id;
+        
         return view('Home.SankougiChat.sankougichat_thread', [
-            'sankougi_chat_users'        =>  SankougiChatUser::get(),
-            'sankougi_chat_none_user'    =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
-            'sankougi_chat_user'         =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
-            'sankougi_chat_threads'      =>  SankougiChatThread::get(),
-            'sankougi_chat_thread_joins' =>  SankougiChatThreadJoin::get(),
+            'sankougi_chat_users'             =>  SankougiChatUser::get(),
+            'sankougi_chat_none_user'         =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_user'              =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_threads'           =>  SankougiChatThread::latest()->get(),
+            'sankougi_chat_thread_joins'      =>  SankougiChatThreadJoin::get(),
+            'sankougi_chat_thread_join_count' =>  SankougiChatThreadJoin::where('chat_user_id', '=', $sankougi_chat_user)->get()->count(),
         ]);
     }
 
@@ -323,7 +326,116 @@ class HomeController extends Controller
         $sankougi_chat_thread_job->admin_flag = true;
         $sankougi_chat_thread_job->save();
 
+        // スレッドカテゴリを作成
+        $sankougi_chat_thread_category = new SankougiChatThreadCategory;
+        $sankougi_chat_thread_category->sankougi_chat_thread_id = $sankougi_chat_thread->id;
+        $sankougi_chat_thread_category->title = '新しいカテゴリ';
+        $sankougi_chat_thread_category->save();
+
+        // スレッドチャンネルを作成
+        $sankougi_chat_thread_channel = new SankougiChatThreadChannel;
+        $sankougi_chat_thread_channel->sankougi_chat_thread_category_id = SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread->id)->first()->id;
+        $sankougi_chat_thread_channel->title = '新しいチャンネル';
+        $sankougi_chat_thread_channel->save();
+
         return redirect()->back();
+    }
+
+    // スレッドカテゴリ画面
+    public function showSankougiChatThreadCategory($name_id, $sankougi_chat_thread_id)
+    {
+        $sankougi_chat_user = SankougiChatUser::where([
+            ['name_id', '=', $name_id],
+            ['user_id', '=', Auth::id()],
+        ])->first();
+        // 参加済みのスレッドかのチェック
+        if($sankougi_chat_user)
+        {
+            return view('Home.SankougiChat.sankougichat_thread_category', [
+                'sankougi_chat_none_user'        =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+                'sankougi_chat_thread'           =>  SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first(),
+                'sankougi_chat_thread_categorys' =>  SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
+                'sankougi_chat_thread_channels'  =>  SankougiChatThreadChannel::get(),
+            ]);
+        }
+        else
+        {
+            return redirect()->route('Home.sankougichat.thread');
+        }
+    }
+
+    // スレッド参加処理
+    public function storeSankougiChatThread($name_id, $sankougi_chat_thread_id)
+    {
+        $sankougi_chat_user = SankougiChatUser::where('name_id', '=', $name_id)->first()->chat_user_id;
+        // 新規参加者情報を登録
+        $sankougi_chat_thread_join = new SankougiChatThreadJoin;
+        $sankougi_chat_thread_join->sankougi_chat_thread_id = $sankougi_chat_thread_id;
+        $sankougi_chat_thread_join->chat_user_id = $sankougi_chat_user;
+        $sankougi_chat_thread_join->save();
+        // 参加者カウントを更新
+        $sankougi_chat_thread = SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first();
+        $sankougi_chat_thread->update([
+            'join_count' => $sankougi_chat_thread->join_count + 1,
+        ]);
+        // スレッドジョブを設定
+        $sankougi_chat_thread_job = new SankougiChatThreadJob;
+        $sankougi_chat_thread_job->sankougi_chat_thread_id = $sankougi_chat_thread_id;
+        $sankougi_chat_thread_job->chat_user_id = $sankougi_chat_user;
+        $sankougi_chat_thread_job->save();
+
+        return redirect()->route('Home.sankougichat.thread');
+    }
+
+    // スレッド退出処理
+    public function deleteSankougiChatThread($name_id, $sankougi_chat_thread_id)
+    {
+        $sankougi_chat_user = SankougiChatUser::where('name_id', '=', $name_id)->first()->chat_user_id;
+        // 管理者が退出する場合
+        if(SankougiChatThreadJob::where([
+            ['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],
+            ['chat_user_id', '=', $sankougi_chat_user],
+            ['admin_flag', '=', true],
+        ])->first())
+        {
+            // 参加者情報削除
+            $sankougi_chat_thread_joins = SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get();
+            foreach($sankougi_chat_thread_joins as $sankougi_chat_thread_join)
+            {
+                $sankougi_chat_thread_join->delete();
+            }
+            // スレッドジョブ削除
+            $sankougi_chat_thread_jobs = SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get();
+            foreach($sankougi_chat_thread_jobs as $sankougi_chat_thread_job)
+            {
+                $sankougi_chat_thread_job->delete();
+            }
+            // スレッド画像の削除
+            $sankougi_chat_thread = SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first();
+            Storage::disk('public')->delete('sankougichat_thread/image/'. $sankougi_chat_thread->image);
+            // スレッドの削除
+            $sankougi_chat_thread->delete();
+        }
+        else
+        {
+            // 参加者情報削除
+            SankougiChatThreadJoin::where([
+                ['chat_user_id', '=', $sankougi_chat_user],
+                ['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],
+            ])->delete();
+            // スレッドジョブ削除
+            SankougiChatThreadJob::where([
+                ['chat_user_id', '=', $sankougi_chat_user],
+                ['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],
+            ])->delete();
+            // 参加者カウントを更新
+            $sankougi_chat_thread = SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first();
+            $sankougi_chat_thread->update([
+                'join_count' => $sankougi_chat_thread->join_count - 1,
+            ]);
+        }
+        
+        return redirect()->route('Home.sankougichat.thread');
     }
 
     // プロフィール画面
