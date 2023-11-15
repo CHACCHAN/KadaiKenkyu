@@ -118,6 +118,8 @@ Route::get('/sankougichat/thread', [HomeController::class, 'showSankougiChatThre
 Route::post('/sankougichat/thread', [HomeController::class, 'sankougichatthread']);
 // Home->三工技チャット->スレッド->カテゴリ
 Route::get('/sankougichat/thread/category/id={name_id}/thread={sankougi_chat_thread_id}', [HomeController::class, 'showSankougiChatThreadCategory'])->name('Home.sankougichat.thread.category');
+// Home->三工技チャット->スレッド->チャンネル
+Route::get('/sankougichat/thread/category/channel/id={name_id}/thread={sankougi_chat_thread_id}/category={sankougi_chat_thread_category_id}/channel={sankougi_chat_thread_channel_id}', [HomeController::class, 'showSankougiChatThreadChannel'])->name('Home.sankougichat.thread.channel');
 // Home->三工技チャット->スレッド->参加
 Route::get('/sankougichat/thread/join/id={name_id}/thread={sankougi_chat_thread_id}', [HomeController::class, 'storeSankougiChatThread'])->name('Home.sankougichat.thread.join');
 // Home->三工技チャット->スレッド->退出
