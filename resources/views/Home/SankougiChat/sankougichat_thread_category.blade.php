@@ -146,7 +146,7 @@ justify-content: center;
                                     @if($sankougi_chat_thread_channel_chat->chat_user_id == $sankougi_chat_thread_channel_chat_user->chat_user_id)
                                         {{-- 曜日変更時の日付 --}}
                                         @if(\Carbon\Carbon::now()->format('d') - $sankougi_chat_thread_channel_chat->created_at->format('d') != 0)
-                                            <div class="DateText">2023年11月15日</div>
+                                            <div class="DateText">{{ \Carbon\Carbon::now()->format('Y年m月d日 H時i分') }}</div>
                                         @endif
                                         {{-- チャット本体 --}}
                                         <div class="card border-0">
