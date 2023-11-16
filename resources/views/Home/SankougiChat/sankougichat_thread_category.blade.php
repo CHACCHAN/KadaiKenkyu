@@ -30,7 +30,7 @@ justify-content: center;
         <div class="border-bottom ps-2 p-1">
             <div class="row">
                 <div class="col-2">
-                    <a href="{{ url()->previous() }}" class="btn border-0 text-start text-primary">
+                    <a href="{{ route('Home.sankougichat.thread') }}" class="btn border-0 text-start text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
@@ -51,7 +51,9 @@ justify-content: center;
                     </svg>   {{ $sankougi_chat_thread->title }}
                 </div>
                 {{-- ヘッダ画像 --}}
-                <img src="{{ asset('storage/sankougichat_thread/image/' . $sankougi_chat_thread->image) }}" alt="" width="100%">
+                @if($sankougi_chat_thread->image)
+                    <img src="{{ asset('storage/sankougichat_thread/image/' . $sankougi_chat_thread->image) }}" alt="" width="100%">
+                @endif
 
 
 
@@ -69,29 +71,55 @@ justify-content: center;
                                 </div>
                             </button>
                         </h2>
-                        {{-- 設定チャンネル一覧 --}}
+                        {{-- 設定チャンネル --}}
                         <div id="SettingMenu" class="accordion-collapse collapse">
                             <div class="accordion-body p-0">
                                 <div class="list-group list-group-flush">
                                     <a href="#" class="list-group-item list-group-item-action">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
-                                        </svg>   スレッドの名前を変更
-                                    </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
-                                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
-                                        </svg>   スレッドの説明を編集
-                                    </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
-                                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
-                                        </svg>   スレッドの権限を編集
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                                        </svg>   メンバー
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @if($sankougi_chat_thread_job->admin_flag)
+                        {{-- 管理者チャンネル一覧 --}}
+                        <div class="accordion-item">
+                            <button class="accordion-button collapsed d-flex" style="padding-top: 3px; padding-bottom: 3px;" type="button" data-bs-toggle="collapse" data-bs-target="#AdminMenu" aria-expanded="false" aria-controls="SettingMenu">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10.5 1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4H1.5a.5.5 0 0 1 0-1H10V1.5a.5.5 0 0 1 .5-.5ZM12 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm-6.5 2A.5.5 0 0 1 6 6v1.5h8.5a.5.5 0 0 1 0 1H6V10a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5ZM1 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 1 8Zm9.5 2a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V13H1.5a.5.5 0 0 1 0-1H10v-1.5a.5.5 0 0 1 .5-.5Zm1.5 2.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/>
+                                </svg>
+                                <div class="ms-1 fs-5">
+                                    管理者メニュー
+                                </div>
+                            </button>
+                            {{-- 管理者チャンネル --}}
+                            <div id="AdminMenu" class="accordion-collapse collapse">
+                                <div class="accordion-body p-0">
+                                    <div class="list-group list-group-flush">
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                            </svg>   カテゴリの編集
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
+                                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                                            </svg>   チャンネルの編集
+                                        </a>
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+                                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
+                                            </svg>   権限の編集
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="border-bottom mt-3"></div>
 
 
 
@@ -140,7 +168,7 @@ justify-content: center;
                     </div>
                     {{-- ゲットされたチャットを表示 --}}
                     <div class="card h-75 border-0">
-                        <div id="Chat_Content" class="card-body p-0 overflow-auto" style="height: 90vh;">
+                        <div id="ChatContent" class="card-body p-0 overflow-auto" style="height: 90vh;">
                             @foreach($sankougi_chat_thread_channel_chats as $sankougi_chat_thread_channel_chat)
                                 @foreach($sankougi_chat_thread_channel_chat_users as $sankougi_chat_thread_channel_chat_user)
                                     @if($sankougi_chat_thread_channel_chat->chat_user_id == $sankougi_chat_thread_channel_chat_user->chat_user_id)
@@ -154,14 +182,16 @@ justify-content: center;
                                                 <div class="row">
                                                     <div class="col-1 p-3 pt-2 pb-0">
                                                         {{-- チャットした人のアイコン --}}
-                                                        <img class="rounded-circle" src="https://media.discordapp.net/attachments/845634545800839171/1173755419475316736/IMG_9879.jpg?ex=65651beb&is=6552a6eb&hm=f66c35a4f3a07d87379eec8ef582254d1850c55724ff895d4cb43d71f48d507e&=&width=675&height=635" alt="" width="100%">
+                                                        <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
+                                                            <img class="rounded-circle" src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_thread_channel_chat_user->image_avatar) }}" alt="" width="100%">
+                                                        </a>
                                                     </div>
                                                     <div class="col-11 p-0">
                                                         <div class="d-flex">
                                                             {{-- チャットした人のユーザネーム --}}
                                                             <div class="fs-4 font-weight-bold">{{ $sankougi_chat_thread_channel_chat_user->name }}</div>
                                                             {{-- チャットした人のチャット日付 --}}
-                                                            <div class="mt-2 ms-2 text-secondary">{{ $sankougi_chat_thread_channel_chat->created_at }}</div>
+                                                            <div class="mt-2 ms-2 text-secondary">{{ $sankougi_chat_thread_channel_chat->created_at->format('Y-m-d H:i') }}</div>
                                                         </div>
                                                         {{-- チャットコンテンツ --}}
                                                         <div class="fs-5">{{ $sankougi_chat_thread_channel_chat->content }}</div>
@@ -176,24 +206,21 @@ justify-content: center;
                         </div>
                     </div>
                     {{-- チャット入力欄 --}}
-                    <form id="ChatForm">
-                        <div class="d-flex px-2 pt-2 pe-4">
-                            <div class="input-group">
-                                <span class="input-group-text" id="ChatInputArea">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                                    </svg>
-                                </span>
-                                <input type="text" id="ChatContent" class="form-control form-control-lg me-2" placeholder="メッセージを入力" aria-describedby="ChatInputArea">
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
-                                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                    <div class="d-flex px-2 pt-2 pe-4">
+                        <div class="input-group">
+                            <span class="input-group-text" id="ChatInputArea">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
                                 </svg>
-                            </button>
+                            </span>
+                            <input type="text" id="ChatInput" class="form-control form-control-lg me-2" placeholder="メッセージを入力" aria-describedby="ChatInputArea">
                         </div>
-                        <button id="QuitButton" type="button">Quit</button>
-                    </form>
+                        <button type="submit" id="ChatSubmit" class="btn btn-primary" style="width: 100px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             @endif
         </div>
@@ -201,24 +228,105 @@ justify-content: center;
 </div>
 @endsection
 @section('jQuery')
-<script type="text/javascript">
-    // Fetch 送信
-    const stream = new ReadableStream({
-        start(controller) {
-            // 送信ボタンを押したら
-            document.getElementById("ChatForm").addEventListener("submit", (event) => {
-                event.preventDefault();
-                // messageに文字列を追加
-                const message = document.getElementById("ChatContent").value;
-                document.getElementById("ChatContent").value = "";
+<script type="module">
+    // チャットURLに到達したらチャットを監視する
+    $(document).ready(function() {
+        if(location.href === '@if(isset($sankougi_chat_thread_channel_chat_link)){{ $sankougi_chat_thread_channel_chat_link }}@endif')
+        {  
+            // 最下部までスクロール
+            $('#ChatContent').scrollTop($('#ChatContent')[0].scrollHeight);
+            // 日付情報保持用
+            var LatestDate;
+            // 初回処理防止用
+            var Flag = false;
 
-                // ストリームに文字列を追加
-                controller.enqueue(message);
+            // 0.5秒おきにデータを受信
+            setInterval(() => {
+                get_data();
+            }, 500);
+
+            // データをAjaxで取得
+            function get_data() {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    url: "{{ route('Home.sankougichat.thread.channel.getchat') }}",
+                    type: 'POST',
+                    data: {
+                        sankougi_chat_thread_channel_id: @if(isset($sankougi_chat_thread_channel_id)){{ $sankougi_chat_thread_channel_id }}@endif,
+                        name_id: '{{ $sankougi_chat_user->name_id }}',
+                    },
+                })
+                .done((res) => {
+                    if(LatestDate !== res.created_at) {
+                        // 追加するチャット内容を設定
+                        const html = `
+                            <div class="card border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-1 p-3 pt-2 pb-0">
+                                            <a href="{{ url('sankougichat/profile/id=') }}${res.name_id}" class="p-0 m-0">
+                                                <img class="rounded-circle" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
+                                            </a>
+                                        </div>
+                                        <div class="col-11 p-0">
+                                            <div class="d-flex">
+                                                <div class="fs-4 font-weight-bold">${res.name}</div>
+                                                <div class="mt-2 ms-2 text-secondary">${res.created_at}</div>
+                                            </div>
+                                            <div class="fs-5">${res.content}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        // チャット本体を追加
+                        if(Flag) {
+                            $('#ChatContent').append(html);
+	                        $('#ChatContent').scrollTop($('#ChatContent')[0].scrollHeight);
+                        }
+                        Flag = true;
+
+                        // 日付情報を更新
+                        LatestDate = res.created_at;
+                    }
+                })
+                .fail((error) => {
+                    alert('通信に失敗しました');
+                    console.log(error);
+                });
+            }
+
+            // 送信をクリックしたら
+            $('#ChatSubmit').on('click', function() {
+                // チャットの内容を取得
+                var ChatInput = $('#ChatInput').val();
+                console.log(ChatInput);
+                if(ChatInput !== '') {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        },
+                        url: "{{ route('Home.sankougichat.thread.channel.postchat') }}",
+                        type: 'POST',
+                        data: {
+                            sankougi_chat_thread_channel_id: @if(isset($sankougi_chat_thread_channel_id)){{ $sankougi_chat_thread_channel_id }}@endif,
+                            name_id: '{{ $sankougi_chat_user->name_id }}',
+                            content: ChatInput,
+                        },
+                    })
+                    .done((res => {
+
+                    }))
+                    .fail((error) => {
+                        alert('通信に失敗しました');
+                    });
+                    // チャット欄を空にする
+                    $('#ChatInput').val('');
+                }
             });
-            
-            // 退出ボタン
-            document.getElementById("QuitButton").addEventListener("click", () => controller.close());
-        },
-    }).pipeThrough(new TextEncoderStream());
+        }
+    });
 </script>
 @endsection

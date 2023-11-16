@@ -357,6 +357,7 @@ class HomeController extends Controller
                 'sankougi_chat_thread'               =>  SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first(),
                 'sankougi_chat_thread_categorys'     =>  SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
                 'sankougi_chat_thread_channels'      =>  SankougiChatThreadChannel::get(),
+                'sankougi_chat_thread_job'           =>  SankougiChatThreadJob::where([['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],['chat_user_id', '=', $sankougi_chat_user->chat_user_id]])->first(),
             ]);
         }
         else
@@ -386,6 +387,13 @@ class HomeController extends Controller
             $user = SankougiChatUser::where('chat_user_id', '=', $sankougi_chat_thread_channel_chat->chat_user_id)->first();
             $sankougi_chat_thread_channel_chat_users->push($user);
         }
+        // パラメータ付きリンクを生成する
+        $sankougi_chat_thread_channel_chat_link = route('Home.sankougichat.thread.channel', [
+            'name_id' => $name_id,
+            'sankougi_chat_thread_id' => $sankougi_chat_thread_id,
+            'sankougi_chat_thread_category_id' => $sankougi_chat_thread_category_id,
+            'sankougi_chat_thread_channel_id' => $sankougi_chat_thread_channel_id,
+        ]);
 
         return view('Home.SankougiChat.sankougichat_thread_category', [
             'sankougi_chat_none_user'                 =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
@@ -394,38 +402,44 @@ class HomeController extends Controller
             'sankougi_chat_thread_category'           =>  $sankougi_chat_thread_category_id,
             'sankougi_chat_thread_categorys'          =>  SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             'sankougi_chat_thread_channels'           =>  SankougiChatThreadChannel::get(),
+            'sankougi_chat_thread_channel_id'         =>  $sankougi_chat_thread_channel_id,
             'sankougi_chat_thread_channel_title'      =>  SankougiChatThreadChannel::where('id', '=', $sankougi_chat_thread_channel_id)->first()->title,
             'sankougi_chat_thread_channel_chats'      =>  $sankougi_chat_thread_channel_chats,
             'sankougi_chat_thread_channel_chat_users' =>  $sankougi_chat_thread_channel_chat_users,
+            'sankougi_chat_thread_channel_chat_link'  =>  $sankougi_chat_thread_channel_chat_link,
+            'sankougi_chat_thread_job'                =>  SankougiChatThreadJob::where([['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],['chat_user_id', '=', $sankougi_chat_user->chat_user_id]])->first(),
         ]);
     }
 
-    // スレッドチャンネルチャット受信処理 : Fetch Stream Upload API
+    // スレッドチャンネルチャット受信処理 : Ajax
     public function getSankougiChatThreadChannelChat(Request $request)
     {
-        // DBから指定したチャンネルIDとユーザの最新チャットデータを取得する
+        // DBから指定したチャンネルIDの最新チャットデータを取得する
         $sankougi_chat_thread_channel_chat = SankougiChatThreadChannelChat::where([
             ['sankougi_chat_thread_channel_id', '=', $request->sankougi_chat_thread_channel_id],
-            ['chat_user_id', '=', $request->chat_user_id],
-        ])->latest()->first();
-
-        $sankougi_chat_thread_channel_chat_user = SankougiChatUser::where('chat_user_id', '=', $request->chat_user_id)->first();
+            ['id', '=', SankougiChatThreadChannelChat::where('sankougi_chat_thread_channel_id', '=', $request->sankougi_chat_thread_channel_id)->latest()->first()->id],
+        ])->first();
+        // チャットデータのユーザ情報を取得する
+        $sankougi_chat_thread_channel_chat_user = SankougiChatUser::where('chat_user_id', '=', $sankougi_chat_thread_channel_chat->chat_user_id)->first();
 
         // メッセージの内容とユーザ情報を返す
         return response()->json([
+            'name' => $sankougi_chat_thread_channel_chat_user->name,
             'content' => $sankougi_chat_thread_channel_chat->content,
             'image' => $sankougi_chat_thread_channel_chat->image,
-            'sankougi_chat_thread_channel_chat_user' => $sankougi_chat_thread_channel_chat_user,
+            'image_avatar' => $sankougi_chat_thread_channel_chat_user->image_avatar,
+            'name_id' => $sankougi_chat_thread_channel_chat_user->name_id,
+            'created_at' => $sankougi_chat_thread_channel_chat->created_at->format('Y-m-d H:i'),
         ], 200);
     }
 
-    // スレッドチャンネルチャット送信処理 : Fetch Stream Upload API
+    // スレッドチャンネルチャット送信処理 : Ajax
     public function postSankougiChatThreadChannelChat(Request $request)
     {
         // チャットデータをDBに保存する
         $sankougi_chat_thread_channel_chat = new SankougiChatThreadChannelChat;
         $sankougi_chat_thread_channel_chat->sankougi_chat_thread_channel_id = $request->sankougi_chat_thread_channel_id;
-        $sankougi_chat_thread_channel_chat->chat_user_id = SankougiChatUser::where('name_id', '=', $request->name_id)->chat_user_id;
+        $sankougi_chat_thread_channel_chat->chat_user_id = SankougiChatUser::where('name_id', '=', $request->name_id)->first()->chat_user_id;
         $sankougi_chat_thread_channel_chat->content = $request->content;
         // 画像の保存
         if($request->image)
