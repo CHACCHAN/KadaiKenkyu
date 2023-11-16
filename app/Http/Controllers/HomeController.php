@@ -400,6 +400,44 @@ class HomeController extends Controller
         ]);
     }
 
+    // スレッドチャンネルチャット受信処理 : Fetch Stream Upload API
+    public function getSankougiChatThreadChannelChat(Request $request)
+    {
+        // DBから指定したチャンネルIDとユーザの最新チャットデータを取得する
+        $sankougi_chat_thread_channel_chat = SankougiChatThreadChannelChat::where([
+            ['sankougi_chat_thread_channel_id', '=', $request->sankougi_chat_thread_channel_id],
+            ['chat_user_id', '=', $request->chat_user_id],
+        ])->latest()->first();
+
+        $sankougi_chat_thread_channel_chat_user = SankougiChatUser::where('chat_user_id', '=', $request->chat_user_id)->first();
+
+        // メッセージの内容とユーザ情報を返す
+        return response()->json([
+            'content' => $sankougi_chat_thread_channel_chat->content,
+            'image' => $sankougi_chat_thread_channel_chat->image,
+            'sankougi_chat_thread_channel_chat_user' => $sankougi_chat_thread_channel_chat_user,
+        ], 200);
+    }
+
+    // スレッドチャンネルチャット送信処理 : Fetch Stream Upload API
+    public function postSankougiChatThreadChannelChat(Request $request)
+    {
+        // チャットデータをDBに保存する
+        $sankougi_chat_thread_channel_chat = new SankougiChatThreadChannelChat;
+        $sankougi_chat_thread_channel_chat->sankougi_chat_thread_channel_id = $request->sankougi_chat_thread_channel_id;
+        $sankougi_chat_thread_channel_chat->chat_user_id = SankougiChatUser::where('name_id', '=', $request->name_id)->chat_user_id;
+        $sankougi_chat_thread_channel_chat->content = $request->content;
+        // 画像の保存
+        if($request->image)
+        {
+            $image_path = $request->file('image')->store('public/sankougichat_thread/chat/image/');
+            $sankougi_chat_thread_channel_chat->image = basename($image_path);
+        }
+        $sankougi_chat_thread_channel_chat->save();
+
+        return response()->json([], 200);
+    }
+
     // スレッド参加処理
     public function storeSankougiChatThread($name_id, $sankougi_chat_thread_id)
     {
