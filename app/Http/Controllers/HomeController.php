@@ -429,7 +429,7 @@ class HomeController extends Controller
             'image' => $sankougi_chat_thread_channel_chat->image,
             'image_avatar' => $sankougi_chat_thread_channel_chat_user->image_avatar,
             'name_id' => $sankougi_chat_thread_channel_chat_user->name_id,
-            'created_at' => $sankougi_chat_thread_channel_chat->created_at->format('Y-m-d H:i'),
+            'created_at' => $sankougi_chat_thread_channel_chat->created_at,
         ], 200);
     }
 

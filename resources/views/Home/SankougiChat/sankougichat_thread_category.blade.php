@@ -206,21 +206,23 @@ justify-content: center;
                         </div>
                     </div>
                     {{-- チャット入力欄 --}}
-                    <div class="d-flex px-2 pt-2 pe-4">
-                        <div class="input-group">
-                            <span class="input-group-text" id="ChatInputArea">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    <form>
+                        <div class="d-flex px-2 pt-2 pe-4">
+                            <div class="input-group">
+                                <span class="input-group-text" id="ChatInputArea">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                    </svg>
+                                </span>
+                                <input type="text" id="ChatInput" class="form-control form-control-lg me-2" placeholder="メッセージを入力" aria-describedby="ChatInputArea">
+                            </div>
+                            <button type="submit" id="ChatSubmit" class="btn btn-primary" style="width: 100px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
                                 </svg>
-                            </span>
-                            <input type="text" id="ChatInput" class="form-control form-control-lg me-2" placeholder="メッセージを入力" aria-describedby="ChatInputArea">
+                            </button>
                         </div>
-                        <button type="submit" id="ChatSubmit" class="btn btn-primary" style="width: 100px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
-                                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
-                            </svg>
-                        </button>
-                    </div>
+                    </form>
                 </div>
             @endif
         </div>
@@ -229,21 +231,21 @@ justify-content: center;
 @endsection
 @section('jQuery')
 <script type="module">
+    // 日付情報保持用
+    var LatestDate;
+    // 初回処理防止用
+    var Flag = false;
     // チャットURLに到達したらチャットを監視する
     $(document).ready(function() {
         if(location.href === '@if(isset($sankougi_chat_thread_channel_chat_link)){{ $sankougi_chat_thread_channel_chat_link }}@endif')
         {  
             // 最下部までスクロール
             $('#ChatContent').scrollTop($('#ChatContent')[0].scrollHeight);
-            // 日付情報保持用
-            var LatestDate;
-            // 初回処理防止用
-            var Flag = false;
 
-            // 0.5秒おきにデータを受信
+            // 1秒おきにデータを受信
             setInterval(() => {
                 get_data();
-            }, 500);
+            }, 1000);
 
             // データをAjaxで取得
             function get_data() {
@@ -258,7 +260,7 @@ justify-content: center;
                         name_id: '{{ $sankougi_chat_user->name_id }}',
                     },
                 })
-                .done((res) => {
+                .done((res) => {                   
                     if(LatestDate !== res.created_at) {
                         // 追加するチャット内容を設定
                         const html = `
@@ -293,7 +295,7 @@ justify-content: center;
                     }
                 })
                 .fail((error) => {
-                    alert('通信に失敗しました');
+                    location.reload();
                     console.log(error);
                 });
             }
@@ -320,7 +322,8 @@ justify-content: center;
 
                     }))
                     .fail((error) => {
-                        alert('通信に失敗しました');
+                        location.reload();
+                        console.log(error);
                     });
                     // チャット欄を空にする
                     $('#ChatInput').val('');
