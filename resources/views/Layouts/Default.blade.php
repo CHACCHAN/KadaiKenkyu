@@ -9,7 +9,7 @@
     {{-- Vite --}}
     @vite('resources/sass/app.scss')
     {{-- Cropper --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css">
+    <link rel="stylesheet" href="{{ asset('Layouts/CSS/cropper.min.css') }}">
     {{-- CSS --}}
     <style>
         #Hover:hover {
@@ -113,7 +113,7 @@
 {{-- Vite --}}
 @vite('resources/js/app.js')
 {{-- Cropper --}}
-<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+<script src="{{ asset('Layouts/JS/cropper.min.js') }}"></script>
 @yield('jQuery')
 </body>
 </html>
