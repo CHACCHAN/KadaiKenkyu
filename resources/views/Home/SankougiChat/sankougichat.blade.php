@@ -169,7 +169,7 @@
                                             ]) }}" class="btn border-0 p-0 m-0 text-start">
                                                 <div class="card-body">
                                                     <div class="my-1">
-                                                        {{ $sankougi_chat->content }}
+                                                        {!! nl2br(htmlspecialchars($sankougi_chat->content)) !!}
                                                     </div>
                                                     @if($sankougi_chat->image)
                                                         <img src="{{ asset('storage/sankougichat/post/'. $sankougi_chat->image) }}" class="rounded" alt="" width="100%">
