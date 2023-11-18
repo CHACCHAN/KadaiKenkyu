@@ -354,10 +354,13 @@ class HomeController extends Controller
             return view('Home.SankougiChat.sankougichat_thread_category', [
                 'sankougi_chat_none_user'            =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
                 'sankougi_chat_user'                 =>  $sankougi_chat_user,
+                'sankougi_chat_users'                =>  SankougiChatUser::get(),
                 'sankougi_chat_thread'               =>  SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first(),
                 'sankougi_chat_thread_categorys'     =>  SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
                 'sankougi_chat_thread_channels'      =>  SankougiChatThreadChannel::get(),
                 'sankougi_chat_thread_job'           =>  SankougiChatThreadJob::where([['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],['chat_user_id', '=', $sankougi_chat_user->chat_user_id]])->first(),
+                'sankougi_chat_thread_joins'         =>  SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
+                'sankougi_chat_thread_jobs'          =>  SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             ]);
         }
         else
@@ -389,15 +392,18 @@ class HomeController extends Controller
         }
         // パラメータ付きリンクを生成する
         $sankougi_chat_thread_channel_chat_link = route('Home.sankougichat.thread.channel', [
-            'name_id' => $name_id,
-            'sankougi_chat_thread_id' => $sankougi_chat_thread_id,
+            'name_id'                          => $name_id,
+            'sankougi_chat_thread_id'          => $sankougi_chat_thread_id,
             'sankougi_chat_thread_category_id' => $sankougi_chat_thread_category_id,
-            'sankougi_chat_thread_channel_id' => $sankougi_chat_thread_channel_id,
+            'sankougi_chat_thread_channel_id'  => $sankougi_chat_thread_channel_id,
+            'sankougi_chat_thread_joins'       =>  SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
+            'sankougi_chat_thread_jobs'        =>  SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
         ]);
 
         return view('Home.SankougiChat.sankougichat_thread_category', [
             'sankougi_chat_none_user'                 =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
             'sankougi_chat_user'                      =>  $sankougi_chat_user,
+            'sankougi_chat_users'                     =>  SankougiChatUser::get(),
             'sankougi_chat_thread'                    =>  SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first(),
             'sankougi_chat_thread_category'           =>  $sankougi_chat_thread_category_id,
             'sankougi_chat_thread_categorys'          =>  SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
@@ -407,6 +413,8 @@ class HomeController extends Controller
             'sankougi_chat_thread_channel_chats'      =>  $sankougi_chat_thread_channel_chats,
             'sankougi_chat_thread_channel_chat_users' =>  $sankougi_chat_thread_channel_chat_users,
             'sankougi_chat_thread_channel_chat_link'  =>  $sankougi_chat_thread_channel_chat_link,
+            'sankougi_chat_thread_joins'              =>  SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
+            'sankougi_chat_thread_jobs'               =>  SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             'sankougi_chat_thread_job'                =>  SankougiChatThreadJob::where([['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],['chat_user_id', '=', $sankougi_chat_user->chat_user_id]])->first(),
         ]);
     }
@@ -429,7 +437,8 @@ class HomeController extends Controller
             'image' => $sankougi_chat_thread_channel_chat->image,
             'image_avatar' => $sankougi_chat_thread_channel_chat_user->image_avatar,
             'name_id' => $sankougi_chat_thread_channel_chat_user->name_id,
-            'created_at' => $sankougi_chat_thread_channel_chat->created_at,
+            'created_at' => $sankougi_chat_thread_channel_chat->created_at->format('Y-m-d H:i'),
+            'created_data' => $sankougi_chat_thread_channel_chat->created_at,
         ], 200);
     }
 

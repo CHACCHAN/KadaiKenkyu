@@ -75,11 +75,89 @@ justify-content: center;
                         <div id="SettingMenu" class="accordion-collapse collapse">
                             <div class="accordion-body p-0">
                                 <div class="list-group list-group-flush">
-                                    <a href="#" class="list-group-item list-group-item-action">
+                                    {{-- メンバー --}}
+                                    <button class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#SettingModal">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                                             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
                                         </svg>   メンバー
-                                    </a>
+                                    </button>
+                                    {{-- メンバーモーダル --}}
+                                    <div class="modal fade" id="SettingModal" tabindex="-1" aria-labelledby="SettingModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-0 py-1 mx-auto">
+                                                    <h1 class="modal-title fs-5" id="SettingModalLabel">メンバー ({{ $sankougi_chat_thread->join_count }})</h1>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{-- 管理者のみを表示 --}}
+                                                    @foreach($sankougi_chat_thread_joins as $sankougi_chat_thread_join)
+                                                        @foreach($sankougi_chat_thread_jobs as $job)
+                                                            @foreach($sankougi_chat_users as $user)
+                                                                @if($sankougi_chat_thread_join->chat_user_id == $user->chat_user_id && $job->chat_user_id == $user->chat_user_id)
+                                                                    @if($job->admin_flag)
+                                                                        <div class="row mb-1">
+                                                                            @if($user->image_avatar)
+                                                                                <div class="col-2 p-0">
+                                                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                </div>
+                                                                            @else
+                                                                                <div class="col-2 p-0">
+                                                                                    <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                </div>
+                                                                            @endif
+                                                                            <div class="col-9 px-0 ps-1 my-auto">
+                                                                                {{ $user->name }} : 管理者
+                                                                            </div>
+                                                                            <div class="col-1 p-0 my-auto">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+                                                                                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
+                                                                                </svg>
+                                                                            </div>
+                                                                        </div>
+                                                                        @break
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    @endforeach
+                                                    {{-- 管理者以外を表示 --}}
+                                                    @foreach($sankougi_chat_thread_joins as $sankougi_chat_thread_join)
+                                                        @foreach($sankougi_chat_thread_jobs as $job)
+                                                            @foreach($sankougi_chat_users as $user)
+                                                                @if($sankougi_chat_thread_join->chat_user_id == $user->chat_user_id && $job->chat_user_id == $user->chat_user_id)
+                                                                    @if(!$job->admin_flag)
+                                                                        <div class="row mb-1">
+                                                                            @if($user->image_avatar)
+                                                                                <div class="col-2 p-0">
+                                                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                </div>
+                                                                            @else
+                                                                                <div class="col-2 p-0">
+                                                                                    <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                </div>
+                                                                            @endif
+                                                                            <div class="col-9 px-0 ps-1 my-auto">
+                                                                                {{ $user->name }}
+                                                                            </div>
+                                                                            <div class="col-1 p-0 my-auto">
+                                                                                @if($sankougi_chat_thread_job->admin_flag)
+                                                                                    <a href="#" class="btn border-0 p-0">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                                        </svg>
+                                                                                    </a>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,9 +260,15 @@ justify-content: center;
                                                 <div class="row">
                                                     <div class="col-1 p-3 pt-2 pb-0">
                                                         {{-- チャットした人のアイコン --}}
+                                                        @if($sankougi_chat_thread_channel_chat_user->image_avatar)
                                                         <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
                                                             <img class="rounded-circle" src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_thread_channel_chat_user->image_avatar) }}" alt="" width="100%">
                                                         </a>
+                                                        @else
+                                                        <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
+                                                            <img class="rounded-circle" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="100%">
+                                                        </a>
+                                                        @endif                                                       
                                                     </div>
                                                     <div class="col-11 p-0">
                                                         <div class="d-flex">
@@ -264,7 +348,7 @@ justify-content: center;
                 .done((res) => {
                     StartUp = true;
 
-                    if(LatestDate !== res.created_at) {
+                    if(LatestDate !== res.created_data) {
                         // 追加するチャット内容を設定
                         const html = `
                             <div class="card border-0">
@@ -294,7 +378,11 @@ justify-content: center;
                         Flag = true;
 
                         // 日付情報を更新
-                        LatestDate = res.created_at;
+                        LatestDate = res.created_data;
+
+                        // 送信ボタンの有効化
+                        $('#ChatSubmit').prop("disabled", false);
+                        $('#ChatSubmit').html('<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16"><path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/></svg>');
                     }
                 })
                 .fail((error) => {
@@ -309,6 +397,9 @@ justify-content: center;
                 var ChatInput = $('#ChatInput').val();
                 console.log(ChatInput);
                 if(ChatInput !== '') {
+                    // 送信ボタンの無効化
+                    $('#ChatSubmit').prop("disabled", true);
+                    $('#ChatSubmit').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
