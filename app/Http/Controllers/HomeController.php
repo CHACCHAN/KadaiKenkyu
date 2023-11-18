@@ -532,7 +532,7 @@ class HomeController extends Controller
             ]);
         }
         
-        return redirect()->route('Home.sankougichat.thread');
+        return back();
     }
 
     // プロフィール画面

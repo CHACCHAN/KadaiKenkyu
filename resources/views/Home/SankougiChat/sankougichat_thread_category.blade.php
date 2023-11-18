@@ -98,11 +98,15 @@ justify-content: center;
                                                                         <div class="row mb-1">
                                                                             @if($user->image_avatar)
                                                                                 <div class="col-2 p-0">
-                                                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                        <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                    </a>
                                                                                 </div>
                                                                             @else
                                                                                 <div class="col-2 p-0">
-                                                                                    <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                        <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                    </a>
                                                                                 </div>
                                                                             @endif
                                                                             <div class="col-9 px-0 ps-1 my-auto">
@@ -129,19 +133,27 @@ justify-content: center;
                                                                         <div class="row mb-1">
                                                                             @if($user->image_avatar)
                                                                                 <div class="col-2 p-0">
-                                                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                        <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                    </a>
                                                                                 </div>
                                                                             @else
                                                                                 <div class="col-2 p-0">
-                                                                                    <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                        <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                    </a>
                                                                                 </div>
                                                                             @endif
                                                                             <div class="col-9 px-0 ps-1 my-auto">
                                                                                 {{ $user->name }}
                                                                             </div>
                                                                             <div class="col-1 p-0 my-auto">
+                                                                                {{-- キックボタン --}}
                                                                                 @if($sankougi_chat_thread_job->admin_flag)
-                                                                                    <a href="#" class="btn border-0 p-0">
+                                                                                    <a href="{{ route('Home.sankougichat.thread.delete', [
+                                                                                        'name_id' => $user->name_id,
+                                                                                        'sankougi_chat_thread_id' => $sankougi_chat_thread->id,
+                                                                                        ]) }}" class="btn border-0 p-0">
                                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                                                                                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                                                                         </svg>
@@ -251,9 +263,9 @@ justify-content: center;
                                 @foreach($sankougi_chat_thread_channel_chat_users as $sankougi_chat_thread_channel_chat_user)
                                     @if($sankougi_chat_thread_channel_chat->chat_user_id == $sankougi_chat_thread_channel_chat_user->chat_user_id)
                                         {{-- 曜日変更時の日付 --}}
-                                        @if(\Carbon\Carbon::now()->format('d') - $sankougi_chat_thread_channel_chat->created_at->format('d') != 0)
+                                        {{-- @if(\Carbon\Carbon::now()->format('d') - $sankougi_chat_thread_channel_chat->created_at->format('d') != 0)
                                             <div class="DateText">{{ \Carbon\Carbon::now()->format('Y年m月d日 H時i分') }}</div>
-                                        @endif
+                                        @endif --}}
                                         {{-- チャット本体 --}}
                                         <div class="card border-0">
                                             <div class="card-body">
