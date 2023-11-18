@@ -18,10 +18,18 @@
     <div class="col-9 p-0 border-end">
         <div class="position-relative p-0">
             <a href="#" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">
-                <img id="image_header" src="{{ asset('storage/sankougichat_user/header/'. $sankougi_chat_user->image_header) }}" alt="" width="100%">
+                @if($sankougi_chat_user->image_header)
+                    <img id="image_header" src="{{ asset('storage/sankougichat_user/header/'. $sankougi_chat_user->image_header) }}" alt="" width="100%">
+                @else
+                    <img id="image_header" src="{{ asset('Home/SankougiChat/header/sample_header.jpeg') }}" alt="" width="100%">
+                @endif
             </a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">
-                <img id="image_avatar" src="{{ asset('storage/sankougichat_user/avatar/'. $sankougi_chat_user->image_avatar) }}" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%" >
+                @if($sankougi_chat_user->image_avatar)
+                    <img id="image_avatar" src="{{ asset('storage/sankougichat_user/avatar/'. $sankougi_chat_user->image_avatar) }}" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%" >
+                @else
+                    <img id="image_avatar" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%" >
+                @endif
             </a>
         </div>
         <div class="ms-4">

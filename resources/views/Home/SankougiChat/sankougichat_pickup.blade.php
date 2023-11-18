@@ -20,9 +20,15 @@
                 {{-- 投稿ヘッダー --}}
                 <div class="card-header border-0 p-0 bg-light">
                     <div class="d-flex">
-                        <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_user->name_id) }}">
-                            <img src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_user->image_avatar)}}" class="rounded-circle" alt="" width="40px">
-                        </a>
+                        @if($sankougi_chat_user->image_avatar)
+                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_user->name_id) }}">
+                                <img src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_user->image_avatar)}}" class="rounded-circle border" alt="" width="40px">
+                            </a>
+                        @else
+                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_user->name_id) }}">
+                                <img src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg')}}" class="rounded-circle border" alt="" width="40px">
+                            </a>
+                        @endif
                         {{-- 投稿時間 --}}
                         <div class="d-flex mt-2 ms-2">
                             <div class="me-2 h5">{{ $sankougi_chat_user->name}}</div>
@@ -331,9 +337,15 @@
                             @auth
                                 @if($user->user_id == Auth::id())
                                     <div class="d-flex">
-                                        <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
-                                            <img src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar)}}" class="rounded-circle" alt="" width="40px">
-                                        </a>
+                                        @if($user->image_avatar)
+                                            <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                <img src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar)}}" class="rounded-circle border" alt="" width="40px">
+                                            </a>
+                                        @else
+                                            <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                <img src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg')}}" class="rounded-circle border" alt="" width="40px">
+                                            </a>
+                                        @endif
                                         <div class="w-100">
                                             <form action="{{ route('Home.sankougichat.comment',[
                                                 'name_id' => $user->name_id,
@@ -377,9 +389,15 @@
                     <div class="card w-75 mx-auto my-3 border-0">
                         <div class="card-header border-0 p-0 bg-light">
                             <div class="d-flex">
-                                <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
-                                    <img src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar)}}" class="rounded-circle" alt="" width="40px">
-                                </a>
+                                @if($user->image_avatar)
+                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                        <img src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar)}}" class="rounded-circle border" alt="" width="40px">
+                                    </a>
+                                @else
+                                    <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                        <img src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg')}}" class="rounded-circle border" alt="" width="40px">
+                                    </a>
+                                @endif
                                 {{-- 投稿時間 --}}
                                 <div class="d-flex mt-2 ms-2">
                                     <div class="me-2 h5">{{ $user->name}}</div>

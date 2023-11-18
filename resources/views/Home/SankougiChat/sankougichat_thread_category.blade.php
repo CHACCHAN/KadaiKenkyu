@@ -407,7 +407,6 @@ justify-content: center;
             $('#ChatSubmit').on('click', function() {
                 // チャットの内容を取得
                 var ChatInput = $('#ChatInput').val();
-                console.log(ChatInput);
                 if(ChatInput !== '') {
                     // 送信ボタンの無効化
                     $('#ChatSubmit').prop("disabled", true);
