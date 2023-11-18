@@ -233,6 +233,9 @@ justify-content: center;
     var LatestDate;
     // 初回処理防止用
     var Flag = false;
+    // 初回更新処理用
+    var StartUp = true;
+
     // チャットURLに到達したらチャットを監視する
     $(document).ready(function() {
         if(location.href === '@if(isset($sankougi_chat_thread_channel_chat_link)){{ $sankougi_chat_thread_channel_chat_link }}@endif')
@@ -258,7 +261,9 @@ justify-content: center;
                         name_id: '{{ $sankougi_chat_user->name_id }}',
                     },
                 })
-                .done((res) => {                   
+                .done((res) => {
+                    StartUp = true;
+
                     if(LatestDate !== res.created_at) {
                         // 追加するチャット内容を設定
                         const html = `
@@ -293,7 +298,7 @@ justify-content: center;
                     }
                 })
                 .fail((error) => {
-                    // location.reload();
+                    StartUp = false;
                     console.log(error);
                 });
             }
@@ -317,10 +322,12 @@ justify-content: center;
                         },
                     })
                     .done((res => {
-
+                        if(StartUp === false) {
+                            location.reload();
+                        }
                     }))
                     .fail((error) => {
-                        // location.reload();
+                        location.reload();
                         console.log(error);
                     });
                     // チャット欄を空にする
