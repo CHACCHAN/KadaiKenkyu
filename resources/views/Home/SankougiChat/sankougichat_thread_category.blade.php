@@ -189,21 +189,98 @@ justify-content: center;
                             <div id="AdminMenu" class="accordion-collapse collapse">
                                 <div class="accordion-body p-0">
                                     <div class="list-group list-group-flush">
-                                        <a href="#" class="list-group-item list-group-item-action">
+                                        {{-- カテゴリ --}}
+                                        <button id="CategoryModeButton" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#CategoryModal">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                                 <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                                             </svg>   カテゴリの編集
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
+                                        </button>
+                                        {{-- カテゴリ / チャンネルモーダル --}}
+                                        <div class="modal fade" id="CategoryModal" tabindex="-1" aria-labelledby="CategoryModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h1 class="modal-title fs-5" id="CategoryModalLabel">
+                                                            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                                                <ol class="breadcrumb">
+                                                                    <li id="CategoryModeTextButton" class="breadcrumb-item"><div id="CategoryText" class="btn border-0 p-0">カテゴリ</div></li>
+                                                                    <li id="ChannelModeTextButton" class="breadcrumb-item"><div id="ChannelText" class="btn border-0 p-0">チャンネル</div></li>
+                                                                </ol>
+                                                            </nav>
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{-- カテゴリだったら --}}
+                                                        <div id="CategoryMode">
+                                                            <div class="row">
+                                                                {{-- カテゴリ選択一覧 --}}
+                                                                <div class="col-3 p-0">                                                                   
+                                                                    <div class="list-group">
+                                                                        @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
+                                                                        <div class="mx-3">
+                                                                            <button id="CategoryKey_{{ $sankougi_chat_thread_category->id }}" type="button" class="list-group-item list-group-item-action">{{ $sankougi_chat_thread_category->title }}</button>
+                                                                            <script type="text/javascript">
+                                                                                document.getElementById("CategoryKey_{{ $sankougi_chat_thread_category->id }}").onclick = function() {
+                                                                                    CategoryEdit('CategoryKey_{{ $sankougi_chat_thread_category->id }}', 'CategoryEditKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                }
+                                                                            </script>
+                                                                        </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                                {{-- カテゴリ編集 --}}
+                                                                <div class="col-9 p-0 border-start">
+                                                                    @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
+                                                                        <div id="CategoryEditKey_{{ $sankougi_chat_thread_category->id }}" class="mb-3 ps-3 pe-5" style="display: none;">
+                                                                            <div class="h5">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                                                </svg>   カテゴリの編集
+                                                                            </div>
+                                                                            <hr>
+                                                                            <label for="CategoryEditInput_{{ $sankougi_chat_thread_category->id }}" class="form-label m-0">カテゴリのタイトル</label>
+                                                                            <input type="text" class="form-control" id="CategoryEditInput_{{ $sankougi_chat_thread_category->id }}" value="{{ $sankougi_chat_thread_category->title }}" required>
+                                                                            <div class="mt-3 text-end">
+                                                                                <button id="CategoryEditSubmit" class="btn btn-primary">保存</button>
+                                                                            </div>
+                                                                            <script type="text/javascript">
+                                                                                document.getElementById('CategoryEditSubmit').onclick = function() {
+                                                                                    var CategoryEditInput = document.getElementById('CategoryEditInput_{{ $sankougi_chat_thread_category->id }}').value;
+                                                                                    if(CategoryEditInput !== '') {
+                                                                                        CategoryUpdate(CategoryEditInput, '{{ $sankougi_chat_thread_category->id }}');
+                                                                                    }                                                                
+                                                                                }
+                                                                            </script>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {{-- チャンネルだったら --}}
+                                                        <div id="ChannelMode">
+
+                                                        </div>
+                                                    </div>
+                                                    {{-- <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                    </div> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- チャンネル --}}
+                                        <button id="ChannelModeButton" class="list-group-item list-group-item-action">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
                                                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
                                             </svg>   チャンネルの編集
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
+                                        </button>
+                                        <button class="list-group-item list-group-item-action">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
                                             </svg>   権限の編集
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -437,6 +514,40 @@ justify-content: center;
                 }
             });
         }
+
+        // カテゴリの編集
+        $('#CategoryModeButton, #CategoryModeTextButton').on('click', function() {
+            $('#CategoryText').css('text-decoration-line', 'underline');
+            $('#ChannelText').css('text-decoration-line', 'none');
+            $('#CategoryMode').css('display', 'block');
+            $('#ChannelyMode').css('display', 'none');
+        });
+
+        // チャンネルの編集
+        $('#ChannelModeButton, #ChannelModeTextButton').on('click', function() {
+            $('#CategoryText').css('text-decoration-line', 'none');
+            $('#ChannelText').css('text-decoration-line', 'underline');
+            $('#CategoryMode').css('display', 'none');
+            $('#ChannelyMode').css('display', 'block');
+        });
     });
+</script>
+<script type="text/javascript">
+    var Temp;
+    // カテゴリの編集選択
+    function CategoryEdit(CategoryKey, CategoryEditKey) {
+        // 一時保存
+        Temp = CategoryEditKey;
+        // 前のものは非表示
+        document.getElementById(Temp).style.display = "none";
+        // 最新のものは表示
+        document.getElementById(CategoryEditKey).style.display = "block";
+    }
+
+    // カテゴリの更新
+    function CategoryUpdate(CategoryEditInput, sankougi_chat_thread_category_id) {
+        // Fetchで送信
+        console.log('aa');
+    }
 </script>
 @endsection
