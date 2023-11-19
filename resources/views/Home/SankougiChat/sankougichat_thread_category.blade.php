@@ -273,13 +273,13 @@ justify-content: center;
                                                     <div class="col-1 p-3 pt-2 pb-0">
                                                         {{-- チャットした人のアイコン --}}
                                                         @if($sankougi_chat_thread_channel_chat_user->image_avatar)
-                                                        <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
-                                                            <img class="rounded-circle" src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_thread_channel_chat_user->image_avatar) }}" alt="" width="100%">
-                                                        </a>
+                                                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
+                                                                <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_thread_channel_chat_user->image_avatar) }}" alt="" width="100%">
+                                                            </a>
                                                         @else
-                                                        <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
-                                                            <img class="rounded-circle" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="100%">
-                                                        </a>
+                                                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_thread_channel_chat_user->name_id) }}" class="p-0 m-0">
+                                                                <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="100%">
+                                                            </a>
                                                         @endif                                                       
                                                     </div>
                                                     <div class="col-11 p-0">
@@ -368,7 +368,7 @@ justify-content: center;
                                     <div class="row">
                                         <div class="col-1 p-3 pt-2 pb-0">
                                             <a href="{{ url('sankougichat/profile/id=') }}${res.name_id}" class="p-0 m-0">
-                                                <img class="rounded-circle" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
+                                                <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
                                             </a>
                                         </div>
                                         <div class="col-11 p-0">
