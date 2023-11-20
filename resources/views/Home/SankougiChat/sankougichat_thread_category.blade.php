@@ -217,15 +217,30 @@ justify-content: center;
                                                                 {{-- カテゴリ選択一覧 --}}
                                                                 <div class="col-3 p-0">                                                                   
                                                                     <div class="list-group">
-                                                                        @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
-                                                                        <div class="mx-3">
-                                                                            <button id="CategoryKey_{{ $sankougi_chat_thread_category->id }}" type="button" class="list-group-item list-group-item-action">{{ $sankougi_chat_thread_category->title }}</button>
+                                                                        {{-- 新規カテゴリ作成ボタン --}}
+                                                                        <div class="mx-3 mb-2 border-bottom">
+                                                                            <button id="NewCategory" class="btn btn-primary mb-2 w-100">カテゴリを作る</button>
                                                                             <script type="text/javascript">
-                                                                                document.getElementById("CategoryKey_{{ $sankougi_chat_thread_category->id }}").onclick = function() {
-                                                                                    CategoryEdit('CategoryKey_{{ $sankougi_chat_thread_category->id }}', 'CategoryEditKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                document.getElementById("NewCategory").onclick = function() {
+                                                                                    CategoryAdd({{ $sankougi_chat_thread->id }});
+                                                                                    //{{-- 作成ボタンの無効化 --}}
+                                                                                    this.disabled = true;
+                                                                                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   カテゴリを作る';
                                                                                 }
                                                                             </script>
                                                                         </div>
+                                                                        <div class="text-secondary mx-3">クリックで選択</div>
+                                                                        @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
+                                                                            <div class="mx-3">
+                                                                                <button id="CategoryKey_{{ $sankougi_chat_thread_category->id }}" type="button" class="list-group-item list-group-item-action text-truncate">
+                                                                                    {{ $sankougi_chat_thread_category->title }}
+                                                                                </button>
+                                                                                <script type="text/javascript">
+                                                                                    document.getElementById("CategoryKey_{{ $sankougi_chat_thread_category->id }}").onclick = function() {
+                                                                                        CategoryEdit('CategoryEditKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    }
+                                                                                </script>
+                                                                            </div>
                                                                         @endforeach
                                                                     </div>
                                                                 </div>
@@ -243,14 +258,36 @@ justify-content: center;
                                                                             <label for="CategoryEditInput_{{ $sankougi_chat_thread_category->id }}" class="form-label m-0">カテゴリのタイトル</label>
                                                                             <input type="text" class="form-control" id="CategoryEditInput_{{ $sankougi_chat_thread_category->id }}" value="{{ $sankougi_chat_thread_category->title }}" required>
                                                                             <div class="mt-3 text-end">
-                                                                                <button id="CategoryEditSubmit" class="btn btn-primary">保存</button>
+                                                                                <button id="CategoryEditSubmit_{{ $sankougi_chat_thread_category->id }}" class="btn btn-primary">保存</button>
+                                                                                <button id="CategoryDeleteSubmit_{{ $sankougi_chat_thread_category->id }}" class="btn btn-danger">削除</button>
                                                                             </div>
                                                                             <script type="text/javascript">
-                                                                                document.getElementById('CategoryEditSubmit').onclick = function() {
+                                                                                document.getElementById('CategoryEditInput_{{ $sankougi_chat_thread_category->id }}').addEventListener('keypress', (e) => {
+                                                                                    if(e.key === "Enter") {
+                                                                                        document.getElementById('CategoryEditSubmit_{{ $sankougi_chat_thread_category->id }}').click();
+                                                                                    }
+                                                                                });
+                                                                                document.getElementById('CategoryEditSubmit_{{ $sankougi_chat_thread_category->id }}').onclick = function() {
                                                                                     var CategoryEditInput = document.getElementById('CategoryEditInput_{{ $sankougi_chat_thread_category->id }}').value;
+                                                                                    var CategoryEditSubmit = document.getElementById('CategoryEditSubmit_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryKey = document.getElementById('CategoryKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryMenuKey = document.getElementById('CategoryMenuKey_{{ $sankougi_chat_thread_category->id }}');
                                                                                     if(CategoryEditInput !== '') {
-                                                                                        CategoryUpdate(CategoryEditInput, '{{ $sankougi_chat_thread_category->id }}');
-                                                                                    }                                                                
+                                                                                        CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, '{{ $sankougi_chat_thread_category->id }}');
+                                                                                        //{{-- 送信ボタンの無効化 --}}
+                                                                                        this.disabled = true;
+                                                                                        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   保存';
+                                                                                    }
+                                                                                }
+                                                                                document.getElementById('CategoryDeleteSubmit_{{ $sankougi_chat_thread_category->id }}').onclick = function() {
+                                                                                    var CategoryKey = document.getElementById('CategoryKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryDeleteSubmit = document.getElementById('CategoryDeleteSubmit_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryMenuKey = document.getElementById('CategoryMenuKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryEditKey = document.getElementById('CategoryEditKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    CategoryDelete(CategoryKey, CategoryDeleteSubmit, CategoryMenuKey, CategoryEditKey, {{ $sankougi_chat_thread_category->id }});
+                                                                                    //{{-- 削除ボタンの無効化 --}}
+                                                                                    this.disabled = true;
+                                                                                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   削除';
                                                                                 }
                                                                             </script>
                                                                         </div>
@@ -260,7 +297,7 @@ justify-content: center;
                                                         </div>
                                                         {{-- チャンネルだったら --}}
                                                         <div id="ChannelMode">
-
+                                                            
                                                         </div>
                                                     </div>
                                                     {{-- <div class="modal-footer">
@@ -294,11 +331,11 @@ justify-content: center;
                     @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                    {{ $sankougi_chat_thread_category->title }}
+                                <button id="CategoryMenuKey_{{ $sankougi_chat_thread_category->id }}" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#Category_{{ $sankougi_chat_thread_category->id }}" aria-expanded="false" aria-controls="Category_{{ $sankougi_chat_thread_category->id }}">
+                                    <span class="text-truncate">{{ $sankougi_chat_thread_category->title }}</span>
                                 </button>
                             </h2>
-                            <div id="flush-collapseTwo" class="accordion-collapse collapse @if(Request::is('sankougichat/thread/category/channel/id=' . $sankougi_chat_user->name_id . '/thread=' . $sankougi_chat_thread->id . '/category=' . $sankougi_chat_thread_category->id . '/*')) show @endif">
+                            <div id="Category_{{ $sankougi_chat_thread_category->id }}" class="accordion-collapse collapse @if(Request::is('sankougichat/thread/category/channel/id=' . $sankougi_chat_user->name_id . '/thread=' . $sankougi_chat_thread->id . '/category=' . $sankougi_chat_thread_category->id . '/*')) show @endif">
                                 {{-- チャンネル一覧 --}}
                                 <div class="accordion-body p-0">
                                     <div class="list-group list-group-flush">
@@ -394,6 +431,14 @@ justify-content: center;
                             </svg>
                         </button>
                     </div>
+                    {{-- エンターキー検知用 --}}
+                    <script type="text/javascript">
+                        document.getElementById('ChatInput').addEventListener('keypress', (e) => {
+                            if(e.key === "Enter") {
+                                document.getElementById('ChatSubmit').click();
+                            }
+                        });
+                    </script>
                 </div>
             @endif
         </div>
@@ -520,7 +565,7 @@ justify-content: center;
             $('#CategoryText').css('text-decoration-line', 'underline');
             $('#ChannelText').css('text-decoration-line', 'none');
             $('#CategoryMode').css('display', 'block');
-            $('#ChannelyMode').css('display', 'none');
+            $('#ChannelMode').css('display', 'none');
         });
 
         // チャンネルの編集
@@ -528,26 +573,111 @@ justify-content: center;
             $('#CategoryText').css('text-decoration-line', 'none');
             $('#ChannelText').css('text-decoration-line', 'underline');
             $('#CategoryMode').css('display', 'none');
-            $('#ChannelyMode').css('display', 'block');
+            $('#ChannelMode').css('display', 'block');
         });
     });
 </script>
 <script type="text/javascript">
     var Temp;
     // カテゴリの編集選択
-    function CategoryEdit(CategoryKey, CategoryEditKey) {
-        // 一時保存
-        Temp = CategoryEditKey;
+    function CategoryEdit(CategoryEditKey) {
+        let prevButton = document.getElementById(Temp);
+        let currentButton = document.getElementById(CategoryEditKey); 
         // 前のものは非表示
-        document.getElementById(Temp).style.display = "none";
+        if(Temp) {
+            prevButton.style.display = "none";
+        }
         // 最新のものは表示
-        document.getElementById(CategoryEditKey).style.display = "block";
+        currentButton.style.display = "block";
+
+        Temp = CategoryEditKey;
+    }
+    
+    // カテゴリ新規作成
+    function CategoryAdd(sankougi_chat_thread_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.category.make') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_id': sankougi_chat_thread_id,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+            // 作成ボタンを有効化
+            document.getElementById('NewCategory').disabled = false;
+            document.getElementById('NewCategory').innerHTML = 'カテゴリを作る';
+            location.reload();
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     // カテゴリの更新
-    function CategoryUpdate(CategoryEditInput, sankougi_chat_thread_category_id) {
+    function CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, sankougi_chat_thread_category_id) {
         // Fetchで送信
-        console.log('aa');
+        fetch('{{ route('Home.sankougichat.thread.category.update') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_category_id': sankougi_chat_thread_category_id,
+                'title': CategoryEditInput,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+                // 送信ボタンを有効化
+                CategoryEditSubmit.disabled = false;
+                CategoryEditSubmit.innerHTML = '保存';
+                // カテゴリ名の変更
+                CategoryKey.innerHTML = CategoryEditInput;
+                CategoryMenuKey.innerHTML = CategoryEditInput;
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    // カテゴリの削除
+    function CategoryDelete(CategoryKey, CategoryDeleteSubmit, CategoryMenuKey, CategoryEditKey, sankougi_chat_thread_category_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.category.delete') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_category_id': sankougi_chat_thread_category_id,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+                // 送信ボタンを有効化
+                CategoryDeleteSubmit.disabled = false;
+                CategoryDeleteSubmit.innerHTML = '削除';
+                // カテゴリを削除
+                CategoryKey.style.display = "none";
+                CategoryMenuKey.style.display = "none";
+                CategoryEditKey.style.display = "none";
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 </script>
 @endsection

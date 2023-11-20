@@ -419,6 +419,60 @@ class HomeController extends Controller
         ]);
     }
 
+    // スレッドカテゴリ作成処理 : Fetch
+    public function makeSankougiChatThreadCategory(Request $request)
+    {
+        $sankougi_chat_thread_category = new SankougiChatThreadCategory;
+        $sankougi_chat_thread_category->sankougi_chat_thread_id = $request->sankougi_chat_thread_id;
+        $sankougi_chat_thread_category->title = '新しいカテゴリ';
+        $sankougi_chat_thread_category->save();
+    }
+
+    // スレッドカテゴリ更新処理 : Fetch
+    public function updateSankougiChatThreadCategory(Request $request)
+    {
+        SankougiChatThreadCategory::where('id', '=', $request->sankougi_chat_thread_category_id)->update([
+            'title' => $request->title,
+        ]);
+    }
+
+    // スレッドカテゴリ削除処理 : Fetch
+    public function deleteSankougiChatThreadCategory(Request $request)
+    {
+        // カテゴリ配下のチャンネル削除
+        SankougiChatThreadChannel::where('sankougi_chat_thread_category_id', '=', $request->sankougi_chat_thread_category_id)->delete();
+        // カテゴリ削除
+        SankougiChatThreadCategory::where('id', '=', $request->sankougi_chat_thread_category_id)->delete();
+    }
+
+    // スレッドチャンネル作成処理 : Fetch
+    public function makeSankougiChatThreadChannel(Request $request)
+    {
+        $sankougi_chat_thread_channel = new SankougiChatThreadChannel;
+        $sankougi_chat_thread_channel->sankougi_chat_thread_category_id = $request->sankougi_chat_thread_category_id;
+        $sankougi_chat_thread_channel->title = '新しいチャンネル';
+        $sankougi_chat_thread_channel->save();
+    }
+
+    // スレッドチャンネル更新処理 : Fetch
+    public function updateSankougiChatThreadChannel(Request $request)
+    {
+        SankougiChatThreadCategory::where('id', '=', $request->sankougi_chat_thread_channel_id)->update([
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+    }
+
+    // スレッドチャンネル削除処理 : Fetch
+    public function deleteSankougiChatThreadChannel(Request $request)
+    {
+        // カテゴリ配下のチャンネル削除
+        SankougiChatThreadChannel::where([
+            ['id', '=', $request->sankougi_chat_thread_channel_id],
+            ['sankougi_chat_thread_category_id', '=', $request->sankougi_chat_thread_category_id],
+        ])->delete();
+    }
+
     // スレッドチャンネルチャット受信処理 : Ajax
     public function getSankougiChatThreadChannelChat(Request $request)
     {
@@ -506,10 +560,28 @@ class HomeController extends Controller
             foreach($sankougi_chat_thread_jobs as $sankougi_chat_thread_job)
             {
                 $sankougi_chat_thread_job->delete();
-            }
-            // スレッド画像の削除
+            }            
+            // スレッド内部情報削除
             $sankougi_chat_thread = SankougiChatThread::where('id', '=', $sankougi_chat_thread_id)->first();
-            Storage::disk('public')->delete('sankougichat_thread/image/'. $sankougi_chat_thread->image);
+            // 画像の削除
+            if($sankougi_chat_thread->image)
+            {
+                Storage::disk('public')->delete('sankougichat_thread/image/'. $sankougi_chat_thread->image);
+            }
+            // スレッドカテゴリ削除
+            $sankougi_chat_thread_categorys = SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get();
+            // スレッドチャンネル削除
+            foreach($sankougi_chat_thread_categorys as $thread_category)
+            {
+                $sankougi_chat_thread_channel = SankougiChatThreadChannel::where('sankougi_chat_thread_category_id', '=', $thread_category->id);
+                // スレッドチャンネルチャット削除
+                SankougiChatThreadChannelChat::where('sankougi_chat_thread_channel_id', '=', $sankougi_chat_thread_channel->first()->id)->delete();
+                // スレッドチャンネル削除
+                $sankougi_chat_thread_channel->delete();
+                // スレッドカテゴリ削除
+                $thread_category->delete();
+            }
+
             // スレッドの削除
             $sankougi_chat_thread->delete();
         }
