@@ -297,22 +297,135 @@ justify-content: center;
                                                         </div>
                                                         {{-- チャンネルだったら --}}
                                                         <div id="ChannelMode">
-                                                            
+                                                            <div class="row">
+                                                                {{-- チャンネル選択一覧 --}}
+                                                                <div class="col-3 p-0">                                                                   
+                                                                    <div class="list-group">
+                                                                        <div class="text-secondary mx-3">クリックで選択</div>
+                                                                        <div class="mx-3">
+                                                                            @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
+                                                                                <div class="accordion accordion-flush" id="CategoryAccordionFlush_{{ $sankougi_chat_thread_category->id }}">
+                                                                                    <div class="accordion-item">
+                                                                                        {{-- カテゴリを表示 --}}
+                                                                                        <h2 class="accordion-header border">
+                                                                                            <button class="accordion-button collapsed py-2 text-truncate" type="button" data-bs-toggle="collapse" data-bs-target="#CategoryFlush_{{ $sankougi_chat_thread_category->id }}" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                                                                {{ $sankougi_chat_thread_category->title }}
+                                                                                            </button>
+                                                                                        </h2>
+                                                                                        <div id="CategoryFlush_{{ $sankougi_chat_thread_category->id }}" class="accordion-collapse collapse" data-bs-parent="#CategoryAccordionFlush_{{ $sankougi_chat_thread_category->id }}">
+                                                                                            <div class="accordion-body p-0">
+                                                                                                <div class="list-group-item list-group-item-action p-0">
+                                                                                                    <button id="NewChannel_{{ $sankougi_chat_thread_category->id }}" class="btn btn-primary rounded-0 m-0 w-100">
+                                                                                                        チャンネルを作る
+                                                                                                    </button>
+                                                                                                    <script type="text/javascript">
+                                                                                                        document.getElementById("NewChannel_{{ $sankougi_chat_thread_category->id }}").onclick = function() {
+                                                                                                            var NewChannelButton = 'NewChannel_{{ $sankougi_chat_thread_category->id }}';
+                                                                                                            ChannelAdd(NewChannelButton, {{ $sankougi_chat_thread_category->id }});
+                                                                                                            //{{-- 作成ボタンの無効化 --}}
+                                                                                                            this.disabled = true;
+                                                                                                            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   チャンネルを作る';
+                                                                                                        }
+                                                                                                    </script>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {{-- チャンネルを表示 --}}
+                                                                                        @foreach($sankougi_chat_thread_channels as $sankougi_chat_thread_channel)
+                                                                                            @if($sankougi_chat_thread_category->id == $sankougi_chat_thread_channel->sankougi_chat_thread_category_id)
+                                                                                                <div id="CategoryFlush_{{ $sankougi_chat_thread_category->id }}" class="accordion-collapse collapse" data-bs-parent="#CategoryAccordionFlush_{{ $sankougi_chat_thread_category->id }}">
+                                                                                                    <div class="accordion-body p-0">
+                                                                                                        <button id="ChannelKey_{{ $sankougi_chat_thread_channel->id }}" type="button" class="list-group-item list-group-item-action text-truncate">
+                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
+                                                                                                                <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                                                                                                            </svg>   {{ $sankougi_chat_thread_channel->title }}               
+                                                                                                        </button>
+                                                                                                        <script type="text/javascript">
+                                                                                                            document.getElementById("ChannelKey_{{ $sankougi_chat_thread_channel->id }}").onclick = function() {
+                                                                                                                ChannelEdit('ChannelEditKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                                            }
+                                                                                                        </script>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {{-- カテゴリ内チャンネル編集 --}}
+                                                                <div class="col-9 p-0 border-start">
+                                                                    @foreach($sankougi_chat_thread_categorys as $sankougi_chat_thread_category)
+                                                                        @foreach($sankougi_chat_thread_channels as $sankougi_chat_thread_channel)
+                                                                            @if($sankougi_chat_thread_category->id == $sankougi_chat_thread_channel->sankougi_chat_thread_category_id)
+                                                                                <div id="ChannelEditKey_{{ $sankougi_chat_thread_channel->id }}" class="mb-3 ps-3 pe-5" style="display: none;">
+                                                                                    <div class="h5">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                                                        </svg>   チャンネルの編集
+                                                                                    </div>
+                                                                                    <hr>
+                                                                                    <label for="ChannelEditInput_{{ $sankougi_chat_thread_channel->id }}" class="form-label m-0">チャンネルのタイトル</label>
+                                                                                    <input type="text" class="form-control" id="ChannelEditInput_{{ $sankougi_chat_thread_channel->id }}" value="{{ $sankougi_chat_thread_channel->title }}" required>
+                                                                                    <div class="mt-3 text-end">
+                                                                                        <button id="ChannelEditSubmit_{{ $sankougi_chat_thread_channel->id }}" class="btn btn-primary">保存</button>
+                                                                                        <button id="ChannelDeleteSubmit_{{ $sankougi_chat_thread_channel->id }}" class="btn btn-danger">削除</button>
+                                                                                    </div>
+                                                                                    <script type="text/javascript">
+                                                                                        document.getElementById('ChannelEditInput_{{ $sankougi_chat_thread_channel->id }}').addEventListener('keypress', (e) => {
+                                                                                            if(e.key === "Enter") {
+                                                                                                document.getElementById('ChannelEditSubmit_{{ $sankougi_chat_thread_channel->id }}').click();
+                                                                                            }
+                                                                                        });
+                                                                                        document.getElementById('ChannelEditSubmit_{{ $sankougi_chat_thread_channel->id }}').onclick = function() {
+                                                                                            var ChannelEditInput = document.getElementById('ChannelEditInput_{{ $sankougi_chat_thread_channel->id }}').value;
+                                                                                            var ChannelEditSubmit = document.getElementById('ChannelEditSubmit_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelKey = document.getElementById('ChannelKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelMenuKey = document.getElementById('ChannelMenuKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            if(ChannelEditInput !== '') {
+                                                                                                ChannelUpdate(ChannelKey, ChannelEditSubmit, ChannelMenuKey, ChannelEditInput, '{{ $sankougi_chat_thread_channel->id }}');
+                                                                                                //{{-- 送信ボタンの無効化 --}}
+                                                                                                this.disabled = true;
+                                                                                                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   保存';
+                                                                                            }
+                                                                                        }
+                                                                                        document.getElementById('ChannelDeleteSubmit_{{ $sankougi_chat_thread_channel->id }}').onclick = function() {
+                                                                                            var ChannelKey = document.getElementById('ChannelKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelDeleteSubmit = document.getElementById('ChannelDeleteSubmit_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelMenuKey = document.getElementById('ChannelMenuKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelEditKey = document.getElementById('ChannelEditKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            ChannelDelete(ChannelKey, ChannelDeleteSubmit, ChannelMenuKey, ChannelEditKey, {{ $sankougi_chat_thread_category->id }}, {{ $sankougi_chat_thread_channel->id }});
+                                                                                            //{{-- 削除ボタンの無効化 --}}
+                                                                                            this.disabled = true;
+                                                                                            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   削除';
+                                                                                        }
+                                                                                    </script>
+                                                                                </div>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    {{-- <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
                                         {{-- チャンネル --}}
-                                        <button id="ChannelModeButton" class="list-group-item list-group-item-action">
+                                        <button id="ChannelModeButton" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#CategoryModal">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
                                                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
                                             </svg>   チャンネルの編集
                                         </button>
+                                        {{-- チャンネルに切り替え --}}
+                                        <script type="text/javascript">
+                                            document.getElementById('ChannelModeButton').onclick = function() {
+                                                document.getElementById('ChannelModeTextButton').click();
+                                            }
+                                        </script>
                                         <button class="list-group-item list-group-item-action">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
@@ -342,7 +455,7 @@ justify-content: center;
                                         {{-- チャンネル --}}
                                         @foreach($sankougi_chat_thread_channels as $sankougi_chat_thread_channel)
                                             @if($sankougi_chat_thread_channel->sankougi_chat_thread_category_id == $sankougi_chat_thread_category->id)
-                                                <a href="{{ route('Home.sankougichat.thread.channel', [
+                                                <a id="ChannelMenuKey_{{ $sankougi_chat_thread_channel->id }}" href="{{ route('Home.sankougichat.thread.channel', [
                                                     'name_id' => $sankougi_chat_user->name_id,
                                                     'sankougi_chat_thread_id' => $sankougi_chat_thread->id,
                                                     'sankougi_chat_thread_category_id' => $sankougi_chat_thread_category->id,
@@ -579,6 +692,7 @@ justify-content: center;
 </script>
 <script type="text/javascript">
     var Temp;
+    var Temp2
     // カテゴリの編集選択
     function CategoryEdit(CategoryEditKey) {
         let prevButton = document.getElementById(Temp);
@@ -679,5 +793,115 @@ justify-content: center;
             console.log(error);
         });
     }
+
+    // チャンネルの編集選択
+    function ChannelEdit(ChannelEditKey) {
+        let prevButton = document.getElementById(Temp2);
+        let currentButton = document.getElementById(ChannelEditKey); 
+        // 前のものは非表示
+        if(Temp2) {
+            prevButton.style.display = "none";
+        }
+        // 最新のものは表示
+        currentButton.style.display = "block";
+
+        Temp = ChannelEditKey;
+    }
+
+    // チャンネル新規作成
+    function ChannelAdd(NewChannelButton, sankougi_chat_thread_category_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.channel.make') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_category_id': sankougi_chat_thread_category_id,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+            // 作成ボタンを有効化
+            NewChannelButton.disabled = false;
+            NewChannelButton.innerHTML = 'チャンネルを作る';
+            location.reload();
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    // チャンネルの更新
+    function ChannelUpdate(ChannelKey, ChannelEditSubmit, ChannelMenuKey, ChannelEditInput, sankougi_chat_thread_channel_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.channel.update') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_category_id': sankougi_chat_thread_channel_id,
+                'title': ChannelEditInput,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+                // 送信ボタンを有効化
+                ChannelEditSubmit.disabled = false;
+                ChannelEditSubmit.innerHTML = '保存';
+                // カテゴリ名の変更
+                ChannelKey.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
+                        <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                    </svg>
+                ` + ChannelEditInput;
+                ChannelMenuKey.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
+                        <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                    </svg>
+                ` + ChannelEditInput;
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    // カテゴリの削除
+    function ChannelDelete(ChannelKey, ChannelDeleteSubmit, ChannelMenuKey, ChannelEditKey, sankougi_chat_thread_category_id, sankougi_chat_thread_channel_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.channel.delete') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_category_id': sankougi_chat_thread_category_id,
+                'sankougi_chat_thread_channel_id': sankougi_chat_thread_channel_id,
+            }),
+        })
+        .then(res => {
+            // スパム対策
+            setTimeout( () => {
+                // 送信ボタンを有効化
+                ChannelDeleteSubmit.disabled = false;
+                ChannelDeleteSubmit.innerHTML = '削除';
+                // カテゴリを削除
+                Channel.Key.style.display = "none";
+                ChannelMenuKey.style.display = "none";
+                ChannelEditKey.style.display = "none";
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }    
 </script>
 @endsection
