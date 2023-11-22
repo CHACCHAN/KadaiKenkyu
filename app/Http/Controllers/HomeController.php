@@ -12,6 +12,8 @@ use App\Models\SankougiChat;
 use App\Models\SankougiChatComment;
 use App\Models\SankougiChatEvaluation;
 use App\Models\SankougiChatFollow;
+use App\Models\SankougiChatStamp;
+use App\Models\SankougiChatStampGroup;
 use App\Models\SankougiChatThread;
 use App\Models\SankougiChatThreadCategory;
 use App\Models\SankougiChatThreadChannel;
@@ -392,10 +394,10 @@ class HomeController extends Controller
         }
         // パラメータ付きリンクを生成する
         $sankougi_chat_thread_channel_chat_link = route('Home.sankougichat.thread.channel', [
-            'name_id'                          => $name_id,
-            'sankougi_chat_thread_id'          => $sankougi_chat_thread_id,
-            'sankougi_chat_thread_category_id' => $sankougi_chat_thread_category_id,
-            'sankougi_chat_thread_channel_id'  => $sankougi_chat_thread_channel_id,
+            'name_id'                          =>  $name_id,
+            'sankougi_chat_thread_id'          =>  $sankougi_chat_thread_id,
+            'sankougi_chat_thread_category_id' =>  $sankougi_chat_thread_category_id,
+            'sankougi_chat_thread_channel_id'  =>  $sankougi_chat_thread_channel_id,
             'sankougi_chat_thread_joins'       =>  SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             'sankougi_chat_thread_jobs'        =>  SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
         ]);
@@ -416,6 +418,8 @@ class HomeController extends Controller
             'sankougi_chat_thread_joins'              =>  SankougiChatThreadJoin::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             'sankougi_chat_thread_jobs'               =>  SankougiChatThreadJob::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get(),
             'sankougi_chat_thread_job'                =>  SankougiChatThreadJob::where([['sankougi_chat_thread_id', '=', $sankougi_chat_thread_id],['chat_user_id', '=', $sankougi_chat_user->chat_user_id]])->first(),
+            'sankougi_chat_stamp_groups'              =>  SankougiChatStampGroup::get(),
+            'sankougi_chat_stamps'                    =>  SankougiChatStamp::get(),
         ]);
     }
 
@@ -457,7 +461,7 @@ class HomeController extends Controller
     // スレッドチャンネル更新処理 : Fetch
     public function updateSankougiChatThreadChannel(Request $request)
     {
-        SankougiChatThreadCategory::where('id', '=', $request->sankougi_chat_thread_channel_id)->update([
+        SankougiChatThreadChannel::where('id', '=', $request->sankougi_chat_thread_channel_id)->update([
             'title' => $request->title,
             'content' => $request->content,
         ]);
@@ -488,6 +492,7 @@ class HomeController extends Controller
         return response()->json([
             'name' => $sankougi_chat_thread_channel_chat_user->name,
             'content' => $sankougi_chat_thread_channel_chat->content,
+            'stamp' => $sankougi_chat_thread_channel_chat->stamp,
             'image' => $sankougi_chat_thread_channel_chat->image,
             'image_avatar' => $sankougi_chat_thread_channel_chat_user->image_avatar,
             'name_id' => $sankougi_chat_thread_channel_chat_user->name_id,
@@ -503,12 +508,25 @@ class HomeController extends Controller
         $sankougi_chat_thread_channel_chat = new SankougiChatThreadChannelChat;
         $sankougi_chat_thread_channel_chat->sankougi_chat_thread_channel_id = $request->sankougi_chat_thread_channel_id;
         $sankougi_chat_thread_channel_chat->chat_user_id = SankougiChatUser::where('name_id', '=', $request->name_id)->first()->chat_user_id;
-        $sankougi_chat_thread_channel_chat->content = $request->content;
+        
         // 画像の保存
         if($request->image)
         {
             $image_path = $request->file('image')->store('public/sankougichat_thread/chat/image/');
             $sankougi_chat_thread_channel_chat->image = basename($image_path);
+        }
+        // スタンプの保存
+        if($request->sankougi_chat_stamp_id)
+        {
+            $sankougi_chat_thread_channel_chat->content = '###STAMP_DATA###';
+            $sankougi_chat_thread_channel_chat->stamp = SankougiChatStamp::where([
+                ['sankougi_chat_stamp_group_id', '=', $request->sankougi_chat_stamp_group_id],
+                ['id', '=', $request->sankougi_chat_stamp_id],
+            ])->first()->image;
+        }
+        else
+        {
+            $sankougi_chat_thread_channel_chat->content = $request->content;
         }
         $sankougi_chat_thread_channel_chat->save();
 

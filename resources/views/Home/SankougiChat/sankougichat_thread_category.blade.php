@@ -272,8 +272,9 @@ justify-content: center;
                                                                                     var CategoryEditSubmit = document.getElementById('CategoryEditSubmit_{{ $sankougi_chat_thread_category->id }}');
                                                                                     var CategoryKey = document.getElementById('CategoryKey_{{ $sankougi_chat_thread_category->id }}');
                                                                                     var CategoryMenuKey = document.getElementById('CategoryMenuKey_{{ $sankougi_chat_thread_category->id }}');
+                                                                                    var CategoryChannelKey = document.getElementById('CategoryChannelKey_{{ $sankougi_chat_thread_category->id }}');
                                                                                     if(CategoryEditInput !== '') {
-                                                                                        CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, '{{ $sankougi_chat_thread_category->id }}');
+                                                                                        CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, CategoryChannelKey, '{{ $sankougi_chat_thread_category->id }}');
                                                                                         //{{-- 送信ボタンの無効化 --}}
                                                                                         this.disabled = true;
                                                                                         this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   保存';
@@ -308,7 +309,7 @@ justify-content: center;
                                                                                     <div class="accordion-item">
                                                                                         {{-- カテゴリを表示 --}}
                                                                                         <h2 class="accordion-header border">
-                                                                                            <button class="accordion-button collapsed py-2 text-truncate" type="button" data-bs-toggle="collapse" data-bs-target="#CategoryFlush_{{ $sankougi_chat_thread_category->id }}" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                                                            <button id="CategoryChannelKey_{{ $sankougi_chat_thread_category->id }}" class="accordion-button collapsed py-2 text-truncate" type="button" data-bs-toggle="collapse" data-bs-target="#CategoryFlush_{{ $sankougi_chat_thread_category->id }}" aria-expanded="false" aria-controls="flush-collapseOne">
                                                                                                 {{ $sankougi_chat_thread_category->title }}
                                                                                             </button>
                                                                                         </h2>
@@ -384,7 +385,7 @@ justify-content: center;
                                                                                             var ChannelEditInput = document.getElementById('ChannelEditInput_{{ $sankougi_chat_thread_channel->id }}').value;
                                                                                             var ChannelEditSubmit = document.getElementById('ChannelEditSubmit_{{ $sankougi_chat_thread_channel->id }}');
                                                                                             var ChannelKey = document.getElementById('ChannelKey_{{ $sankougi_chat_thread_channel->id }}');
-                                                                                            var ChannelMenuKey = document.getElementById('ChannelMenuKey_{{ $sankougi_chat_thread_channel->id }}');
+                                                                                            var ChannelMenuKey = document.getElementById('ChannelMenuKey_{{ $sankougi_chat_thread_channel->id }}');  
                                                                                             if(ChannelEditInput !== '') {
                                                                                                 ChannelUpdate(ChannelKey, ChannelEditSubmit, ChannelMenuKey, ChannelEditInput, '{{ $sankougi_chat_thread_channel->id }}');
                                                                                                 //{{-- 送信ボタンの無効化 --}}
@@ -517,7 +518,11 @@ justify-content: center;
                                                             <div class="mt-2 ms-2 text-secondary">{{ $sankougi_chat_thread_channel_chat->created_at->format('Y-m-d H:i') }}</div>
                                                         </div>
                                                         {{-- チャットコンテンツ --}}
-                                                        <div class="fs-5">{{ $sankougi_chat_thread_channel_chat->content }}</div>
+                                                        @if($sankougi_chat_thread_channel_chat->stamp)
+                                                            <img src="{{ asset('Home/SankougiChat/SampleStamp/' . $sankougi_chat_thread_channel_chat->stamp) }}" alt="" width="25%">
+                                                        @else
+                                                            <div class="fs-5">{{ $sankougi_chat_thread_channel_chat->content }}</div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -530,6 +535,7 @@ justify-content: center;
                     </div>
                     {{-- チャット入力欄 --}}
                     <div class="d-flex px-2 pt-2 pe-4">
+                        {{-- 入力 --}}
                         <div class="input-group">
                             <span class="input-group-text" id="ChatInputArea">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -538,6 +544,74 @@ justify-content: center;
                             </span>
                             <input type="text" id="ChatInput" class="form-control form-control-lg me-2" placeholder="メッセージを入力" aria-describedby="ChatInputArea">
                         </div>
+                        {{-- スタンプ --}}
+                        <div class="btn-group dropup">
+                            <button type="button" class="btn btn-secondary me-2 rounded" style="width: 50px;" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-emoji-sunglasses-fill" viewBox="0 0 16 16">
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.22 4.22 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A2.99 2.99 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515L2.31 5.243zM4.969 9.75A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .866-.5z"/>
+                                </svg>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @if(isset($sankougi_chat_stamp_groups) && isset($sankougi_chat_stamps))
+                                        <div class="row">
+                                            <div class="col-12 mx-5">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                        <li class="page-item">
+                                                            <button class="page-link border-0" aria-label="Previous">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </li>
+                                                        @foreach($sankougi_chat_stamp_groups as $sankougi_chat_stamp_group)
+                                                            <li class="page-item">
+                                                                <button id="StampCardKey_{{ $sankougi_chat_stamp_group->id }}" class="page-link border-0 text-truncate">
+                                                                    {{ $sankougi_chat_stamp_group->stamp_title }}
+                                                                </button>
+                                                            </li>
+                                                        @endforeach
+                                                        <li class="page-item">
+                                                            <button class="page-link border-0" aria-label="Next">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                            <div class="col-12" style="margin-left: 5.7px;">
+                                                @foreach($sankougi_chat_stamp_groups as $sankougi_chat_stamp_group)
+                                                    @foreach($sankougi_chat_stamps as $sankougi_chat_stamp)
+                                                        @if($sankougi_chat_stamp_group->id == $sankougi_chat_stamp->sankougi_chat_stamp_group_id)
+                                                            <button id="StampKey_{{ $sankougi_chat_stamp->id }}" class="btn border-0 mb-1">
+                                                                <img src="{{ asset('Home/SankougiChat/SampleStamp/' . $sankougi_chat_stamp->image) }}" alt="" width="50px">
+                                                            </button>
+                                                            <script type="text/javascript">
+                                                                document.getElementById('StampKey_{{ $sankougi_chat_stamp->id }}').onclick = function() {
+                                                                    this.disabled = true;
+                                                                    this.innerHTML = `
+                                                                        <div class="spinner-border" role="status">
+                                                                            <span class="visually-hidden">Loading...</span>
+                                                                        </div>
+                                                                    `;
+                                                                    var StampKey = this;
+                                                                    var Stamp = '{{ $sankougi_chat_stamp->image }}';
+                                                                    SendStamp(StampKey, Stamp, {{ $sankougi_chat_stamp->sankougi_chat_stamp_group_id }}, {{ $sankougi_chat_stamp->id }});
+                                                                }
+                                                            </script>
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                </li>
+                            </ul>
+                        </div>
+                        {{-- 送信 --}}
                         <button type="submit" id="ChatSubmit" class="btn btn-primary" style="width: 100px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                                 <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
@@ -566,6 +640,8 @@ justify-content: center;
     var Flag = false;
     // 初回更新処理用
     var StartUp = true;
+    // HTML入力用
+    var html;
 
     // チャットURLに到達したらチャットを監視する
     $(document).ready(function() {
@@ -597,26 +673,49 @@ justify-content: center;
 
                     if(LatestDate !== res.created_data) {
                         // 追加するチャット内容を設定
-                        const html = `
-                            <div class="card border-0">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-1 p-3 pt-2 pb-0">
-                                            <a href="{{ url('sankougichat/profile/id=') }}${res.name_id}" class="p-0 m-0">
-                                                <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
-                                            </a>
-                                        </div>
-                                        <div class="col-11 p-0">
-                                            <div class="d-flex">
-                                                <div class="fs-4 font-weight-bold">${res.name}</div>
-                                                <div class="mt-2 ms-2 text-secondary">${res.created_at}</div>
+                        if(res.stamp) {
+                            html = `
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-1 p-3 pt-2 pb-0">
+                                                <a href="{{ url('sankougichat/profile/id=') }}${res.name_id}" class="p-0 m-0">
+                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
+                                                </a>
                                             </div>
-                                            <div class="fs-5">${res.content}</div>
+                                            <div class="col-11 p-0">
+                                                <div class="d-flex">
+                                                    <div class="fs-4 font-weight-bold">${res.name}</div>
+                                                    <div class="mt-2 ms-2 text-secondary">${res.created_at}</div>
+                                                </div>
+                                                <img src="{{ asset('Home/SankougiChat/SampleStamp') }}/${res.stamp}" alt="" width="25%">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
+                        } else {
+                            html = `
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-1 p-3 pt-2 pb-0">
+                                                <a href="{{ url('sankougichat/profile/id=') }}${res.name_id}" class="p-0 m-0">
+                                                    <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar') }}/${res.image_avatar}" alt="" width="100%">
+                                                </a>
+                                            </div>
+                                            <div class="col-11 p-0">
+                                                <div class="d-flex">
+                                                    <div class="fs-4 font-weight-bold">${res.name}</div>
+                                                    <div class="mt-2 ms-2 text-secondary">${res.created_at}</div>
+                                                </div>
+                                                <div class="fs-5">${res.content}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
                         // チャット本体を追加
                         if(Flag) {
                             $('#ChatContent').append(html);
@@ -646,30 +745,33 @@ justify-content: center;
                     // 送信ボタンの無効化
                     $('#ChatSubmit').prop("disabled", true);
                     $('#ChatSubmit').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        },
-                        url: "{{ route('Home.sankougichat.thread.channel.postchat') }}",
-                        type: 'POST',
-                        data: {
-                            sankougi_chat_thread_channel_id: @if(isset($sankougi_chat_thread_channel_id)){{ $sankougi_chat_thread_channel_id }}@endif,
-                            name_id: '{{ $sankougi_chat_user->name_id }}',
-                            content: ChatInput,
-                        },
-                    })
-                    .done((res => {
-                        if(StartUp === false) {
+                    // スパム対策
+                    setTimeout(function() {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            },
+                            url: "{{ route('Home.sankougichat.thread.channel.postchat') }}",
+                            type: 'POST',
+                            data: {
+                                sankougi_chat_thread_channel_id: @if(isset($sankougi_chat_thread_channel_id)){{ $sankougi_chat_thread_channel_id }}@endif,
+                                name_id: '{{ $sankougi_chat_user->name_id }}',
+                                content: ChatInput,
+                            },
+                        })
+                        .done((res => {
+                            if(StartUp === false) {
+                                location.reload();
+                            }
+                        }))
+                        .fail((error) => {
                             location.reload();
-                        }
-                    }))
-                    .fail((error) => {
-                        location.reload();
-                        console.log(error);
-                    });
+                            console.log(error);
+                        });
+                    }, 500);
                     // チャット欄を空にする
                     $('#ChatInput').val('');
-                }
+                }          
             });
         }
 
@@ -693,6 +795,34 @@ justify-content: center;
 <script type="text/javascript">
     var Temp;
     var Temp2
+
+    // スタンプを押したら
+    function SendStamp(StampKey, Stamp, sankougi_chat_stamp_group_id, sankougi_chat_stamp_id) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.channel.postchat') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'sankougi_chat_thread_channel_id': @if(isset($sankougi_chat_thread_channel_id)){{ $sankougi_chat_thread_channel_id }}@endif,
+                'name_id': '{{ $sankougi_chat_user->name_id }}',
+                'sankougi_chat_stamp_group_id': sankougi_chat_stamp_group_id,
+                'sankougi_chat_stamp_id': sankougi_chat_stamp_id,
+            }),
+        })
+        .then(res => {
+            setTimeout(function() {
+                StampKey.disabled = false;
+                StampKey.innerHTML = '<img src="{{ asset('Home/SankougiChat/SampleStamp') }}/' + Stamp + '" alt="" width="50px">';
+            }, 1000)
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     // カテゴリの編集選択
     function CategoryEdit(CategoryEditKey) {
         let prevButton = document.getElementById(Temp);
@@ -735,7 +865,7 @@ justify-content: center;
     }
 
     // カテゴリの更新
-    function CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, sankougi_chat_thread_category_id) {
+    function CategoryUpdate(CategoryKey, CategoryEditSubmit, CategoryMenuKey, CategoryEditInput, CategoryChannelKey, sankougi_chat_thread_category_id) {
         // Fetchで送信
         fetch('{{ route('Home.sankougichat.thread.category.update') }}', {
             method: 'POST',
@@ -757,6 +887,7 @@ justify-content: center;
                 // カテゴリ名の変更
                 CategoryKey.innerHTML = CategoryEditInput;
                 CategoryMenuKey.innerHTML = CategoryEditInput;
+                CategoryChannelKey.innerHTML = CategoryEditInput;
             }, 1000);
         })
         .catch(error => {
@@ -845,7 +976,7 @@ justify-content: center;
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'sankougi_chat_thread_category_id': sankougi_chat_thread_channel_id,
+                'sankougi_chat_thread_channel_id': sankougi_chat_thread_channel_id,
                 'title': ChannelEditInput,
             }),
         })
@@ -866,6 +997,11 @@ justify-content: center;
                         <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
                     </svg>
                 ` + ChannelEditInput;
+                document.getElementById('ChannelTitle').innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
+                        <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                    </svg>
+                ` + ChannelEditInput;
             }, 1000);
         })
         .catch(error => {
@@ -873,7 +1009,7 @@ justify-content: center;
         });
     }
 
-    // カテゴリの削除
+    // チャンネルの削除
     function ChannelDelete(ChannelKey, ChannelDeleteSubmit, ChannelMenuKey, ChannelEditKey, sankougi_chat_thread_category_id, sankougi_chat_thread_channel_id) {
         // Fetchで送信
         fetch('{{ route('Home.sankougichat.thread.channel.delete') }}', {
@@ -894,7 +1030,7 @@ justify-content: center;
                 ChannelDeleteSubmit.disabled = false;
                 ChannelDeleteSubmit.innerHTML = '削除';
                 // カテゴリを削除
-                Channel.Key.style.display = "none";
+                ChannelKey.style.display = "none";
                 ChannelMenuKey.style.display = "none";
                 ChannelEditKey.style.display = "none";
             }, 1000);

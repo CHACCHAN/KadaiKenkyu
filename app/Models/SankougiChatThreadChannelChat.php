@@ -16,5 +16,6 @@ class SankougiChatThreadChannelChat extends Model
         'chat_user_id',
         'content',
         'image',
+        'stamp',
     ];
 }
