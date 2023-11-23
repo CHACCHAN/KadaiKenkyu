@@ -43,22 +43,22 @@
                             'Card_Title'  => '三工技チャット',
                             'Card_Body'   => 'わからないことを共有しよう!',
                             'Card_Date'   => '最終更新日: 2023年11月01日',
-                            'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                            'Card_Image'  => asset('Home/Images/SankougiChat.png'),
                             'Card_Link'   => route('Home.sankougichat'),
                         ),
                         array(
                             'Card_Title'  => 'ローカルメモ',
                             'Card_Body'   => 'ここだけをメモしよう!',
                             'Card_Date'   => '最終更新日: 2023年11月01日',
-                            'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
+                            'Card_Image'  => asset('Home/Images/LocalMemo.png'),
                             'Card_Link'   => route('Home.localmemo'),
                         ), 
                         array(
                             'Card_Title'  => 'カレンダー',
                             'Card_Body'   => 'Googleカレンダーとも連携!',
                             'Card_Date'   => '最終更新日: 2023年11月01日',
-                            'Card_Image'  => asset('Home/Images/CHaserOnline.jpg'),
-                            'Card_Link'   => '',
+                            'Card_Image'  => asset('Home/Images/Calender.png'),
+                            'Card_Link'   => route('Home.calendar'),
                         ), 
                     );
                 @endphp

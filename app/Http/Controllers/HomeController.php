@@ -625,6 +625,12 @@ class HomeController extends Controller
         return back();
     }
 
+    // 検索画面
+    public function showSankougiChatSearch()
+    {
+        view('Home.SankougiChat.sankougichat_search');
+    }
+
     // プロフィール画面
     public function showSankougiChatProfile($name_id)
     {
@@ -734,5 +740,15 @@ class HomeController extends Controller
         } while (SankougiChatUser::where('name_id', '=', $name_id)->exists());
 
         return response()->json(['name_id' => $name_id]);
+    }
+    /************************************************/
+    /*                                              */
+    /*                  カレンダー                   */
+    /*                                              */
+    /************************************************/
+    // カレンダー画面
+    public function showCalendar()
+    {
+        view('Home.Calendar.calendar');
     }
 }

@@ -936,7 +936,7 @@ justify-content: center;
         // 最新のものは表示
         currentButton.style.display = "block";
 
-        Temp = ChannelEditKey;
+        Temp2 = ChannelEditKey;
     }
 
     // チャンネル新規作成

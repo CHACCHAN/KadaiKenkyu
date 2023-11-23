@@ -145,6 +145,9 @@ Route::get('/sankougichat/thread/join/id={name_id}/thread={sankougi_chat_thread_
 // Home->三工技チャット->スレッド->退出
 Route::get('/sankougichat/thread/delete/id={name_id}/thread={sankougi_chat_thread_id}', [HomeController::class, 'deleteSankougiChatThread'])->name('Home.sankougichat.thread.delete');
 
+// Home->三工技チャット->検索
+Route::get('/sankougichat/search', [HomeController::class, 'showSankougiChatSearch'])->name('Home.sankougichat.search');
+
 // Home->三工技チャット->プロフィール
 Route::get('/sankougichat/profile/id={name_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
 // Home->三工技チャット->プロフィール更新
@@ -154,3 +157,12 @@ Route::get('/sankougichat/adduser', [HomeController::class, 'showSankougiChatPro
 Route::post('/sankougichat/adduser', [HomeController::class, 'sankougichatprofilecreate']);
 // Home->三工技チャット->プロフィール登録->検索IDの生成
 Route::get('/sankougichat/userid', [HomeController::class, 'createSankougiChatProfileID'])->name('Home.sankougichat.profile.userid');
+
+
+/************************************************/
+/*                                              */
+/*              ホーム/カレンダー/*              */
+/*                                              */
+/************************************************/
+// Home->カレンダー
+Route::get('/calendar', [HomeController::class, 'showCalendar'])->name('Home.calendar');
