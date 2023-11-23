@@ -628,7 +628,9 @@ class HomeController extends Controller
     // 検索画面
     public function showSankougiChatSearch()
     {
-        view('Home.SankougiChat.sankougichat_search');
+        return view('Home.SankougiChat.sankougichat_search', [
+            'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+        ]);
     }
 
     // プロフィール画面
@@ -749,6 +751,6 @@ class HomeController extends Controller
     // カレンダー画面
     public function showCalendar()
     {
-        view('Home.Calendar.calendar');
+        return view('Home.Calendar.calendar');
     }
 }
