@@ -140,6 +140,10 @@ Route::post('/sankougichat/thread/category/channel/chat/get', [HomeController::c
 // Home->三工技チャット->スレッド->チャンネル->チャット送信 API
 Route::post('/sankougichat/thread/category/channel/chat/post', [HomeController::class, 'postSankougiChatThreadChannelChat'])->name('Home.sankougichat.thread.channel.postchat');
 
+// Home->三工技チャット->スレッド->権限の編集
+Route::get('/sankougichat/thread/changejob', [HomeController::class, 'changeSankougiChatThreadJob'])->name('Home.sankougichat.thread.changejob');
+Route::post('/sankougichat/thread/changejob', [HomeController::class, 'changeSankougiChatThreadJob']);
+
 // Home->三工技チャット->スレッド->参加
 Route::get('/sankougichat/thread/join/id={name_id}/thread={sankougi_chat_thread_id}', [HomeController::class, 'storeSankougiChatThread'])->name('Home.sankougichat.thread.join');
 // Home->三工技チャット->スレッド->退出
@@ -147,6 +151,7 @@ Route::get('/sankougichat/thread/delete/id={name_id}/thread={sankougi_chat_threa
 
 // Home->三工技チャット->検索
 Route::get('/sankougichat/search', [HomeController::class, 'showSankougiChatSearch'])->name('Home.sankougichat.search');
+Route::post('/sankougichat/search', [HomeController::class, 'sankougichatsearch']);
 
 // Home->三工技チャット->プロフィール
 Route::get('/sankougichat/profile/id={name_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
@@ -157,6 +162,13 @@ Route::get('/sankougichat/adduser', [HomeController::class, 'showSankougiChatPro
 Route::post('/sankougichat/adduser', [HomeController::class, 'sankougichatprofilecreate']);
 // Home->三工技チャット->プロフィール登録->検索IDの生成
 Route::get('/sankougichat/userid', [HomeController::class, 'createSankougiChatProfileID'])->name('Home.sankougichat.profile.userid');
+
+// Home->三工技チャット->フォロー$フォロワー一覧画面
+Route::get('/sankougichat/follow/id={name_id}/{type}', [HomeController::class, 'showSankougiChatFollow'])->name('Home.sankougichat.follow');
+// Home->三工技チャット->フォロー登録
+Route::post('/sankougichat/follow/store', [HomeController::class, 'storeSankougiChatFollow'])->name('Home.sankougichat.follow.store');
+// Home->三工技チャット->フォロー解除
+Route::post('/sankougichat/follow/delete', [HomeController::class, 'deleteSankougiChatFollow'])->name('Home.sankougichat.follow.delete');
 
 
 /************************************************/

@@ -12,6 +12,7 @@ use App\Models\SankougiChat;
 use App\Models\SankougiChatComment;
 use App\Models\SankougiChatEvaluation;
 use App\Models\SankougiChatFollow;
+use App\Models\SankougiChatFollower;
 use App\Models\SankougiChatStamp;
 use App\Models\SankougiChatStampGroup;
 use App\Models\SankougiChatThread;
@@ -163,7 +164,7 @@ class HomeController extends Controller
     {
         // 投稿データをDBに保存
         $sankougi_chat = new SankougiChat;
-        $sankougi_chat->chat_user_id = Auth::id();
+        $sankougi_chat->chat_user_id = SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id;
         $sankougi_chat->content = $request->content;
         // 画像の保存
         if($request->image)
@@ -533,6 +534,39 @@ class HomeController extends Controller
         return response()->json([], 200);
     }
 
+    // スレッド権限編集処理 : Fetch
+    public function changeSankougiChatThreadJob(Request $request)
+    {
+        $sankougi_chat_thread_job = SankougiChatThreadJob::where('id', '=', $request->sankougi_chat_thread_job_id);
+        $sankougi_chat_user = SankougiChatUser::where('chat_user_id', '=', $sankougi_chat_thread_job->first()->chat_user_id);
+        // 管理者権限剥奪
+        if($request->mode == 'remove')
+        {
+            $sankougi_chat_thread_job->update([
+                'admin_flag' => null,
+            ]);
+            $text = '付与';
+            $command = 'give';
+        }
+        // 管理者権限付与
+        else if($request->mode == 'give')
+        {
+            $sankougi_chat_thread_job->update([
+                'admin_flag' => true,
+            ]);
+            $text = '剥奪';
+            $command = 'remove';
+        }
+
+        return response()->json([
+            'id' => $sankougi_chat_thread_job->first()->id,
+            'image_avatar' => $sankougi_chat_user->first()->image_avatar,
+            'name' => $sankougi_chat_user->first()->name,
+            'text' => $text,
+            'command' => $command,
+        ], 200);
+    }
+
     // スレッド参加処理
     public function storeSankougiChatThread($name_id, $sankougi_chat_thread_id)
     {
@@ -584,7 +618,7 @@ class HomeController extends Controller
             // 画像の削除
             if($sankougi_chat_thread->image)
             {
-                Storage::disk('public')->delete('sankougichat_thread/image/'. $sankougi_chat_thread->image);
+                Storage::disk('public')->delete('sankougichat_thread/image/' . $sankougi_chat_thread->image);
             }
             // スレッドカテゴリ削除
             $sankougi_chat_thread_categorys = SankougiChatThreadCategory::where('sankougi_chat_thread_id', '=', $sankougi_chat_thread_id)->get();
@@ -630,16 +664,52 @@ class HomeController extends Controller
     {
         return view('Home.SankougiChat.sankougichat_search', [
             'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_users'       =>  SankougiChatUser::get(),
+            'sankougi_chats'            =>  SankougiChat::orderBy('good_count', 'desc')->limit(5)->get(),
         ]);
+    }
+
+    // 検索処理 : Ajax
+    public function sankougichatsearch(Request $request)
+    {
+        // name_idでの検索
+        if($request->mode == 'nameID')
+        {
+            $results = 0;
+            $sankougi_chat_users = SankougiChatUser::where('name_id', 'LIKE', "%{$request->content}%")->get();
+        }
+        // 投稿検索
+        else if($request->mode == 'search')
+        {
+            $results = SankougiChat::where('content', 'LIKE', "%{$request->content}%")->get();
+            $sankougi_chat_users = collect();
+            foreach($results as $result)
+            {
+                $user = SankougiChatUser::where('chat_user_id', '=', $result->chat_user_id)->first();
+                $sankougi_chat_users->push($user);
+            }
+        }
+
+        return response()->json([
+            'results' => $results,
+            'sankougi_chat_users' => $sankougi_chat_users,
+        ], 200);
     }
 
     // プロフィール画面
     public function showSankougiChatProfile($name_id)
     {
         return view('Home.SankougiChat.sankougichat_profile', [
-            'sankougi_chats'            =>  SankougiChat::all(),
-            'sankougi_chat_none_user'   =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
-            'sankougi_chat_user'        =>  SankougiChatUser::where('name_id', '=', $name_id)->first(),
+            'sankougi_chats'             =>  SankougiChat::latest()->get(),
+            'sankougi_chat_none_user'    =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_users'        =>  SankougiChatUser::get(),
+            'sankougi_chat_user'         =>  SankougiChatUser::where('name_id', '=', $name_id)->first(),
+            'sankougi_chat_evaluations' =>  SankougiChatEvaluation::where('user_id', '=', Auth::id())->get(),
+            'sankougi_chat_comments'    =>  SankougiChatComment::get(),
+            'sankougi_chat_follow_check' =>  SankougiChatFollow::where([['chat_user_name_id', '=', $name_id], ['chat_user_id', '=', SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id]])->first(),
+            'sankougi_chat_followers'    =>  SankougiChatFollow::where('chat_user_name_id', '=', $name_id)->get(),
+            'sankougi_chat_follows'      =>  SankougiChatFollow::where('chat_user_id', '=', SankougiChatUser::where('name_id', '=', $name_id)->first()->chat_user_id)->get(),
+            'name_id'                    =>  $name_id,
         ]);
     }
 
@@ -656,7 +726,7 @@ class HomeController extends Controller
             $image_path = 'HeaderImage-'. Date::now()->format('Y-m-d-H-i-s'). '.png';
 
             // 画像の保存処理
-            Storage::disk('public/sankougichat_user/header')->delete($sankougi_chat_user->image_header);
+            Storage::disk('public')->delete('sankougichat_user/header/' . $sankougi_chat_user->first()->image_header);
             Storage::put('public/sankougichat_user/header/' . $image_path, $image);
             $sankougi_chat_user->update([
                 'image_header' => $image_path,
@@ -671,7 +741,7 @@ class HomeController extends Controller
             $image_path = 'AvatarImage-'. Date::now()->format('Y-m-d-H-i-s'). '.png';
 
             // 画像の保存処理
-            Storage::disk('public/sankougichat_user/avatar')->delete($sankougi_chat_user->image_avatar);
+            Storage::disk('public')->delete('sankougichat_user/avatar/' . $sankougi_chat_user->first()->image_avatar);
             Storage::put('public/sankougichat_user/avatar/' . $image_path, $image);
             $sankougi_chat_user->update([
                 'image_avatar' => $image_path,
@@ -732,6 +802,36 @@ class HomeController extends Controller
             $sankougi_chat_user->image_avatar = $image_path;
         }
         $sankougi_chat_user->save();
+    }
+
+    // フォロー&フォロワー一覧画面
+    public function showSankougiChatFollow($name_id, $type)
+    {
+        return view('Home.SankougiChat.sankougichat_follows', [
+            'sankougi_chat_none_user'    =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_users'        =>  SankougiChatUser::get(),
+            'sankougi_chat_follow_check' =>  SankougiChatFollow::where([['chat_user_name_id', '=', $name_id], ['chat_user_id', '=', SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id]])->first(),
+            'sankougi_chat_followers'    =>  SankougiChatFollow::where('chat_user_name_id', '=', $name_id)->get(),
+            'sankougi_chat_follows'      =>  SankougiChatFollow::where('chat_user_id', '=', SankougiChatUser::where('name_id', '=', $name_id)->first()->chat_user_id)->get(),
+            'name_id'                    =>  $name_id,
+        ]);
+    }
+
+    // フォロー登録処理 : Fetch
+    public function storeSankougiChatFollow(Request $request)
+    {
+        // フォローを追加
+        $sankougi_chat_follow = new SankougiChatFollow;
+        $sankougi_chat_follow->chat_user_name_id = $request->chat_user_name_id;
+        $sankougi_chat_follow->chat_user_id = SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id;
+        $sankougi_chat_follow->follow_flag = true;
+        $sankougi_chat_follow->save();
+    }
+
+    // フォロー解除処理 : Fetch
+    public function deleteSankougiChatFollow()
+    {
+        SankougiChatFollow::where('chat_user_id', '=', SankougiChatUser::where('user_id', '=', Auth::id())->first()->chat_user_id)->delete();
     }
 
     // 検索IDの生成処理

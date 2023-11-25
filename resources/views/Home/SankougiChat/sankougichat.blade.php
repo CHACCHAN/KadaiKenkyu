@@ -121,12 +121,12 @@
                 @if(Request::is('sankougichat'))
                     {{-- 投稿カード --}}
                     @foreach($sankougi_chats as $sankougi_chat)
-                        <div class="col-9">
+                        <div class="col-9 p-0 border-end">
                             <div class="border-bottom">
                                 <div class="card w-75 mx-auto my-3 border-0">
                                     <div class="card-header border-0 p-0 bg-light">
                                         @foreach($sankougi_chat_users as $user)
-                                            @if($user->user_id == $sankougi_chat->chat_user_id)
+                                            @if($user->chat_user_id == $sankougi_chat->chat_user_id)
                                                 <div class="d-flex">
                                                     @if($user->image_avatar)
                                                         <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
@@ -168,7 +168,7 @@
                                     </div>
                                     {{-- 投稿本体 --}}
                                     @foreach($sankougi_chat_users as $user)
-                                        @if($user->user_id == $sankougi_chat->chat_user_id)
+                                        @if($user->chat_user_id == $sankougi_chat->chat_user_id)
                                             <a href="{{ route('Home.sankougi.pickup', [
                                                 'name_id' => $user->name_id,
                                                 'chat_id' => $sankougi_chat->chat_id,

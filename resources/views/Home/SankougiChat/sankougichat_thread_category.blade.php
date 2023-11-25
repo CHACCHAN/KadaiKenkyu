@@ -110,7 +110,11 @@ justify-content: center;
                                                                                 </div>
                                                                             @endif
                                                                             <div class="col-9 px-0 ps-1 my-auto">
-                                                                                {{ $user->name }} : 管理者
+                                                                                @if($sankougi_chat_user->user_id == $user->user_id)
+                                                                                    {{ $user->name }} : 自分
+                                                                                @else
+                                                                                    {{ $user->name }} : 管理者
+                                                                                @endif
                                                                             </div>
                                                                             <div class="col-1 p-0 my-auto">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
@@ -145,7 +149,11 @@ justify-content: center;
                                                                                 </div>
                                                                             @endif
                                                                             <div class="col-9 px-0 ps-1 my-auto">
-                                                                                {{ $user->name }}
+                                                                                @if($sankougi_chat_user->user_id == $user->user_id)
+                                                                                    {{ $user->name }} : 自分
+                                                                                @else
+                                                                                    {{ $user->name }}
+                                                                                @endif
                                                                             </div>
                                                                             <div class="col-1 p-0 my-auto">
                                                                                 {{-- キックボタン --}}
@@ -427,11 +435,137 @@ justify-content: center;
                                                 document.getElementById('ChannelModeTextButton').click();
                                             }
                                         </script>
-                                        <button class="list-group-item list-group-item-action">
+                                        {{-- 権限 --}}
+                                        <button class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#JobChangeModal">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
                                             </svg>   権限の編集
                                         </button>
+                                        {{-- 権限の編集モーダル --}}
+                                        <div class="modal fade" id="JobChangeModal" tabindex="-1" aria-labelledby="JobChangeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h1 class="modal-title fs-5" id="JobChangeModalLabel">権限の編集</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="text-secondary pb-2 mb-2 border-bottom">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+                                                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
+                                                            </svg>   管理者一覧
+                                                        </div>
+                                                            @foreach($sankougi_chat_thread_joins as $sankougi_chat_thread_join)
+                                                                @foreach($sankougi_chat_thread_jobs as $job)
+                                                                    @foreach($sankougi_chat_users as $user)
+                                                                        @if($sankougi_chat_thread_join->chat_user_id == $user->chat_user_id && $job->chat_user_id == $user->chat_user_id)
+                                                                            @if($job->admin_flag)
+                                                                                <div id="AdminJobList_{{ $job->id }}" class="row mb-1">
+                                                                                    @if($user->image_avatar)
+                                                                                        <div class="col-2 p-0">
+                                                                                            <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                                <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    @else
+                                                                                        <div class="col-2 p-0">
+                                                                                            <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                                <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    @endif
+                                                                                    <div class="col-8 px-0 ps-1 my-auto">
+                                                                                        @if($sankougi_chat_user->user_id == $user->user_id)
+                                                                                            {{ $user->name }} : 自分
+                                                                                        @else
+                                                                                            {{ $user->name }}
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <div class="col-2 p-0 my-auto">
+                                                                                        @if($sankougi_chat_user->user_id == $user->user_id)
+                                                                                            <button class="btn btn-secondary p-2" disabled>剥奪</button>
+                                                                                        @else
+                                                                                            <button id="RemoveJobSubmit_{{ $job->id }}" class="btn btn-danger p-2">剥奪</button>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <script type="text/javascript">
+                                                                                        document.getElementById('RemoveJobSubmit_{{ $job->id }}').onclick = function() {
+                                                                                            var JobSubmit = this;
+                                                                                            //{{-- ボタンの無効化 --}}
+                                                                                            this.disabled = true;
+                                                                                            this.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+                                                                                            ChangeAdminJob(JobSubmit, {{ $job->id }}, 'remove');
+                                                                                            setTimeout(function() {
+                                                                                                document.getElementById('AdminJobList_{{ $job->id }}').remove();
+                                                                                            }, 1000);
+                                                                                        }
+                                                                                    </script>
+                                                                                </div>
+                                                                                @break
+                                                                            @endif
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endforeach
+                                                            @endforeach
+                                                            <div id="AdminJobList"></div>
+                                                        <div class="text-secondary pb-2 mb-2 border-bottom">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                                            </svg>   一般参加者一覧
+                                                        </div>
+                                                        @foreach($sankougi_chat_thread_joins as $sankougi_chat_thread_join)
+                                                            @foreach($sankougi_chat_thread_jobs as $job)
+                                                                @foreach($sankougi_chat_users as $user)
+                                                                    @if($sankougi_chat_thread_join->chat_user_id == $user->chat_user_id && $job->chat_user_id == $user->chat_user_id)
+                                                                        @if(!$job->admin_flag)
+                                                                            <div id="NormalJobList_{{ $job->id }}" class="row mb-1">
+                                                                                @if($user->image_avatar)
+                                                                                    <div class="col-2 p-0">
+                                                                                        <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                            <img class="rounded-circle border" src="{{ asset('storage/sankougichat_user/avatar/' . $user->image_avatar) }}" alt="" width="90%">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                @else
+                                                                                    <div class="col-2 p-0">
+                                                                                        <a href="{{ route('Home.sankougichat.profile', $user->name_id) }}">
+                                                                                            <img class="rounded-circle border" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" alt="" width="90%">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                @endif
+                                                                                <div class="col-8 px-0 ps-1 my-auto">
+                                                                                    @if($sankougi_chat_user->user_id == $user->user_id)
+                                                                                        {{ $user->name }} : 自分
+                                                                                    @else
+                                                                                        {{ $user->name }}
+                                                                                    @endif
+                                                                                </div>
+                                                                                <div class="col-2 p-0 my-auto">
+                                                                                    <button id="GiveJobSubmit_{{ $job->id }}" class="btn btn-success p-2">付与</button>
+                                                                                </div>
+                                                                                <script type="text/javascript">
+                                                                                    document.getElementById('GiveJobSubmit_{{ $job->id }}').onclick = function() {
+                                                                                        var JobSubmit = this;
+                                                                                        //{{-- ボタンの無効化 --}}
+                                                                                        this.disabled = true;
+                                                                                        this.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+                                                                                        ChangeAdminJob(JobSubmit, {{ $job->id }}, 'give');
+                                                                                        setTimeout(function() {
+                                                                                            document.getElementById('NormalJobList_{{ $job->id }}').remove();
+                                                                                        }, 1000);
+                                                                                    }
+                                                                                </script>
+                                                                            </div>
+                                                                            @break
+                                                                        @endif
+                                                                    @endif
+                                                                @endforeach
+                                                            @endforeach
+                                                        @endforeach
+                                                        <div id="NormalJobList"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -466,6 +600,15 @@ justify-content: center;
                                                         <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
                                                     </svg>   {{ $sankougi_chat_thread_channel->title }}
                                                 </a>
+                                                {{-- チャンネル移動処理 --}}
+                                                @if(Request::is('sankougichat/thread/category/id=' . $sankougi_chat_user->name_id . '/thread=' . $sankougi_chat_thread->id))
+                                                    @php
+                                                        $id = 'ChannelMenuKey_' . $sankougi_chat_thread_channel->id;
+                                                    @endphp
+                                                    <script type="text/javascript">
+                                                        document.getElementById('{{ $id }}').click();
+                                                    </script>
+                                                @endif
                                             @endif
                                         @endforeach
                                     </div>
@@ -1038,6 +1181,99 @@ justify-content: center;
         .catch(error => {
             console.log(error);
         });
-    }    
+    }
+
+    // 権限の編集
+    function ChangeAdminJob(JobSubmit, sankougi_chat_thread_job_id, ProcessMode) {
+        // Fetchで送信
+        fetch('{{ route('Home.sankougichat.thread.changejob') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'mode': ProcessMode,
+                'sankougi_chat_thread_job_id': sankougi_chat_thread_job_id,
+            }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            var html;
+            var iamge_avatar;
+            var submitbutton;
+            var typebutton;
+            var typeremove;
+            var start_script = '<scri' + 'pt type="text/javascript">';
+            var end_script = '</scri' + 'pt>';
+            // アバターの有無
+            if(data.image_avatar) {
+                image_avatar = '{{ asset('storage/sankougichat_user/avatar') }}/' + data.image_avatar;
+            } else {
+                image_avatar = '{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}';
+            }
+            // 剥奪と付与の区別
+            if(ProcessMode === 'remove') {
+                submitbutton = 'GiveJobSubmit_' + data.id ;
+                typebutton = 'btn-success';
+                typeremove = 'NormalJobList';
+            } else if(ProcessMode === 'give') {
+                submitbutton = 'RemoveJobSubmit_' + data.id;
+                typebutton = 'btn-danger';
+                typeremove = 'AdminJobList';
+            }
+            html = `
+                <div id="${typeremove}_${data.id}" class="row mb-1">
+                    <div class="col-2 p-0">
+                        <a href="{{ url('sankougichat/profile') }}/id=${data.name_id}">
+                            <img class="rounded-circle border" src="${image_avatar}" alt="" width="90%">
+                        </a>
+                    </div>
+                    <div class="col-8 px-0 ps-1 my-auto">
+                        ${data.name}
+                    </div>
+                    <div class="col-2 p-0 my-auto">
+                        <button id="${submitbutton}" class="btn ${typebutton} p-2">${data.text}</button>
+                    </div>
+                    ${start_script}
+                        document.getElementById('${submitbutton}').onclick = function() {
+                            var JobSubmit = this;
+                            this.disabled = true;
+                            this.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+                            ChangeAdminJob(JobSubmit, ${data.id}, '${data.command}');
+                            setTimeout(function() {
+                                document.getElementById('${typeremove}_${data.id}').remove();
+                            }, 1000);
+                        }
+                    ${end_script}
+                </div>
+            `;
+            setTimeout(function() {
+                // 管理者の剥奪表示
+                if(ProcessMode === 'remove') {
+                    // 一般権限一覧に追加する
+                    setInnerHTML(document.getElementById('NormalJobList'), html);
+                // 管理者を付与表示
+                } else if(ProcessMode === 'give') {
+                    // 管理者一覧に追加する
+                    setInnerHTML(document.getElementById('AdminJobList'), html);
+                }
+            }, 1000);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    window.setInnerHTML = function(elm, html) {
+        elm.innerHTML = html;
+        Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
+            const newScript = document.createElement("script");
+            Array.from(oldScript.attributes)
+            .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+    }
 </script>
 @endsection
