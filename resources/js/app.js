@@ -8,7 +8,37 @@ import './bootstrap';
 import jQuery from 'jquery';
 window.$ = jQuery;
 import { createApp } from 'vue';
+import { Calendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
+let calendarEl = document.getElementById('calendar');
+let calendar = new Calendar(calendarEl, {
+    plugins: [ dayGridPlugin ],
+    initialView: 'dayGridMonth',
+    timeZone: "Asia/Tokyo",
+    locale: 'ja',
+    events: '/index',
+    dayCellContent: function(arg){
+		return arg.date.getDate();
+	},
+    height: 'auto',
+    firstDay: 1,
+    headerToolbar: {
+        start: "prev",
+		center: "title",
+		end: "today,next",
+    },
+    buttonText: {
+        today: '今月',
+        month: '月',
+        day: '日',
+    },
+    buttonHints: {
+		prev: '前の$0',
+		next: '次の$0',
+	},
+});
+calendar.render();
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready

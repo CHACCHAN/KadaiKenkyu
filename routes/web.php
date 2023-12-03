@@ -153,6 +153,9 @@ Route::get('/sankougichat/thread/delete/id={name_id}/thread={sankougi_chat_threa
 Route::get('/sankougichat/search', [HomeController::class, 'showSankougiChatSearch'])->name('Home.sankougichat.search');
 Route::post('/sankougichat/search', [HomeController::class, 'sankougichatsearch']);
 
+// Home->三工技チャット->友達リスト
+Route::get('/sankougichat/friend', [HomeController::class, 'showSankougiChatFriend'])->name('Home.sankougichat.friend');
+
 // Home->三工技チャット->プロフィール
 Route::get('/sankougichat/profile/id={name_id}', [HomeController::class, 'showSankougiChatProfile'])->name('Home.sankougichat.profile');
 // Home->三工技チャット->プロフィール更新

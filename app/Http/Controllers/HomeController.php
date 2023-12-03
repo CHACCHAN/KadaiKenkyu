@@ -696,6 +696,17 @@ class HomeController extends Controller
         ], 200);
     }
 
+    // 友達リスト画面
+    public function showSankougiChatFriend()
+    {
+        $sankougi_chat_user = SankougiChatUser::where('user_id', '=', Auth::id())->first();
+        return view('Home.SankougiChat.sankougichat_friend', [
+            'sankougi_chat_none_user'    =>  SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chat_users'        =>  SankougiChatUser::get(),
+            'sankougi_chat_follows'      =>  SankougiChatFollow::where('chat_user_id', '=', $sankougi_chat_user->chat_user_id)->get(),
+        ]);
+    }
+
     // プロフィール画面
     public function showSankougiChatProfile($name_id)
     {

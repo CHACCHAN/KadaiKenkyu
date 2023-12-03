@@ -16,6 +16,8 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "@fullcalendar/daygrid": "^6.1.10",
+        "@fullcalendar/google-calendar": "^6.1.10",
         "jquery": "^3.7.1",
         "laravel-echo": "^1.15.3",
         "pusher-js": "^8.3.0"
