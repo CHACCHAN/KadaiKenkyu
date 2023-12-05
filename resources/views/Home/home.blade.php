@@ -108,7 +108,7 @@
                             'Card_Title'  => 'ナンプレ',
                             'Card_Body'   => 'ナンプレを遊べるよ！',
                             'Card_Date'   => '最終更新日: 2023年12月05日',
-                            'Card_Image'  => asset('Game/NumberPlate/sudoku.png'),
+                            'Card_Image'  => asset('Game/NumberPlate/Images/sudoku.png'),
                             'Card_Link'   => route('Game.numberplate'),
                         ),
                     );
