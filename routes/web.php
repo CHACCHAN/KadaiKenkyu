@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GameController;
 use App\Events\MessageReceivedEvent;
 
 /*
@@ -181,3 +182,21 @@ Route::post('/sankougichat/follow/delete', [HomeController::class, 'deleteSankou
 /************************************************/
 // Home->カレンダー
 Route::get('/calendar', [HomeController::class, 'showCalendar'])->name('Home.calendar');
+// Home->カレンダー->登録情報
+Route::post('/calendar/get', [HomeController::class, 'getCalendar'])->name('Home.calendar.get');
+Route::post('/calendar/post', [HomeController::class, 'postCalendar'])->name('Home.calendar.post');
+
+/************************************************/
+/*                                              */
+/*               入退室フォーム/*                */
+/*                                              */
+/************************************************/
+Route::get('/joinout', [HomeController::class, 'showJoinOutForm'])->name('Home.joinout');
+
+/************************************************/
+/*                                              */
+/*                   ゲーム/*                   */
+/*                                              */
+/************************************************/
+// ナンプレ
+Route::get('/game/releases/numberplate', [GameController::class, 'showNumberPlate'])->name('Game.numberplate');

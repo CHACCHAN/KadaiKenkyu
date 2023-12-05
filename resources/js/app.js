@@ -8,8 +8,8 @@ import './bootstrap';
 import jQuery from 'jquery';
 window.$ = jQuery;
 import { createApp } from 'vue';
-import { Calendar } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import { Calendar } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
 
 let calendarEl = document.getElementById('calendar');
 let calendar = new Calendar(calendarEl, {
@@ -17,10 +17,6 @@ let calendar = new Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     timeZone: "Asia/Tokyo",
     locale: 'ja',
-    events: '/index',
-    dayCellContent: function(arg){
-		return arg.date.getDate();
-	},
     height: 'auto',
     firstDay: 1,
     headerToolbar: {
@@ -36,7 +32,7 @@ let calendar = new Calendar(calendarEl, {
     buttonHints: {
 		prev: '前の$0',
 		next: '次の$0',
-	},
+	  }, 
 });
 calendar.render();
 /**

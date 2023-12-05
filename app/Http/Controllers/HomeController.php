@@ -22,6 +22,7 @@ use App\Models\SankougiChatThreadChannelChat;
 use App\Models\SankougiChatThreadJob;
 use App\Models\SankougiChatThreadJoin;
 use App\Models\SankougiChatUser;
+use App\Models\Calendar;
 
 
 class HomeController extends Controller
@@ -854,6 +855,7 @@ class HomeController extends Controller
 
         return response()->json(['name_id' => $name_id]);
     }
+
     /************************************************/
     /*                                              */
     /*                  カレンダー                   */
@@ -863,5 +865,64 @@ class HomeController extends Controller
     public function showCalendar()
     {
         return view('Home.Calendar.calendar');
+    }
+
+    // カレンダー情報取得処理 : Fetch
+    public function getCalendar(Request $request)
+    {
+        // バリデーション
+        $request->validate([
+            'start_date' => 'required|integer',
+            'end_date' => 'required|integer',
+            'event_name' => 'required|max:32',
+        ]);
+
+        // 登録処理
+        $schedule = new Calendar;
+        // 日付に変換。JavaScriptのタイムスタンプはミリ秒なので秒に変換
+        $schedule->start_date = date('Y-m-d', $request->input('start_date') / 1000);
+        $schedule->end_date = date('Y-m-d', $request->input('end_date') / 1000);
+        $schedule->event_name = $request->input('event_name');
+        $schedule->save();
+
+        return;
+    }
+
+    // カレンダー情報送信処理 : Fetch
+    public function postCalendar(Request $request)
+    {
+        // バリデーション
+        $request->validate([
+            'start_date' => 'required|integer',
+            'end_date' => 'required|integer'
+        ]);
+
+        // カレンダー表示期間
+        $start_date = date('Y-m-d', $request->input('start_date') / 1000);
+        $end_date = date('Y-m-d', $request->input('end_date') / 1000);
+
+        // 登録処理
+        return Calendar::query()
+            ->select(
+                // FullCalendarの形式に合わせる
+                'start_date as start',
+                'end_date as end',
+                'event_name as title'
+            )
+            // FullCalendarの表示範囲のみ表示
+            ->where('end_date', '>', $start_date)
+            ->where('start_date', '<', $end_date)
+            ->get();
+    }
+
+    /************************************************/
+    /*                                              */
+    /*               入退室フォーム                  */
+    /*                                              */
+    /************************************************/
+    // 入退室フォーム画面
+    public function showJoinOutForm()
+    {
+        return view('Home.JoinOut.joinout');
     }
 }
