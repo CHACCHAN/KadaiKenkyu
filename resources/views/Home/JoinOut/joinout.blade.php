@@ -29,10 +29,8 @@
 @section('content')
 <div class="row">
     @auth
-        <div class="col-12 bg-dark">
-            <div class="text-center text-light pt-2 h1">
-                にゃーにゃー🐈入退室フォーム
-            </div>
+        <div class="col-12">
+            
         </div>
     @endauth
     @guest
