@@ -25,12 +25,14 @@ class AuthController extends Controller
         }
         
         $user = User::query()->create([
-            'name'      =>  $request['name'],
-            'email'     =>  $request['email'],
-            'password'  =>  Hash::make($request['password']),
-            'class_id'  =>  $request['class_id'],
-            'chaser_id' =>  $request['chaser_id'],
-            'chaser_password' => $request['chaser_password'],
+            'first_name'      =>  $request['first_name'],
+            'last_name'       =>  $request['last_name'],
+            'name'            =>  $request['name'],
+            'email'           =>  $request['email'],
+            'password'        =>  Hash::make($request['password']),
+            'class_id'        =>  $request['class_id'],
+            'chaser_id'       =>  $request['chaser_id'],
+            'chaser_password' =>  $request['chaser_password'],
         ]);
 
         Auth::login($user);

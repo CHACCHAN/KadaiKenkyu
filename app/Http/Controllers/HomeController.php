@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
+use App\Models\User;
 use App\Models\LocalMemo;
 use App\Models\SankougiChat;
 use App\Models\SankougiChatComment;
