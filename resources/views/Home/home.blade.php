@@ -6,18 +6,105 @@
     background: rgb(231, 231, 231);
     transition: 0.3s;
 }
+#QuickAccess:hover {
+    background: rgb(231, 231, 231);
+    transition: 0.3s;
+}
 </style>
 @endsection
 @section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 p-0 border-end">
-            <div class="p-2 h4 border-bottom text-center bg-primary text-light">
+            <div class="p-2 mb-0 h4 border-bottom text-center bg-primary text-light">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
                     <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
                     <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
                 </svg>   クイックアクセス
             </div>
+            <ul class="list-group list-group-flush">
+                {{-- 学校関連情報 --}}
+                <li class="list-group-item p-0">
+                    <div class="text-center text-secondary">
+                        学校関連情報
+                    </div>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="https://misato-th.spec.ed.jp/" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <div class="d-flex">
+                            <div class="h5">三郷工業技術高等学校</div>
+                            <div class="h5 mx-2 d-lg-block d-md-none">-</div>
+                            <div class="text-secondary d-lg-block d-md-none">ホーム</div>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="http://www.zenjouken.com/" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <div class="d-flex">
+                            <div class="h5">全国情報技術教育研究会</div>
+                            <div class="h5 mx-2 d-lg-block d-md-none">-</div>
+                            <div class="text-secondary d-lg-block d-md-none">ホーム</div>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="https://passnavi.obunsha.co.jp/" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <div class="d-flex">
+                            <div class="h5">パスナビ</div>
+                            <div class="h5 mx-2 d-lg-block d-md-none">-</div>
+                            <div class="text-secondary d-lg-block d-md-none">大学検索</div>
+                        </div>
+                    </a>
+                </li>
+                {{-- Googleサービス --}}
+                <li class="list-group-item p-0 border-top">
+                    <div class="text-center text-secondary">
+                        Googleサービス
+                    </div>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <div class="input-group p-2">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                        <input type="text" id="SearchContent" class="form-control" placeholder="Googleで検索する" aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text p-0">
+                            <button type="button" id="SearchSubmit" class="btn btn-primary rounded-0 rounded-end" target="_blank">検索</button>
+                            <script type="text/javascript">
+                                document.getElementById('SearchSubmit').addEventListener('click', () => {
+                                    window.open('https://www.google.com/search?q=' + document.getElementById('SearchContent').value);
+                                });
+                            </script>
+                        </span>
+                    </div>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="https://classroom.google.com/" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                        </svg>
+                        <div class="h5 ms-2">Google Classroom</div>
+                    </a>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="https://drive.google.com/drive/home" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                        </svg>
+                        <div class="h5 ms-2">Google Drive</div>
+                    </a>
+                </li>
+                <li class="list-group-item p-0 border-0">
+                    <a href="https://www.youtube.com/" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
+                            <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
+                        </svg>
+                        <div class="h5 ms-2">YouTube</div>
+                    </a>
+                </li>
+            </ul>
         </div>
         {{-- サービス一覧 --}}
         <div class="col-10 p-0 bg-light">
@@ -92,7 +179,7 @@
                     </div>
                 @endforeach
                 {{-- ゲーム一覧 --}}
-                <div class="col-12 p-0">
+                <div class="col-12 p-0" style="margin-left: 3px;">
                     <div class="p-2 h4 border-top border-bottom text-center bg-dark text-light">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-controller" viewBox="0 0 16 16">
                             <path d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z"/>
