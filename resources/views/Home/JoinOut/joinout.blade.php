@@ -53,11 +53,11 @@
                                 <div class="card-body">
                                     <p class="h5 text-secondary">入室者情報を入力してください</p>
                                     <label for="first_name" class="form-label m-0">苗字</label>
-                                    <input type="text" class="form-control mb-3" id="first_name" name="first_name" placeholder="三郷" value="{{ Auth::user()->first_name }}" aria-describedby="basic-addon3 basic-addon4" required>
+                                    <input type="text" class="form-control mb-3" id="first_name" placeholder="三郷" value="{{ Auth::user()->first_name }}" aria-describedby="basic-addon3 basic-addon4" required>
                                     <label for="last_name" class="form-label m-0">名前</label>
-                                    <input type="text" class="form-control mb-3" id="last_name" name="last_name" placeholder="太郎" value="{{ Auth::user()->last_name }}" aria-describedby="basic-addon3 basic-addon4" required>
+                                    <input type="text" class="form-control mb-3" id="last_name" placeholder="太郎" value="{{ Auth::user()->last_name }}" aria-describedby="basic-addon3 basic-addon4" required>
                                     <label for="class_id" class="form-label m-0">学科番号</label>
-                                    <input type="text" class="form-control" id="class_id" name="class_id" placeholder="C21G000" value="{{ Auth::user()->class_id }}" aria-describedby="basic-addon3 basic-addon4" required>
+                                    <input type="text" class="form-control" id="class_id" placeholder="C21G000" value="{{ Auth::user()->class_id }}" aria-describedby="basic-addon3 basic-addon4" required>
                                 </div>
                             </div>
                             <div class="text-end mt-3">
@@ -81,25 +81,21 @@
                             <div class="card">
                                 <div class="card-body">
                                     <p class="h5 text-secondary">部屋を選択する</p>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="EnteredRoom" id="Room1" checked>
-                                        <label id="Room1_Str" class="form-check-label" for="Room1">
-                                            電子計算機実習室
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="EnteredRoom" id="Room2">
-                                        <label id="Room2_Str" class="form-check-label" for="Room2">
-                                            情報総合室
-                                        </label>
-                                    </div>
+                                    @foreach($joinout_rooms as $joinout_room)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" id="{{ 'Room' . $loop->iteration }}" name="RadioSet" @if($loop->iteration == 1) checked @endif>
+                                            <label id="{{ 'Room' . $loop->iteration . '_Str' }}" class="form-check-label" for="{{ 'Room' . $loop->iteration }}">
+                                                {{ $joinout_room->room }}
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             {{-- 利用情報 --}}
                             <div class="card mt-3">
                                 <div class="card-body">
                                     <p class="h5 text-secondary">利用時刻を選択する</p>
-                                    <input type="datetime-local" id="first_date" name="first_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}" required> から <input type="datetime-local" id="last_date" name="last_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}" required> まで
+                                    <input type="datetime-local" id="first_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}" required> から <input type="datetime-local" id="last_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}" required> まで
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mt-3">
@@ -116,16 +112,17 @@
                                             document.getElementById('RegisterInfo').classList.remove("text-decoration-underline");
                                             document.getElementById('SelectRoom').classList.remove("text-decoration-underline");
                                             document.getElementById('Check').classList.add("text-decoration-underline");
+
                                             ChangeCheckString('checked_one', document.getElementById('first_name').value);
                                             ChangeCheckString('checked_two', document.getElementById('last_name').value);
                                             ChangeCheckString('checked_three', document.getElementById('class_id').value);
-                                            if(document.getElementById('Room1').checked) {
-                                                ChangeCheckString('checked_four', '電子計算機実習室');
-                                            } else if(document.getElementById('Room2').checked) {
-                                                ChangeCheckString('checked_four', '情報総合室');
-                                            }
-                                            ChangeCheckString('checked_five', document.getElementById('first_date').value);
-                                            ChangeCheckString('checked_six', document.getElementById('last_date').value);
+                                            @foreach($joinout_rooms as $joinout_room)
+                                                if(document.getElementById('{{ 'Room' . $loop->iteration }}').checked) {
+                                                    ChangeCheckString('checked_four', '{{ $joinout_room->room }}');
+                                                }
+                                            @endforeach
+                                            ChangeCheckString('checked_five', ChangeTime('first_date'));
+                                            ChangeCheckString('checked_six', ChangeTime('last_date'));
                                             document.getElementById('ErrCheck').value = 1;
                                             ChangeDisplay('none', 'none', 'block');
                                         } else {
@@ -141,18 +138,18 @@
                                 <div class="card-body">
                                     <p class="h5 text-secondary">登録情報</p>
                                     <label for="checked_one" class="form-label m-0">苗字</label>
-                                    <input type="text" class="form-control mb-3" id="checked_one" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control mb-3" id="checked_one" name="first_name" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     <label for="checked_two" class="form-label m-0">名前</label>
-                                    <input type="text" class="form-control mb-3" id="checked_two" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control mb-3" id="checked_two" name="last_name" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     <label for="checked_three" class="form-label m-0">学科番号</label>
-                                    <input type="text" class="form-control mb-3" id="checked_three" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control mb-3" id="checked_three" name="class_id" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     <p class="h5 text-secondary">部屋選択</p>
                                     <label for="checked_four" class="form-label m-0">部屋</label>
-                                    <input type="text" class="form-control mb-3" id="checked_four" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control mb-3" id="checked_four" name="EnteredRoom" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     <label for="checked_five" class="form-label m-0">開始利用時刻</label>
-                                    <input type="text" class="form-control mb-3" id="checked_five" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control mb-3" id="checked_five" name="first_date" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     <label for="checked_six" class="form-label m-0">終了利用時刻</label>
-                                    <input type="text" class="form-control" id="checked_six" aria-describedby="basic-addon3 basic-addon4" disabled>
+                                    <input type="text" class="form-control" id="checked_six" name="last_date" aria-describedby="basic-addon3 basic-addon4" disabled>
                                     {{-- Submit対策 --}}
                                     <input type="text" id="ErrCheck" class="d-none" name="str" required>
                                 </div>
@@ -161,6 +158,19 @@
                                 <div id="SelectRoomBack" class="btn btn-secondary me-2">戻る</div>
                                 <button type="submit" id="FormSubmit" class="btn btn-primary">送信する</button>
                                 <script type="text/javascript">
+                                    document.getElementById('FormSubmit').addEventListener('click', () => {
+                                        if(document.getElementById('ErrCheck').value) {
+                                            document.getElementById('checked_one').disabled = false;
+                                            document.getElementById('checked_two').disabled = false;
+                                            document.getElementById('checked_three').disabled = false;
+                                            document.getElementById('checked_four').disabled = false;
+                                            document.getElementById('checked_five').disabled = false;
+                                            document.getElementById('checked_six').disabled = false;
+                                        }
+                                    });
+                                </script>
+                                <script type="text/javascript">
+                                    console.log(document.getElementById('ErrCheck').value);
                                     document.getElementById('SelectRoomBack').addEventListener('click', () => {
                                         document.getElementById('RegisterInfo').classList.remove("text-decoration-underline");
                                         document.getElementById('SelectRoom').classList.add("text-decoration-underline");
@@ -202,6 +212,16 @@
 @endsection
 @section('jQuery')
 <script type="text/javascript">
+    function ChangeTime(e) {
+        var year = document.getElementById(e).value.substr(0, 4);
+        var month = document.getElementById(e).value.substr(5, 2);
+        var day = document.getElementById(e).value.substr(8, 2);
+        var hour = document.getElementById(e).value.substr(11, 2);
+        var minute = document.getElementById(e).value.substr(14, 2);
+
+        return year + '年' + month + '月' + day + '日' + ' ' + hour + '時' + minute + '分';
+    }
+
     function ChangeCheckString(target, string) {
         document.getElementById(target).value = string;
     }

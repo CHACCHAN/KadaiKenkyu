@@ -24,6 +24,8 @@ use App\Models\SankougiChatThreadJob;
 use App\Models\SankougiChatThreadJoin;
 use App\Models\SankougiChatUser;
 use App\Models\Calendar;
+use App\Models\JoinOut;
+use App\Models\JoinOutRoom;
 
 
 class HomeController extends Controller
@@ -924,6 +926,34 @@ class HomeController extends Controller
     // 入退室フォーム画面
     public function showJoinOutForm()
     {
-        return view('Home.JoinOut.joinout');
+        return view('Home.JoinOut.joinout', [
+            'joinout_rooms' => JoinOutRoom::get(),
+        ]);
+    }
+
+    // 入退室フォーム処理
+    public function joinoutform(Request $request)
+    {
+        // 苗字と名前が未登録だったら
+        if(!Auth::user()->first_name && !Auth::user()->last_name)
+        {
+            User::where('id', '=', Auth::id())->update([
+                'first_name' => $request->first_name,
+                'last_name'  => $request->last_name,
+            ]);
+        }
+
+        // 入室記録
+        $joinout = new JoinOut;
+        $joinout->user_id = Auth::id();
+        $joinout->joinout_room_id = JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id;
+        $joinout->class_id = $request->class_id;
+        $joinout->first_name = $request->first_name;
+        $joinout->last_name = $request->last_name;
+        $joinout->first_date = $request->first_date;
+        $joinout->last_date = $request->last_date;
+        $joinout->save();
+
+        return redirect()->route('Home.home');
     }
 }

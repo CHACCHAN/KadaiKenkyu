@@ -192,6 +192,7 @@ Route::post('/calendar/post', [HomeController::class, 'postCalendar'])->name('Ho
 /*                                              */
 /************************************************/
 Route::get('/joinout', [HomeController::class, 'showJoinOutForm'])->name('Home.joinout');
+Route::post('/joinout', [HomeController::class, 'joinoutform']);
 
 /************************************************/
 /*                                              */
