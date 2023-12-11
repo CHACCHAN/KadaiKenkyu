@@ -38,7 +38,10 @@ class HomeController extends Controller
     // ホーム画面
     public function showHome()
     {
-        return view('Home.home');
+        return view('Home.home', [
+            'joinout' => JoinOut::where('user_id' , '=', Auth::id())->first(),
+            'room' => JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room,
+        ]);
     }
 
     /************************************************/
@@ -927,7 +930,9 @@ class HomeController extends Controller
     public function showJoinOutForm()
     {
         return view('Home.JoinOut.joinout', [
+            'joinout' => JoinOut::where('user_id', '=', Auth::id())->first(),
             'joinout_rooms' => JoinOutRoom::get(),
+            'room' => JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room,
         ]);
     }
 
@@ -944,15 +949,37 @@ class HomeController extends Controller
         }
 
         // 入室記録
-        $joinout = new JoinOut;
-        $joinout->user_id = Auth::id();
-        $joinout->joinout_room_id = JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id;
-        $joinout->class_id = $request->class_id;
-        $joinout->first_name = $request->first_name;
-        $joinout->last_name = $request->last_name;
-        $joinout->first_date = $request->first_date;
-        $joinout->last_date = $request->last_date;
-        $joinout->save();
+        // 新規だったら
+        if(!JoinOut::where('user_id', '=', Auth::id())->first())
+        {
+            $joinout = new JoinOut;
+            $joinout->user_id = Auth::id();
+            $joinout->joinout_room_id = JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id;
+            $joinout->class_id = $request->class_id;
+            $joinout->first_name = $request->first_name;
+            $joinout->last_name = $request->last_name;
+            $joinout->first_date = $request->first_date;
+            $joinout->last_date = $request->last_date;
+            $joinout->flag = true;
+            $joinout->save();
+        } else {
+            JoinOut::where('user_id', '=', Auth::id())->update([
+                'joinout_room_id' => JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id,
+                'first_date' => $request->first_date,
+                'last_date' => $request->last_date,
+                'flag' => true,
+            ]);
+        }
+
+        return redirect()->route('Home.home');
+    }
+
+    // 退出処理
+    public function deleteJoinOutForm()
+    {
+        JoinOut::where('user_id', '=', Auth::id())->update([
+            'flag' => false,
+        ]);
 
         return redirect()->route('Home.home');
     }

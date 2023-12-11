@@ -2,6 +2,33 @@
 @section('title', 'ホーム')
 @section('CSS')
 <style>
+@keyframes gaming {
+    to { background-position-x: 200%; }
+}
+
+@keyframes arrow-left {
+    0% {
+        left: -5%;
+    }
+    50% {
+        left: -10%;
+    }
+    100% {
+        left: -5%;
+    }
+}
+
+@keyframes arrow-right {
+    0% {
+        right: -5%;
+    }
+    50% {
+        right: -10%;
+    }
+    100% {
+        right: -5%;
+    }
+}
 #CardHover:hover {
     background: rgb(231, 231, 231);
     transition: 0.3s;
@@ -9,6 +36,33 @@
 #QuickAccess:hover {
     background: rgb(231, 231, 231);
     transition: 0.3s;
+}
+
+.gaming {
+    /* フォントサイズなどを任意で指定する */
+    font: bold 10em / 1 Verdana, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    
+    /* 背景グラデーションを指定・幅を 200% にしておく */
+    background: linear-gradient(to right, #f00 0%, #f80 14.28%, #dd0 28.56%, #0d0 42.85%, #0dd 57.14%, #00f 71.42%, #e0e 85.71%, #f00 100%) 0% center / 200% auto;
+    
+    /* 背景画像を文字でマスクする */
+            background-clip: text;
+    -webkit-background-clip: text;
+    
+    /* 文字色を透明にできればよく color: transparent でも color: rgba(0, 0, 0, 0) でも可 */
+            text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+    
+    /* アニメーション指定 */
+    animation: gaming 4s linear infinite;
+}
+
+.arrow-left:hover {
+    animation: arrow-left 1s linear infinite;
+}
+.arrow-right:hover {
+    animation: arrow-right 1s linear infinite;
 }
 </style>
 @endsection
@@ -104,7 +158,81 @@
                         <div class="h5 ms-2">YouTube</div>
                     </a>
                 </li>
+                {{-- その他 --}}
+                <li class="list-group-item p-0 border-top border-bottom">
+                    <div class="text-center text-secondary">
+                        その他
+                    </div>
+                </li>
+                {{-- ようこそ --}}
+                <li class="list-group-item p-0 border-0">
+                    <a href="@if(Auth::check()){{ route('Profile.account') }} @else {{ route('Auth.login') }} @endif" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                        @if(Auth::check())
+                            <img src="{{ asset('storage/avatar/' . Auth::user()->image) }}" class="rounded-circle border" alt="" width="30px" height="30px">
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                        @endif
+                        <div class="h5 ms-2 @if(Auth::check()) mt-1 pb-2 @endif">
+                            @if(Auth::check())
+                                ようこそ、{{ Auth::user()->name }}さん
+                            @else
+                                ログイン
+                            @endif
+                        </div>
+                    </a>
+                </li>
             </ul>
+            {{-- 入退室ステータス --}}
+            <div class="position-relative">
+                <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
+                    <div class="position-relative">
+                        <div class="rounded-3 border @if($joinout->flag) border-dark @endif">
+                            <div class="p-2 @if($joinout->flag) gaming @else bg-secondary text-light rounded-top @endif">
+                                <div class="h5 mx-3">
+                                    <div class="text-center border-bottom @if($joinout->flag) border-dark @endif pb-1">現在の入室状況</div>
+                                    <div class="text-start pt-1">
+                                        @if($joinout->flag)
+                                            {{ $room }}に入室中です
+                                        @else
+                                            入室していません
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="@if(!$joinout->flag) bg-secondary rounded-bottom @endif pb-2">
+                                @if($joinout->flag)
+                                <div class="card mx-4">
+                                    <div class="card-body text-secondary px-2 py-1">
+                                        <div class="fs-6">{{ $joinout->first_date }}～</div>
+                                        <div class="fs-6">{{ $joinout->last_date }}</div>
+                                    </div>
+                                </div>
+                                    <a href="{{ route('Home.joinout.exit') }}" class="btn btn-primary ms-4 mt-2">退出する</a>
+                                @else
+                                    <a href="{{ route('Home.joinout') }}" class="btn btn-primary ms-4 mt-2">入室する</a>
+                                @endif
+                            </div>
+                        </div>
+                        <div id="MoveArrowLeftContent" class="position-absolute arrow-left" style="top: 40%; left: -5%;">
+                            <button type="button" id="MoveLeftArrow" class="btn border-0 p-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="MoveArrowRightContent" class="position-absolute arrow-right d-none" style="top: 40%; right: -5%;">
+                            <button type="button" id="MoveRightArrow" class="btn border-0 p-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         {{-- サービス一覧 --}}
         <div class="col-10 p-0 bg-light">
@@ -226,4 +354,23 @@
         </div>
     </div>
 </div>
+@endsection
+@section('jQuery')
+<script type="text/javascript">
+    const max_left = "-85%";
+    document.getElementById('MoveLeftArrow').addEventListener('click', () => {
+        document.getElementById('JoinOutContent').animate({
+            left: ["0px", max_left],
+        }, 200);
+        document.getElementById('JoinOutContent').style.left = max_left;
+        document.getElementById('MoveArrowRightContent').classList.remove("d-none");
+    });
+    document.getElementById('MoveRightArrow').addEventListener('click', () => {
+        document.getElementById('JoinOutContent').animate({
+            left: [max_left, "0px"],
+        }, 200);
+        document.getElementById('JoinOutContent').style.left = '0px';
+        document.getElementById('MoveArrowRightContent').classList.add("d-none");
+    });
+</script>
 @endsection
