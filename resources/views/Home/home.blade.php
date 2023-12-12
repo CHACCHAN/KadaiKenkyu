@@ -186,53 +186,91 @@
                 </li>
             </ul>
             {{-- 入退室ステータス --}}
-            <div class="position-relative">
-                <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
+            @auth
+                @if(isset($joinout->flag))
                     <div class="position-relative">
-                        <div class="rounded-3 border @if($joinout->flag) border-dark @endif">
-                            <div class="p-2 @if($joinout->flag) gaming @else bg-secondary text-light rounded-top @endif">
-                                <div class="h5 mx-3">
-                                    <div class="text-center border-bottom @if($joinout->flag) border-dark @endif pb-1">現在の入室状況</div>
-                                    <div class="text-start pt-1">
+                        <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
+                            <div class="position-relative">
+                                <div class="rounded-3 border @if($joinout->flag) border-dark @endif">
+                                    <div class="p-2 @if($joinout->flag) gaming @else bg-secondary text-light rounded-top @endif">
+                                        <div class="h5 mx-3">
+                                            <div class="text-center border-bottom @if($joinout->flag) border-dark @endif pb-1">現在の入室状況</div>
+                                            <div class="text-start pt-1">
+                                                @if($joinout->flag)
+                                                    {{ $room }}に入室中です
+                                                @else
+                                                    入室していません
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="@if(!$joinout->flag) bg-secondary rounded-bottom @endif pb-2">
                                         @if($joinout->flag)
-                                            {{ $room }}に入室中です
+                                        <div class="card mx-4">
+                                            <div class="card-body text-secondary px-2 py-1">
+                                                <div class="fs-6">{{ $joinout->first_date }}～</div>
+                                                <div class="fs-6">{{ $joinout->last_date }}</div>
+                                            </div>
+                                        </div>
+                                            <a href="{{ route('Home.joinout.exit') }}" class="btn btn-primary ms-4 mt-2">退出する</a>
                                         @else
-                                            入室していません
+                                            <a href="{{ route('Home.joinout') }}" class="btn btn-primary ms-4 mt-2">入室する</a>
                                         @endif
                                     </div>
                                 </div>
-                            </div>
-                            <div class="@if(!$joinout->flag) bg-secondary rounded-bottom @endif pb-2">
-                                @if($joinout->flag)
-                                <div class="card mx-4">
-                                    <div class="card-body text-secondary px-2 py-1">
-                                        <div class="fs-6">{{ $joinout->first_date }}～</div>
-                                        <div class="fs-6">{{ $joinout->last_date }}</div>
-                                    </div>
+                                <div id="MoveArrowLeftContent" class="position-absolute arrow-left" style="top: 40%; left: -5%;">
+                                    <button type="button" id="MoveLeftArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                    <a href="{{ route('Home.joinout.exit') }}" class="btn btn-primary ms-4 mt-2">退出する</a>
-                                @else
-                                    <a href="{{ route('Home.joinout') }}" class="btn btn-primary ms-4 mt-2">入室する</a>
-                                @endif
+                                <div id="MoveArrowRightContent" class="position-absolute arrow-right d-none" style="top: 40%; right: -5%;">
+                                    <button type="button" id="MoveRightArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div id="MoveArrowLeftContent" class="position-absolute arrow-left" style="top: 40%; left: -5%;">
-                            <button type="button" id="MoveLeftArrow" class="btn border-0 p-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div id="MoveArrowRightContent" class="position-absolute arrow-right d-none" style="top: 40%; right: -5%;">
-                            <button type="button" id="MoveRightArrow" class="btn border-0 p-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                                </svg>
-                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
+                @else
+                    <div class="position-relative">
+                        <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
+                            <div class="position-relative">
+                                <div class="rounded-3 border">
+                                    <div class="p-2 bg-secondary text-light rounded-top">
+                                        <div class="h5 mx-3">
+                                            <div class="text-center border-bottom pb-1">現在の入室状況</div>
+                                            <div class="text-start pt-1">
+                                                入室していません
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-secondary rounded-bottom pb-2">
+                                        <a href="{{ route('Home.joinout') }}" class="btn btn-primary ms-4 mt-2">入室する</a>
+                                    </div>
+                                </div>
+                                <div id="MoveArrowLeftContent" class="position-absolute arrow-left" style="top: 40%; left: -5%;">
+                                    <button type="button" id="MoveLeftArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div id="MoveArrowRightContent" class="position-absolute arrow-right d-none" style="top: 40%; right: -5%;">
+                                    <button type="button" id="MoveRightArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endauth
         </div>
         {{-- サービス一覧 --}}
         <div class="col-10 p-0 bg-light">
@@ -279,6 +317,13 @@
                             'Card_Title'  => '入退室フォーム',
                             'Card_Body'   => '実習室の利用はこちらより',
                             'Card_Date'   => '最終更新日: 2023年12月05日',
+                            'Card_Image'  => asset('Home/Images/Calender.png'),
+                            'Card_Link'   => route('Home.joinout'),
+                        ),
+                        array(
+                            'Card_Title'  => 'クリエイターツール',
+                            'Card_Body'   => 'あなたの創造に手助けを',
+                            'Card_Date'   => '最終更新日: 2023年12月12日',
                             'Card_Image'  => asset('Home/Images/Calender.png'),
                             'Card_Link'   => route('Home.joinout'),
                         )

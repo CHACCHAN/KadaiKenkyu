@@ -36,7 +36,7 @@
                     ❚ 入退室フォーム
                 </div>';
             @endphp
-            @if($joinout->flag)
+            @if(!empty($joinout->flag))
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-6">

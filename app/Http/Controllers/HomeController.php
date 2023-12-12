@@ -38,9 +38,15 @@ class HomeController extends Controller
     // ホーム画面
     public function showHome()
     {
+        if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists())
+        {
+            $room = JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room;
+        } else {
+            $room = false;
+        }
         return view('Home.home', [
             'joinout' => JoinOut::where('user_id' , '=', Auth::id())->first(),
-            'room' => JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room,
+            'room' => $room,
         ]);
     }
 
@@ -929,10 +935,16 @@ class HomeController extends Controller
     // 入退室フォーム画面
     public function showJoinOutForm()
     {
+        if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists())
+        {
+            $room = JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room;
+        } else {
+            $room = false;
+        }
         return view('Home.JoinOut.joinout', [
             'joinout' => JoinOut::where('user_id', '=', Auth::id())->first(),
             'joinout_rooms' => JoinOutRoom::get(),
-            'room' => JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room,
+            'room' => $room,
         ]);
     }
 
