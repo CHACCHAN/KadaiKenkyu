@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GameController;
-use App\Events\MessageReceivedEvent;
+use App\Http\Controllers\GoogleBardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +50,14 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('Auth.login');
 Route::post('/login', [AuthController::class, 'login']);
 // Auth->ログアウト
 Route::post('logout', [AuthController::class, 'logout'])->name('Auth.logout');
+
+
+/************************************************/
+/*                                              */
+/*               GoogleBardAPI                  */
+/*                                              */
+/************************************************/
+Route::post('/google-bard/request', [GoogleBardController::class, 'googlebard'])->name('Google.bard');
 
 
 /************************************************/
