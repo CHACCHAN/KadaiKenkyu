@@ -22,7 +22,6 @@
                 <div id="CollapseMenu" class="collapse my-1">
                     <div class="card">
                         <div class="card-body">
-                            <button type="button" class="btn btn-light" onclick="PrintOut();">プリントアウト</button>
                             <button type="reset" class="btn btn-light">リセット</button>
                             {{-- オプション --}}
                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#OptionModal">オプション</button>
@@ -177,29 +176,13 @@
                             </div>
                         </div>
                     </div>
-                    <script type="text/javascript">
-                        function PrintOut() {
-                          const OutputContent = document.getElementById('ImageContent');
-                          const canvasImage = document.querySelector('canvas').toDataURL('image/png', 300);
-                          const html = "<img src="${canvasImage}">";
-                          OutputContent.src = html;
-                        }
-                    </script>
-
-                    <iframe src="<p>あいうえお</p>" id="ImageContent" frameborder="1"></iframe>
-                      <div>ここはiframeの外です</div>
-                      <button id="print-btn">印刷</button>
-                      <script>
-                      document.getElementById('print-btn').addEventListener('click',()=>{
-                        document.getElementById('ImageContent').contentWindow.print();
-                      });
-                    </script>
                 </div>
             </div>
         </div>
     </form>
 
     {{-- 原稿本体 --}}
+    <div class="text-secondary text-end mt-3 me-5 pe-3">右クリックで保存</div>
     <div class="d-flex">
         <div class="flex-fill ad-left-content manuscript-area">
             <div id="manuscript" class="col-sm-12"></div>
