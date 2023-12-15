@@ -995,4 +995,27 @@ class HomeController extends Controller
 
         return redirect()->route('Home.home');
     }
+
+    /************************************************/
+    /*                                              */
+    /*                ローカルメモ                   */
+    /*                                              */
+    /************************************************/
+    // クリエイターツール画面
+    public function showCreaterTool()
+    {
+        return view('Home.CreaterTool.creatertool');
+    }
+    
+    // 原稿用紙ツール画面
+    public function showGenkoYoushi()
+    {
+        return view('Home.CreaterTool.genkoyoushi');
+    }
+
+    // 印刷
+    public function printGenkoYoushi()
+    {
+        return view('Home.CreaterTool.genkoyoushiprint'); 
+    }
 }

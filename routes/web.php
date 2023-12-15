@@ -199,9 +199,22 @@ Route::post('/calendar/post', [HomeController::class, 'postCalendar'])->name('Ho
 /*               入退室フォーム/*                */
 /*                                              */
 /************************************************/
+// Home->入退室フォーム
 Route::get('/joinout', [HomeController::class, 'showJoinOutForm'])->name('Home.joinout');
 Route::post('/joinout', [HomeController::class, 'joinoutform']);
 Route::get('/joinout/exit', [HomeController::class, 'deleteJoinOutForm'])->name('Home.joinout.exit');
+
+/************************************************/
+/*                                              */
+/*          ホーム/クリエイターツール/*           */
+/*                                              */
+/************************************************/
+// Home->クリエイターツール
+Route::get('/creatertool', [HomeController::class, 'showCreaterTool'])->name('Home.creatertool');
+// Home->原稿用紙
+Route::get('/creatertool/genkoyoushi', [HomeController::class, 'showGenkoYoushi'])->name('Home.creatertool.genkoyoushi');
+// Home->原稿用紙->印刷
+Route::get('/creatertool/genkoyoushi/print', [HomeController::class, 'printGenkoYoushi'])->name('Home.creatertool.genkoyoushi.print');
 
 /************************************************/
 /*                                              */

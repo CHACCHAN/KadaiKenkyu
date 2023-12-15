@@ -325,7 +325,7 @@
                             'Card_Body'   => 'あなたの創造に手助けを',
                             'Card_Date'   => '最終更新日: 2023年12月12日',
                             'Card_Image'  => asset('Home/Images/CreaterTool.jpg'),
-                            'Card_Link'   => route('Home.joinout'),
+                            'Card_Link'   => route('Home.creatertool'),
                         )
                     );
                 @endphp
@@ -396,32 +396,6 @@
                     </div>
                 @endforeach
             </div>
-            <div class="d-flex">
-                <textarea id="InputContent" class="form-control w-50 mx-2 mb-2" rows="3"></textarea>
-                <button type="button" id="InputButton" class="btn btn-primary px-3">送信</button>
-            </div>
-            <div id="ResponseData"></div>
-            <script type="text/javascript">
-                document.getElementById('InputButton').addEventListener('click', () => {
-                    fetch('{{ route('Google.bard') }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            content: document.getElementById('InputContent').value,
-                        }),
-                    })
-                    .then(res => {
-                        document.getElementById('ResponseData').innerHTML = res.response;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                });
-                
-            </script>
         </div>
     </div>
 </div>
