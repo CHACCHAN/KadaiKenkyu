@@ -253,7 +253,7 @@
                 </div>
                 {{-- ようこそ --}}
                 <li class="list-group-item p-0 border-0">
-                    <a href="@if(Auth::check()){{ route('Profile.account') }} @else {{ route('Auth.login') }} @endif" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
+                    <a href="@if(Auth::check()){{ route('Profile.account') }} @else {{ route('Auth.login') }} @endif" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex">
                         @if(Auth::check())
                             <img src="{{ asset('storage/avatar/' . Auth::user()->image) }}" class="rounded-circle border" alt="" width="30px" height="30px">
                         @else
