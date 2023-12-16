@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call(StampSeeder::class);
-        $this->call(JoinOutSeeder::class);
+        // $this->call(StampSeeder::class);
+        // $this->call(JoinOutSeeder::class);
+        $this->call(PickUpSeeder::class);
     }
 }

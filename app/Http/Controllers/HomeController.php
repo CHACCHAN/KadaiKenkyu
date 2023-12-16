@@ -26,6 +26,8 @@ use App\Models\SankougiChatUser;
 use App\Models\Calendar;
 use App\Models\JoinOut;
 use App\Models\JoinOutRoom;
+use App\Models\PickUp;
+use App\Models\PickUpRead;
 
 
 class HomeController extends Controller
@@ -38,16 +40,60 @@ class HomeController extends Controller
     // ホーム画面
     public function showHome()
     {
+        $flag = false;
+
+        // 入室状況のフラグ
         if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists())
         {
             $room = JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room;
-        } else {
+        }
+        else
+        {
             $room = false;
         }
+
+        // ピックアップの既読を確認
+        if(PickUpRead::where('user_id', '=', Auth::id())->get()->count() != PickUp::get()->count())
+        {
+            $flag = true;
+        }
+
         return view('Home.home', [
-            'joinout' => JoinOut::where('user_id' , '=', Auth::id())->first(),
-            'room' => $room,
+            'joinout'      => JoinOut::where('user_id' , '=', Auth::id())->first(),
+            'room'         => $room,
+            'pickups'      => PickUp::latest()->get(),
+            'pickup_reads' => PickUpRead::latest()->get(),
+            'pickup_flag'  => $flag,
         ]);
+    }
+
+    // ピックアップ受信API
+    public function getPickUp(Request $request)
+    {
+        $flag = false;
+        $pickupData = PickUp::where('id', '=', $request->id)->first();
+        if(!PickUpRead::where([['pickup_id', '=', $request->id], ['user_id', '=', Auth::id()]])->first() && Auth::check())
+        {
+            $pickupRead = new PickUpRead;
+            $pickupRead->user_id = Auth::id();
+            $pickupRead->pickup_id = $request->id;
+            $pickupRead->flag = true;
+            $pickupRead->save();
+        }
+
+        if(PickUpRead::where('user_id', '=', Auth::id())->get()->count() == PickUp::get()->count())
+        {
+            $flag = true;
+        }
+
+        return response()->json([
+            'title'      =>  $pickupData->title,
+            'content'    =>  $pickupData->content,
+            'type'       =>  $pickupData->type,
+            'image'      =>  $pickupData->image,
+            'created_at' =>  $pickupData->created_at->format('Y年m月d日 H時i分s秒 配信'),
+            'flag'    =>  $flag,
+        ], 200);
     }
 
     /************************************************/
@@ -1011,11 +1057,5 @@ class HomeController extends Controller
     public function showGenkoYoushi()
     {
         return view('Home.CreaterTool.genkoyoushi');
-    }
-
-    // 印刷
-    public function printGenkoYoushi()
-    {
-        return view('Home.CreaterTool.genkoyoushiprint'); 
     }
 }

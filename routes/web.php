@@ -80,6 +80,8 @@ Route::middleware('auth')->group(function (){
 /************************************************/
 // Home->ホーム
 Route::get('/', [HomeController::class, 'showHome'])->name('Home.home');
+// Home->ピックアップ受信
+Route::post('/', [HomeController::class, 'getPickUp']);
 
 
 /************************************************/
@@ -213,8 +215,6 @@ Route::get('/joinout/exit', [HomeController::class, 'deleteJoinOutForm'])->name(
 Route::get('/creatertool', [HomeController::class, 'showCreaterTool'])->name('Home.creatertool');
 // Home->原稿用紙
 Route::get('/creatertool/genkoyoushi', [HomeController::class, 'showGenkoYoushi'])->name('Home.creatertool.genkoyoushi');
-// Home->原稿用紙->印刷
-Route::get('/creatertool/genkoyoushi/print', [HomeController::class, 'printGenkoYoushi'])->name('Home.creatertool.genkoyoushi.print');
 
 /************************************************/
 /*                                              */

@@ -7,12 +7,13 @@
             {{-- 入力欄 --}}
             <div class="col-12 mt-3 pe-4">
                 <div class="h4">原稿を入力する</div>
-                <textarea id="str" name="str" rows="10" wrap="soft" class="form-control" placeholder="描画する文字列を入力してください" oninput="onChangeText()"></textarea>
+                <textarea id="str" name="str" rows="10" wrap="soft" class="form-control" placeholder="描画する文字列を入力してください" oninput="onChangeText();"></textarea>
                 {{-- ページ数 --}}
                 <div class="text-end">
                     <small id="pages" class="text-muted"></small>
                 </div>
             </div>
+
             {{-- コマンドメニュー --}}
             <div class="col-12 mt-3 pe-4">
                 <div class="h4">コマンドメニュー</div>
@@ -121,7 +122,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="h2">使い方</div>
+                                            <div class="h2 mb-3">使い方</div>
                                             <div class="h4 text-secondary">概要</div>
                                             <div class="fs-6">テキストボックス内に文字を入力すると、リアルタイムに原稿用紙が描画されます。</div>
                                             <div class="fs-6">入力後は、プリントアウト用にフォーマットされたデータを出力できます。</div>

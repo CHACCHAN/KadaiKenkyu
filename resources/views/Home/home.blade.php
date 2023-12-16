@@ -164,6 +164,93 @@
                         その他
                     </div>
                 </li>
+                {{-- ピックアップ --}}
+                <li class="list-group-item p-0 border-0">
+                    <a href="#Pickup" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" data-bs-toggle="modal" data-bs-target="#PickupModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </svg>
+                        <div class="h5 ms-2">情報技術科ピックアップ</div>
+                        <div id="PickUpPageFlag">
+                            @if($pickup_flag)
+                                <div class="gaming fs-5 ms-3">New</div>
+                            @endif
+                        </div>
+                    </a>
+                </li>
+                {{-- ピックアップモーダル --}}
+                <div class="modal fade" id="PickupModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-header border-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    {{-- メニュー --}}
+                                    <div class="col-3 border-end">
+                                        <div class="list-group">
+                                            <div class="list-group-item bg-primary text-light text-center h4 m-0">情報技術科ピックアップ</div>
+                                            @foreach($pickups as $pickup)
+                                                <button type="button" class="list-group-item list-group-item-action" onclick="ViewPage({{ $pickup->id }});">
+                                                    <div class="row">
+                                                        {{-- 日付 --}}
+                                                        <div class="col-2 p-0 text-center">
+                                                            {{ $pickup->created_at->format('Y.m.d') }}
+                                                        </div>
+                                                        {{-- タイプ --}}
+                                                        <div class="col-3">
+                                                            <div class="@if($pickup->type == '入試関連') bg-danger @else bg-success @endif px-1 text-center text-light">
+                                                                {{ $pickup->type }}
+                                                            </div>
+                                                        </div>
+                                                        {{-- 内容 --}}
+                                                        <div class="col-6 text-truncate">
+                                                            {{ $pickup->title }}
+                                                        </div>
+                                                        {{-- 既読確認 --}}
+                                                        <div class="col-1 ps-1 text-danger">
+                                                            <div id="PickUpPageFlag{{ $pickup->id }}">
+                                                                @if(!\App\Models\PickUpRead::where([['pickup_id', '=', $pickup->id], ['user_id', '=', Auth::id()]])->first())
+                                                                    New
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    {{-- ページ本体 --}}
+                                    <div id="TargetContent" class="col-9">
+                                        <div class="row">
+                                            {{-- ページタイトル --}}
+                                            <div class="col-12">
+                                                <div class="bg-primary text-light py-2 h4 rounded-top d-flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-newspaper ms-2" viewBox="0 0 16 16">
+                                                        <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12z"/>
+                                                        <path d="M2 3h10v2H2V3zm0 3h4v3H2V6zm0 4h4v1H2v-1zm0 2h4v1H2v-1zm5-6h2v1H7V6zm3 0h2v1h-2V6zM7 8h2v1H7V8zm3 0h2v1h-2V8zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1z"/>
+                                                    </svg>
+                                                    <div id="PickUpPageTitle" class="ms-2"></div>
+                                                </div>
+                                            </div>
+                                            {{-- ページ本体 --}}
+                                            <div class="col-12 pt-0">
+                                                <img id="PickUpPageImage" src="" width="100%" alt="">
+                                                <div class="d-flex mt-2 mb-3 h3">
+                                                    <div id="PickUpPageType"></div>
+                                                    <div id="PickUpPageHyphen" class="mx-2 text-secondary"></div>
+                                                    <div id="PickUpPageDate" class="text-secondary"></div>
+                                                </div>
+                                                <div id="PickUpPageContent" class="fs-6"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {{-- ようこそ --}}
                 <li class="list-group-item p-0 border-0">
                     <a href="@if(Auth::check()){{ route('Profile.account') }} @else {{ route('Auth.login') }} @endif" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" target="_blank">
@@ -401,6 +488,50 @@
 </div>
 @endsection
 @section('jQuery')
+<script type="text/javascript">
+    function ViewPage(id) {
+        const TargetContent = document.getElementById('TargetContent');
+        // 元の表示を格納する
+        var TargetBackUp = TargetContent.innerHTML;
+        // 読み込み表示に変更する
+        TargetContent.innerHTML = `
+            <div class="position-relative">
+                <div class="spinner-border position-absolute" style="width: 3rem; height: 3rem; top: 300px; left: 50%;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
+        // 既読に変更する
+        document.getElementById('PickUpPageFlag' + id).innerHTML = "";
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: id,
+            }),
+        })
+        .then((response) => response.json())
+        .then(res => {
+            // 元の表示に戻す
+            TargetContent.innerHTML = TargetBackUp;
+            document.getElementById('PickUpPageTitle').innerHTML = res.title;
+            document.getElementById('PickUpPageImage').src = '{{ asset('Home/SankougiChat/header/') }}' + '/' + res.image;
+            document.getElementById('PickUpPageType').innerHTML = res.type;
+            document.getElementById('PickUpPageContent').innerHTML = res.content;
+            document.getElementById('PickUpPageHyphen').innerHTML = "-";
+            document.getElementById('PickUpPageDate').innerHTML = res.created_at;
+            if(res.flag) {
+                document.getElementById('PickUpPageFlag').innerHTML = "";
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+</script>
 <script type="text/javascript">
     const max_left = "-85%";
     document.getElementById('MoveLeftArrow').addEventListener('click', () => {
