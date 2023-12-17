@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
@@ -48,15 +50,28 @@ class AuthController extends Controller
         return view('Auth.avatar');
     }
 
-    // アバター登録処理
+    // アバター登録処理 : Fetch
     public function avatar(Request $request)
     {
-        $user = User::find(Auth::id());
-        $image_path = $request->file('image')->store('public/avatar/');
-        $user->image = basename($image_path);
-        $user->update();
+        // Data-URLの削除とデコード
+        $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image)));
+        $image_path = 'Avatar-' . Date::now()->format('Y-m-d-H-i-s') . '.png';
 
-        return redirect()->route('Profile.account');
+        // 更新チェックと画像保存
+        $user = User::where('id', '=', Auth::id())->first();
+
+        if($user->image)
+        {
+            Storage::disk('public')->delete('avatar/' . $user->image);
+        }
+        Storage::put('public/avatar/' . $image_path, $image);
+        $user->update([
+            'image' => $image_path,
+        ]);
+
+        return response()->json([
+            'link' => route('Profile.account'),
+        ], 200);
     }
 
     // ログイン画面
