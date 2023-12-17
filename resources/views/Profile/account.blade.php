@@ -21,7 +21,7 @@
                                 array(
                                     'InfoTitle'   =>  'プロフィール画像',
                                     'InfoContent' =>  '自身のアバターを表示します',
-                                    'InfoLink'    =>  '',
+                                    'InfoLink'    =>  route('Auth.avatar'),
                                     'InfoType'    =>  'Image',
                                 ),
                                 array(
