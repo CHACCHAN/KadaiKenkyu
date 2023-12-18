@@ -1,5 +1,5 @@
 @extends('Layouts.Account')
-@section('title', '学科番号更新')
+@section('title', '確認')
 @section('content')
 <div id="AccountForm">
     <div id="Design" class="card overflow-auto p-3 w-50 h-50">
@@ -10,24 +10,18 @@
             </div>
             <hr>
             <div class="card-text text-end">
-                学科番号の変更
+                パスワードの確認
             </div>
-            {{-- 既存の学科番号 --}}
+            {{-- 既存のパスワード --}}
             <div class="card mb-3">
                 <div class="card-header p-1 pb-0 bg-light border-0">
-                    既存の学科番号
+                    現在のパスワードを入力してください
                 </div>
                 <div class="card-body p-1 pt-0">
-                    <input type="text" class="form-control border-0" value="{{ Auth::user()->class_id }}" disabled>
-                </div>
-            </div>
-            {{-- 新しい学科番号 --}}
-            <div class="card mb-3">
-                <div class="card-header p-1 pb-0 bg-light border-0">
-                    新しい学科番号
-                </div>
-                <div class="card-body p-1 pt-0">
-                    <input type="text" class="form-control border-0" value="{{ Auth::user()->class_id }}" name="class_id" required>
+                    @if(session('message'))
+                        <div id="ErrLog" class="text-danger">{{ session('message') }}</div>
+                    @endif
+                    <input type="password" class="form-control border-0" placeholder="パスワードを入力" name="password" required>
                 </div>
             </div>
             <button type="button" id="SendButton" class="btn btn-primary text-center">送信</button>
@@ -35,4 +29,11 @@
         </form>
     </div>
 </div>
+@endsection
+@section('jQuery')
+<script type="text/javascript">
+setTimeout(() => {
+    document.getElementById('ErrLog').style.display = 'none';
+}, 3000);
+</script>
 @endsection

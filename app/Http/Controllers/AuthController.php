@@ -111,6 +111,25 @@ class AuthController extends Controller
         return back();
     }
 
+    // 名前変更画面
+    public function showName()
+    {
+        return view('Auth.name');
+    }
+
+    // 名前変更処理
+    public function name(Request $request)
+    {
+        User::where('id', '=', Auth::id())->update([
+            'name'       =>  $request->name,
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+        ]);
+
+        $message = '名前情報を更新しました';
+        return redirect()->route('Profile.account')->with(compact('message'));
+    }
+
     // メールアドレス変更画面
     public function showEmail()
     {
@@ -120,12 +139,59 @@ class AuthController extends Controller
     // メールアドレス変更処理
     public function email(Request $request)
     {
-        $user = User::find(Auth::id());
-        $user->update([
-            'email' => $request['email'],
+        User::where('id', '=', Auth::id())->update([
+            'email' => $request->email,
         ]);
 
-        return redirect()->route('Profile.account')->with('message', 'メールアドレスを更新しました');;
+        $message = 'メールアドレスを更新しました';
+        return redirect()->route('Profile.account')->with(compact('message'));
+    }
+
+    // パスワード変更画面
+    public function showPassword($check)
+    {
+        if(Hash::check($check, Auth::user()->password))
+        {
+            return view('Auth.password', [
+                'password' => $check,
+            ]);
+        }
+        else
+        {
+            $message = 'パスワードを確認してください';
+            return redirect()->route('Profile.account')->with(compact('message'));
+        }
+    }
+
+    // パスワード変更処理
+    public function password(Request $request)
+    {
+        User::where('id', '=', Auth::id())->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        $message = '正常に変更されました';
+        return redirect()->route('Profile.account')->with(compact('message'));
+    }
+
+    // パスワード変更確認画面
+    public function showPasswordCheck()
+    {
+        return view('Auth.password_check');
+    }
+
+    // パスワード変更確認処理
+    public function passwordcheck(Request $request)
+    {
+        if(Hash::check($request->password, Auth::user()->password))
+        {
+            return redirect()->route('Auth.password', $request->password);
+        }
+        else
+        {
+            $message = 'パスワードが一致しません';
+            return redirect()->back()->with(compact('message'));
+        }
     }
 
     // CHaserOnline変更画面
@@ -137,13 +203,13 @@ class AuthController extends Controller
     // CHaserOnline変更処理
     public function chaser(Request $request)
     {
-        $user = User::find(Auth::id());
-        $user->update([
-            'chaser_id' => $request['chaser_id'],
-            'chaser_password' => $request['chaser_password'],
+        User::where('id', '=', Auth::id())->update([
+            'chaser_id' => $request->chaser_id,
+            'chaser_password' => $request->chaser_password,
         ]);
 
-        return redirect()->route('Profile.account')->with('message', 'CHaserOnlineを更新しました');;
+        $message = 'CHaserOnlineを更新しました';
+        return redirect()->route('Profile.account')->with(compact('message'));
     }
 
     // 学科番号変更画面
@@ -155,11 +221,11 @@ class AuthController extends Controller
     // 学科番号変更処理
     public function class(Request $request)
     {
-        $user = User::find(Auth::id());
-        $user->update([
-            'class_id' => $request['class_id'],
+        User::where('id', '=', Auth::id())->update([
+            'class_id' => $request->class_id,
         ]);
 
-        return redirect()->route('Profile.account')->with('message', '学科番号を更新しました');
+        $message = '学科番号を更新しました';
+        return redirect()->route('Profile.account')->with(compact('message'));
     }
 }

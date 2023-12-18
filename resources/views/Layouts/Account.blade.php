@@ -34,6 +34,23 @@
 @vite('resources/js/app.js')
 {{-- Cropper --}}
 <script src="{{ asset('Layouts/JS/cropper.min.js') }}"></script>
+<script type="text/javascript">
+let target = document.getElementById('SendButton');
+let submit = document.getElementById('EventButton');
+target.addEventListener('click', () => {
+    let targetBackUp = target.innerHTML;
+    target.innerHTML = `
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        送信中...
+    `;
+    target.disabled = true;
+    submit.click();
+});
+
+submit.addEventListener('click', () => {
+    target.click();
+});
+</script>
 @yield('jQuery')
 </body>
 </html>

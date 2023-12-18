@@ -113,7 +113,8 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <button type="submit" class="btn btn-primary">新規登録</button>
+                    <button type="button" id="SendButton" class="btn btn-primary">新規登録</button>
+                    <button type="submit" id="EventButton" class="d-none"></button>
                 </div>
         </form>
         <p class="text-end mt-3">既にアカウントをお持ちの方は<a href="{{ route('Auth.login') }}">こちら</a>から</p>

@@ -35,9 +35,18 @@ Route::middleware('auth')->group(function (){
     // Auth->アバター登録
     Route::get('/register/avatar', [AuthController::class, 'showAvatar'])->name('Auth.avatar');
     Route::post('/register/avatar', [AuthCOntroller::class, 'avatar']);
+    // Auth->名前変更
+    Route::get('/register/name', [AuthController::class, 'showName'])->name('Auth.name');
+    Route::post('/register/name', [AuthController::class, 'name']);
     // Auth->メールアドレス変更
     Route::get('/register/email', [AuthController::class, 'showEmail'])->name('Auth.email');
     Route::post('/register/email', [AuthController::class, 'email']);
+    // Auth->パスワード変更
+    Route::get('/register/password/check={check}', [AuthController::class, 'showPassword'])->name('Auth.password');
+    Route::post('/register/password/', [AuthController::class, 'password'])->name('Auth.password.change');
+    // Auth->パスワード確認
+    Route::get('/register/password/check', [AuthController::class, 'showPasswordCheck'])->name('Auth.password.check');
+    Route::post('/register/password/check', [AuthController::class, 'passwordcheck']);
     // Auth->CHaserOnline変更
     Route::get('/register/chaser', [AuthController::class, 'showChaser'])->name('Auth.chaser');
     Route::post('/register/chaser', [AuthController::class, 'chaser']);
