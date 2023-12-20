@@ -16,7 +16,7 @@
                 <div class="container">
                     <div class="row px-5">
                         @php
-                            // 基本情報コンテンツ
+                            // 基本情報コンテンツ設定
                             $InfoseekContents = array(
                                 array(
                                     'InfoTitle'   =>  'プロフィール画像',
@@ -38,6 +38,7 @@
                                 ),
                             );
                         @endphp
+                        {{-- 基本情報コンテンツ --}}
                         <div class="col-12">
                             <div class="border rounded mx-auto p-3 pb-0 mb-3 w-75">
                                 <div class="h4">基本情報</div>

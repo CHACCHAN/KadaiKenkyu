@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\LocalMemo;
@@ -43,7 +44,7 @@ class HomeController extends Controller
         $flag = false;
 
         // 入室状況のフラグ
-        if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists())
+        if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists() && !Auth::user()->admin_flag)
         {
             $room = JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room;
         }
@@ -983,6 +984,12 @@ class HomeController extends Controller
     {
         if(Auth::check() && JoinOut::where('user_id', '=', Auth::id())->exists())
         {
+            // 管理者だったら
+            if(Auth::user()->admin_flag)
+            {
+                $message = 'これは生徒用サービスなので利用できません';
+                return redirect()->route('Home.home')->with(compact('message'));
+            }
             $room = JoinOutRoom::where('id', '=', JoinOut::where('user_id', '=', Auth::id())->first()->joinout_room_id)->first()->room;
         } else {
             $room = false;
@@ -1023,6 +1030,9 @@ class HomeController extends Controller
         } else {
             JoinOut::where('user_id', '=', Auth::id())->update([
                 'joinout_room_id' => JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id,
+                'class_id' => $request->class_id,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'first_date' => $request->first_date,
                 'last_date' => $request->last_date,
                 'flag' => true,
@@ -1030,6 +1040,61 @@ class HomeController extends Controller
         }
 
         return redirect()->route('Home.home');
+    }
+
+    // 教員用出席画面
+    public function showJoinOutTeacher()
+    {
+        return view('Home.JoinOut.joinout_teacher', [
+            'joinouts' => JoinOut::get(),
+        ]);
+    }
+
+    // 教員用出席処理
+    public function joinoutteacher(Request $request)
+    {
+        // 管理者じゃなかったら
+        if(!User::where('id', '=', Auth::id())->first()->admin_flag)
+        {
+            return redirect()->route('Home.home');
+        }
+
+        // 新規だったら
+        if(!JoinOut::where('user_id', '=', Auth::id())->first())
+        {
+            $joinout = new JoinOut;
+            $joinout->user_id = Auth::id();
+            $joinout->joinout_room_id = 99;
+            $joinout->class_id = 'Teacher';
+            $joinout->first_name = Auth::user()->first_name;
+            $joinout->last_name = Auth::user()->last_name;
+            $joinout->first_date = Carbon::now()->format('Y年m月d日 H時i分');
+            $joinout->last_date = Carbon::now()->format('Y年m月d日 H時i分');
+            $joinout->flag = true;
+            $joinout->save();
+        }
+        else
+        {
+            JoinOut::where('user_id', '=', Auth::id())->update([
+                'joinout_room_id' => 99,
+                'class_id' => 'Teacher',
+                'first_name' => Auth::user()->first_name,
+                'last_name' => Auth::user()->last_name,
+                'first_date' => Carbon::now()->format('Y年m月d日 H時i分'),
+                'last_date' => Carbon::now()->format('Y年m月d日 H時i分'),
+                'flag' => true,
+            ]);
+        }
+
+        return redirect()->route('Home.home');
+    }
+
+    // 出席状況取得API
+    public function getJoinOutTeacher(Request $request)
+    {
+        return response()->json([
+            'flag' => JoinOut::where('id', '=', $request->id)->first()->flag,
+        ], 200);
     }
 
     // 退出処理

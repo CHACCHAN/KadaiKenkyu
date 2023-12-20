@@ -213,6 +213,12 @@ Route::post('/calendar/post', [HomeController::class, 'postCalendar'])->name('Ho
 // Home->入退室フォーム
 Route::get('/joinout', [HomeController::class, 'showJoinOutForm'])->name('Home.joinout');
 Route::post('/joinout', [HomeController::class, 'joinoutform']);
+// Home->出席(教員)
+Route::get('/joinout/iframe/teacher', [HomeController::class, 'showJoinOutTeacher'])->name('Home.joinout.iframe.teacher');
+Route::get('/joinout/teacher', [HomeController::class, 'joinoutteacher'])->name('Home.joinout.teacher');
+// Home->出席状況取得API
+Route::post('/joinout/getdata', [HomeController::class, 'getJoinOutTeacher'])->name('Home.joinout.api');
+// Home->入退室フォーム->退出
 Route::get('/joinout/exit', [HomeController::class, 'deleteJoinOutForm'])->name('Home.joinout.exit');
 
 /************************************************/

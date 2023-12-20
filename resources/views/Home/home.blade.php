@@ -164,6 +164,15 @@
                         その他
                     </div>
                 </li>
+                {{-- 所在ログ --}}
+                <li class="list-group-item p-0 border-0">
+                    <a href="#Log" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" onclick="showWindow()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </svg>
+                        <div class="h5 ms-2">教員出席状況</div>
+                    </a>
+                </li>
                 {{-- ピックアップ --}}
                 <li class="list-group-item p-0 border-0">
                     <a href="#Pickup" id="QuickAccess" class="btn border-0 w-100 pt-3 rounded-0 d-flex" data-bs-toggle="modal" data-bs-target="#PickupModal">
@@ -274,7 +283,8 @@
             </ul>
             {{-- 入退室ステータス --}}
             @auth
-                @if(isset($joinout->flag))
+            {{-- 入室済みだったら --}}
+                @if(isset($joinout->flag) && !Auth::user()->admin_flag)
                     <div class="position-relative">
                         <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
                             <div class="position-relative">
@@ -302,6 +312,49 @@
                                             <a href="{{ route('Home.joinout.exit') }}" class="btn btn-primary ms-4 mt-2">退出する</a>
                                         @else
                                             <a href="{{ route('Home.joinout') }}" class="btn btn-primary ms-4 mt-2">入室する</a>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div id="MoveArrowLeftContent" class="position-absolute arrow-left" style="top: 40%; left: -5%;">
+                                    <button type="button" id="MoveLeftArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div id="MoveArrowRightContent" class="position-absolute arrow-right d-none" style="top: 40%; right: -5%;">
+                                    <button type="button" id="MoveRightArrow" class="btn border-0 p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{-- 入室済みだったら(教員) --}}
+                @elseif(isset($joinout->flag) && Auth::user()->admin_flag)
+                    <div class="position-relative">
+                        <div id="JoinOutContent" class="position-absolute w-100 px-4" style="top: 50px">
+                            <div class="position-relative">
+                                <div class="rounded-3 border @if($joinout->flag) border-dark @endif">
+                                    <div class="p-2 @if($joinout->flag) gaming @else bg-secondary text-light rounded-top @endif">
+                                        <div class="h5 mx-3">
+                                            <div class="text-center border-bottom @if($joinout->flag) border-dark @endif pb-1">現在の入室状況</div>
+                                            <div class="text-start pt-1">
+                                                @if($joinout->flag)
+                                                    出席中です
+                                                @else
+                                                    退席中です
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="@if(!$joinout->flag) bg-secondary rounded-bottom @endif pb-2">
+                                        @if($joinout->flag)
+                                            <a href="{{ route('Home.joinout.exit') }}" class="btn btn-primary ms-4 mt-2">退席する</a>
+                                        @else
+                                            <a href="{{ route('Home.joinout.teacher') }}" class="btn btn-primary ms-4 mt-2">出席する</a>
                                         @endif
                                     </div>
                                 </div>
@@ -489,6 +542,11 @@
 @endsection
 @section('jQuery')
 <script type="text/javascript">
+    @if(session('message'))
+        alert('{{ session('message') }}');
+    @endif
+</script>
+<script type="text/javascript">
     function ViewPage(id) {
         const TargetContent = document.getElementById('TargetContent');
         // 元の表示を格納する
@@ -548,5 +606,41 @@
         document.getElementById('JoinOutContent').style.left = '0px';
         document.getElementById('MoveArrowRightContent').classList.add("d-none");
     });
+</script>
+<script type="text/javascript" src="https://riversun.github.io/jsframe/jsframe.js"></script>
+<script type="text/javascript">
+    var WindowFlag = true;
+    const x = window.innerWidth / 2;
+    const y = window.innerHeight / 2;
+    const align = 'CENTER_CENTER';
+    const jsFrame = new JSFrame();
+    const frame = jsFrame.create({
+        width: 960, height: 480,
+        movable: true,//マウスで移動可能
+        resizable: true,//マウスでリサイズ可能
+        @auth
+        url: '{{ route('Home.joinout.iframe.teacher') }}',
+        @endauth
+        @guest
+        html: `
+            <div class="text-center mt-5">
+                <div class="h5">ログインしてください</div>
+                <a href="{{ route('Auth.login') }}" class="btn btn-success">ログイン</a>
+            </div>
+        `,
+        @endguest
+    });
+
+    frame.setPosition(x, y, align);
+
+    function showWindow() {
+        if(WindowFlag) {
+            frame.show();
+            WindowFlag = false;
+        } else {
+            frame.hide();
+            WindowFlag = true;
+        }  
+    } 
 </script>
 @endsection
