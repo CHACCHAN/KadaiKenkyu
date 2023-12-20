@@ -35,6 +35,7 @@ class AuthController extends Controller
             'class_id'        =>  $request['class_id'],
             'chaser_id'       =>  $request['chaser_id'],
             'chaser_password' =>  $request['chaser_password'],
+            'admin_flag'      =>  false,
         ]);
 
         Auth::login($user);
