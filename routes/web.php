@@ -79,6 +79,16 @@ Route::middleware('auth')->group(function (){
     Route::get('/profile/account', [ProfileController::class, 'showAccount'])->name('Profile.account');
     // Profile->セキュリティ
     Route::get('/profile/secure', [ProfileController::class, 'showSecure'])->name('Profile.secure');
+    // Profile->ダッシュボード
+    Route::get('/profile/dashboard', [ProfileController::class, 'showDashBoard'])->name('Profile.dashboard');
+    // Profile->ダッシュボード->管理者昇格
+    Route::get('/profile/dashboard/account/upgradeAccount/id={id}', [ProfileController::class, 'upgradeAccount'])->name('Profile.dashboard.account.upgrade');
+    // Profile->ダッシュボード->生徒降格
+    Route::get('/profile/dashboard/account/downgradeAccount/id={id}', [ProfileController::class, 'downgradeAccount'])->name('Profile.dashboard.account.downgrade');
+    // Profile->アカウント検索API
+    Route::post('/profile/dashboard/account/search', [ProfileController::class, 'searchAccount'])->name('Profile.dashboard.account.search');
+    // Profile->アカウント取得API
+    Route::post('/profile/dashboard/account/get', [ProfileController::class, 'getAccount'])->name('Profile.dashboard.account.get');
 });
 
 

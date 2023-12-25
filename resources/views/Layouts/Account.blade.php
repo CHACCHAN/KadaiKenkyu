@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
+    {{-- Favicon --}}
+    <link rel="icon" href="{{ asset('Layouts/Images/icon.png') }}">
     {{-- Vite --}}
     @vite('resources/sass/app.scss')
     {{-- Cropper --}}
