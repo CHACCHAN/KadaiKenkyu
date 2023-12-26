@@ -672,7 +672,7 @@
                                     ${pickup[i].title}
                                 </div>
                             </div>
-                            <div class="col-3 px-0">
+                            <div class="col-3 p-0">
                                 <div class="${TypeClass} text-center text-light">
                                     ${pickup[i].type}
                                 </div>
