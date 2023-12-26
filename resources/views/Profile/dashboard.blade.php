@@ -8,7 +8,7 @@
         </div>
         {{-- 管理者権限 --}}
         @if(Auth::user()->admin_flag)
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <div class="row">
                     {{-- 全アカウント詳細一覧 --}}
                     <div class="col-12 mb-3">
@@ -205,7 +205,12 @@
                     <div class="col-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="h5">ピックアップ</div>
+                                <div class="h5">ピックアップ(上限10件)</div>
+                                <div class="card mb-1 border-0">
+                                    <div id="PickUpNotifical" class="card-body p-1 bg-success text-light rounded d-none">
+                                        正常に送信されました
+                                    </div>
+                                </div>
                                 <div class="card mb-3">
                                     <div class="card-header p-1 pb-0 bg-light border-0">
                                         タイトル
@@ -220,6 +225,25 @@
                                     </div>
                                     <div class="card-body p-1 pt-0">
                                         <textarea id="PickUpInputContent" class="form-control border-0" rows="5" aria-label="With textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-header p-1 pb-0 bg-light border-0">
+                                        投稿タイプ
+                                    </div>
+                                    <div class="card-body p-1 pt-0">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="PickUpInputType" value="お知らせ" id="PickUpRadio1" checked>
+                                            <label class="form-check-label" for="PickUpRadio1">
+                                                お知らせ
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="PickUpInputType" value="入試関連" id="PickUpRadio2">
+                                            <label class="form-check-label" for="PickUpRadio2">
+                                                入試関連
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -239,7 +263,10 @@
                     <div class="col-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="h5">ピックアップ</div>
+                                <div class="h5">ピックアップ履歴</div>
+                                <ul class="list-group">
+                                    <div id="ViewPickUpHistory"></div>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -247,7 +274,7 @@
             </div>
         {{-- 一般権限 --}}
         @else
-            <div class="col-12">
+            <div class="col-12 mb-3">
 
             </div>
         @endif
@@ -261,7 +288,6 @@
     alert(Message);
 </script>
 @endif
-
 <script type="text/javascript">
     let max = {{ $viewcount }};
     let SearchInput = document.getElementById('SearchInput');
@@ -514,27 +540,191 @@
         return html;
     }
 </script>
-
 <script type="text/javascript">
     let PickUpInputTitle = document.getElementById('PickUpInputTitle');
     let PickUpInputContent = document.getElementById('PickUpInputContent');
     let PickUpInputFile = document.getElementById('PickUpInputFile');
+    let PickUpInputType = document.getElementsByName('PickUpInputType');
     let PickUpSubmit = document.getElementById('PickUpSubmit');
+    let PickUpNotifical = document.getElementById('PickUpNotifical');
     let PickUpSubmitDefault;
 
     PickUpSubmit.addEventListener('click', () => {
-        // 送信中(ボタン)
-        PickUpSubmitDefault = PickUpSubmit.innerHTML;
-        PickUpSubmit.disabled = true;
-        PickUpSubmit.innerHTML = `
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            送信中
+        if(PickUpInputTitle.value && PickUpInputContent.value) {
+            // 送信中(ボタン)
+            PickUpSubmitDefault = PickUpSubmit.innerHTML;
+            PickUpSubmit.disabled = true;
+            PickUpSubmit.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                送信中
+            `;
+
+            if(PickUpInputFile.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    UploadPickUp(e, true);
+                }
+
+                reader.readAsDataURL(PickUpInputFile.files[0]);
+            } else {
+                UploadPickUp(false, false);
+            }
+
+            // 履歴に適用
+            getData();
+
+            function GetRadioValue() {
+                for(let i = 0; i < PickUpInputType.length; i++) {
+                    if(PickUpInputType.item(i).checked) {
+                        return PickUpInputType.item(i).value;
+                    }
+                }
+            }
+
+            function UploadPickUp(e, mode) {
+                let imageData = null;
+                // Data-URL
+                if(mode) {
+                    imageData = e.target.result;
+                }
+
+                fetch('{{ route('Profile.dashboard.pickup.upload') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'enctype': 'multipart/form-data',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: PickUpInputTitle.value,
+                        content: PickUpInputContent.value,
+                        image: imageData,
+                        type: GetRadioValue(),
+                    }),
+                })
+                .then((response) => response.json())
+                .then(res => {
+                    // 送信完了(ボタン)
+                    PickUpSubmit.innerHTML = PickUpSubmitDefault;
+                    PickUpSubmit.disabled = false;
+
+                    // 入力欄のリセット
+                    PickUpInputTitle.value = "";
+                    PickUpInputContent.value = "";
+                    PickUpInputFile.value = "";
+
+                    // 通知
+                    PickUpNotifical.classList.remove('d-none');
+                    setTimeout(() => {
+                        PickUpNotifical.classList.add('d-none');
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    let ViewPickUpHistory = document.getElementById('ViewPickUpHistory');
+    let Time = 10000;
+
+    // 読み込み中
+    ViewPickUpHistory.innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `;
+
+    // 初回取得
+    getData();
+
+    // 同期処理
+    setInterval(() => {
+        getData();
+    }, Time);
+
+    function getData() {
+        fetch('{{ route('Profile.dashboard.pickup.get') }}')
+        .then((response) => response.json())
+        .then(res => {
+            let pickup = res.pickups;
+            let TypeClass;
+
+            ViewPickUpHistory.innerHTML = "";
+            ViewPickUpHistory.insertAdjacentHTML('beforeend', '最大10件中' + res.count + '件');
+
+            for(let i in pickup) {
+                if(pickup[i].type === "お知らせ") {
+                    TypeClass = 'bg-success';
+                } else {
+                    TypeClass = 'bg-danger';
+                }
+
+                let html = `
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="text-truncate">
+                                    ${pickup[i].title}
+                                </div>
+                            </div>
+                            <div class="col-3 px-0">
+                                <div class="${TypeClass} text-center text-light">
+                                    ${pickup[i].type}
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <div class="text-center">
+                                    <div id="DeletePickUpLoad_${pickup[i].id}" class="btn border-0 p-0" onclick="DeletePickUp(${pickup[i].id});">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+
+                ViewPickUpHistory.insertAdjacentHTML('beforeend', html);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    function DeletePickUp(id) {
+        let DeletePickUpLoad = document.getElementById('DeletePickUpLoad_' + id);
+
+        DeletePickUpLoad.innerHTML = `
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         `;
 
-
-        // 送信完了(ボタン)
-        PickUpSubmit.innerHTML = PickUpSubmitDefault;
-        PickUpSubmit.disabled = false;
-    });
+        fetch('{{ route('Profile.dashboard.pickup.delete') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'enctype': 'multipart/form-data',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: id,
+            }),
+        })
+        .then((response) => response.json())
+        .then(res => {
+            getData();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
 </script>
 @endsection

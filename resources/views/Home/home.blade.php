@@ -576,9 +576,9 @@
             // 元の表示に戻す
             TargetContent.innerHTML = TargetBackUp;
             document.getElementById('PickUpPageTitle').innerHTML = res.title;
-            document.getElementById('PickUpPageImage').src = '{{ asset('Home/SankougiChat/header/') }}' + '/' + res.image;
+            document.getElementById('PickUpPageImage').src = '{{ asset('storage/pickup') }}' + '/' + res.image;
             document.getElementById('PickUpPageType').innerHTML = res.type;
-            document.getElementById('PickUpPageContent').innerHTML = res.content;
+            document.getElementById('PickUpPageContent').innerHTML = res.content.replace(/\r?\n/g, '<br>');
             document.getElementById('PickUpPageHyphen').innerHTML = "-";
             document.getElementById('PickUpPageDate').innerHTML = res.created_at;
             if(res.flag) {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Date;
 use App\Models\User;
 use App\Models\LocalMemo;
 use App\Models\SankougiChat;
@@ -51,7 +53,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    // アカウント管理者昇格API
+    // アカウント管理者昇格
     public function upgradeAccount($id)
     {
         User::where('id', '=', $id)->update([
@@ -95,5 +97,70 @@ class ProfileController extends Controller
             'users' => User::orderBy('id', 'ASC')->take($request->max)->get(),
             'count' => $count,
         ], 200);
+    }
+
+    // ピックアップ投稿API
+    public function uploadPickUp(Request $request)
+    {
+        // 10件を超えたら削除
+        if(PickUp::count() == 10)
+        {
+            $pickup_old = PickUp::oldest('created_at')->first();
+
+            if($pickup_old->image)
+            {
+                Storage::disk('public')->delete('pickup/' . $pickup_old->image);
+            }
+            if(PickUpRead::where('pickup_id', '=', $pickup_old->id)->exists())
+            {
+                PickUpRead::where('pickup_id', '=', $pickup_old->id)->delete();
+            }
+            
+            PickUp::where('id', '=', $pickup_old->id)->delete();
+        }
+
+        $pickup = new PickUp();
+        $pickup->title = $request->title;
+        $pickup->content = $request->content;
+        $pickup->type = $request->type;
+        // 画像の保存
+        if($request->image) {
+            $image = base64_decode(preg_replace('/^data:image.*base64,/', '', str_replace(' ', '+', $request->image)));
+            $image_path = 'PickUpImage-' . Date::now()->format('Y-m-d-H-i-s') . '.png';
+            Storage::put('public/pickup/' . $image_path, $image);
+            $pickup->image = $image_path;
+        }
+
+        $pickup->save();
+
+        return response()->json([], 200);
+    }
+
+    // ピックアップ取得API
+    public function getPickUp()
+    {
+        return response()->json([
+            'pickups' => PickUp::latest()->get(),
+            'count'   => PickUp::count(),
+        ], 200);
+    }
+
+    // ピックアップ削除API
+    public function deletePickUp(Request $request)
+    {
+        $pickup = PickUp::where('id', '=', $request->id)->first();
+        
+        if($pickup->image)
+        {
+            Storage::disk('public')->delete('pickup/' . $pickup->image);
+        }
+        if(PickUpRead::where('pickup_id', '=', $pickup->id)->exists())
+        {
+            PickUpRead::where('pickup_id', '=', $pickup->id)->delete();
+        }
+
+        PickUp::where('id', '=', $pickup->id)->delete();
+
+        return response()->json([], 200);
     }
 }

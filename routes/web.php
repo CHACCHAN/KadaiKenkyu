@@ -89,6 +89,12 @@ Route::middleware('auth')->group(function (){
     Route::post('/profile/dashboard/account/search', [ProfileController::class, 'searchAccount'])->name('Profile.dashboard.account.search');
     // Profile->アカウント取得API
     Route::post('/profile/dashboard/account/get', [ProfileController::class, 'getAccount'])->name('Profile.dashboard.account.get');
+    // Profile->ピックアップ投稿API
+    Route::post('/profile/dashboard/pickup/upload', [ProfileController::class, 'uploadPickUp'])->name('Profile.dashboard.pickup.upload');
+    // Profile->ピックアップ取得API
+    Route::get('/profile/dashboard/pickup/get', [ProfileController::class, 'getPickUp'])->name('Profile.dashboard.pickup.get');
+    // Profile->ピックアップ削除API
+    Route::post('/profile/dashboard/pickup/delete', [ProfileController::class, 'deletePickUp'])->name('Profile.dashboard.pickup.delete');
 });
 
 

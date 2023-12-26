@@ -20,6 +20,5 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(StampSeeder::class);
         $this->call(JoinOutSeeder::class);
-        $this->call(PickUpSeeder::class);
     }
 }
