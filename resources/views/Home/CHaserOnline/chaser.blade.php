@@ -22,7 +22,7 @@
                         サーバー
                     </button>
                     <button id="wait" class="btn btn-secondary ml-0" type="button">
-                        待ち合わせ
+                        待ち合せ
                     </button>
                     @auth
                         <button id="id" class="btn btn-success ml-0" type="button">
