@@ -37,11 +37,94 @@
                 {{-- キャンバス --}}
                 <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="SideMenuCanvas" aria-labelledby="SideMenuCanvasLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="SideMenuCanvasLabel">Backdrop with scrolling</h5>
+                        <h5 class="offcanvas-title" id="SideMenuCanvasLabel">
+                            <a class="navbar-brand" href="{{ route('Home.home') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
+                                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
+                                </svg>   C-SYSTEM
+                            </a>
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div class="offcanvas-body">
-                        <p>Try scrolling the rest of the page to see this option in action.</p>
+                    <div class="offcanvas-body p-1">
+                        <div class="list-group">
+                            @php
+                                $BasicMenus = array(
+                                    array(
+                                        'ListTitle' => 'ホーム',
+                                        'ListLink'  => route('Home.home'),
+                                    ),
+                                );
+                            @endphp
+                            <div class="h5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                                    <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>   基本メニュー
+                            </div>
+                            @foreach($BasicMenus as $BasicMenu)
+                                <a href="{{ $BasicMenu['ListLink'] }}" class="list-group-item list-group-item-action border-0 border-bottom h5 pb-0">
+                                    {{ $BasicMenu['ListTitle'] }}
+                                </a>
+                            @endforeach
+
+                            @php
+                                $ServiceMenus = array(
+                                    array(
+                                        'ListTitle' => 'CHaserOnline',
+                                        'ListLink'  => route('Home.chaser'),
+                                    ),
+                                    array(
+                                        'ListTitle' => '三工技チャット',
+                                        'ListLink'  => route('Home.sankougichat'),
+                                    ),
+                                    array(
+                                        'ListTitle' => 'ローカルメモ',
+                                        'ListLink'  => route('Home.localmemo'),
+                                    ),
+                                    array(
+                                        'ListTitle' => 'カレンダー',
+                                        'ListLink'  => route('Home.calendar'),
+                                    ),
+                                    array(
+                                        'ListTitle' => '入退室フォーム',
+                                        'ListLink'  => route('Home.joinout'),
+                                    ),
+                                    array(
+                                        'ListTitle' => 'クリエイターツール',
+                                        'ListLink'  => route('Home.creatertool'),
+                                    ),
+                                );
+                            @endphp
+                            <div class="h5 mt-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                                    <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>   サービス
+                            </div>
+                            @foreach($ServiceMenus as $ServiceMenu)
+                                <a href="{{ $ServiceMenu['ListLink'] }}" class="list-group-item list-group-item-action border-0 border-bottom h5 pb-0">
+                                    {{ $ServiceMenu['ListTitle'] }}
+                                </a>
+                            @endforeach
+
+                            @php
+                                $GameMenus = array(
+                                    array(
+                                        'ListTitle' => 'ナンプレ',
+                                        'ListLink'  => route('Game.numberplate'),
+                                    ),
+                                );
+                            @endphp
+                            <div class="h5 mt-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                                    <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>   ゲーム
+                            </div>
+                            @foreach($GameMenus as $GameMenu)
+                                <a href="{{ $GameMenu['ListLink'] }}" class="list-group-item list-group-item-action border-0 border-bottom h5 pb-0">
+                                    {{ $GameMenu['ListTitle'] }}
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,7 +159,6 @@
                                         </form>
                                     </a>
                                 </li>
-                                <li><a class="dropdown-item" href="#">設定</a></li>
                             </ul>
                         </div>
                     @endauth

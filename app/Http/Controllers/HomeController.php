@@ -105,7 +105,14 @@ class HomeController extends Controller
     // CHaserOnline画面
     public function showCHaser()
     {
-        return view('Home.CHaserOnline.chaser');
+        if(Auth::check())
+        {
+            return view('Home.CHaserOnline.chaser');
+        }
+        else
+        {
+            return redirect()->route('Auth.login');
+        }
     }
 
     /************************************************/

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Date;
 use App\Models\User;
@@ -47,9 +48,15 @@ class ProfileController extends Controller
         $ViewCount = 3;
 
         return view('Profile.dashboard', [
-            'users' => User::orderBy('id', 'ASC')->take($ViewCount)->get(),
-            'count' => User::count() - $ViewCount,
-            'viewcount' => $ViewCount,
+            'users'                      => User::orderBy('id', 'ASC')->take($ViewCount)->get(),
+            'count'                      => User::count() - $ViewCount,
+            'viewcount'                  => $ViewCount,
+            'localmemos'                 => LocalMemo::latest()->get(),
+            'sankougi_chat_user'         => SankougiChatUser::where('user_id', '=', Auth::id())->first(),
+            'sankougi_chats'             => SankougiChat::get(),
+            'sankougi_chat_follows'      => SankougiChatFollow::get(),
+            'sankougi_chat_threads'      => SankougiChatThread::get(),
+            'sankougi_chat_thread_joins' => SankougiChatThreadJoin::get(),
         ]);
     }
 

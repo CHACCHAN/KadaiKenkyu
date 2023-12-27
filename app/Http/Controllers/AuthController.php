@@ -109,7 +109,7 @@ class AuthController extends Controller
     {
         Auth::logout();
         
-        return back();
+        return redirect()->route('Home.home');
     }
 
     // 名前変更画面

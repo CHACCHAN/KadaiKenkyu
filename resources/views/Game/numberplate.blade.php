@@ -4,20 +4,19 @@
     <link rel="stylesheet" href="{{ asset('Game/NumberPlate/CSS/style.css') }}">
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <h1>ナンプレ</h1><button onclick="location.reload();" class="btn btn-primary">問題を変える</button>
-            <a href="https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r03/html/nd131100.html">次の問題へ</a><br>
-            <table class="main"></table>
-            <table class="select"></table>
-            <div class="box">
-                <div class="check" onclick="check()">正解確認</div>
-                <div class="remove" onclick="remove()">消す</div>
-            </div><br>
-            <h2></h2>
-        </div>
-    </div>
-
+<body>
+    <main>
+        <h1>ナンプレ</h1><button id="btn" class="btn btn-primary">問題を変える</button>
+        <a href="https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r03/html/nd131100.html">次の問題へ</a><br>
+        <table class="main"></table>
+        <table class="select"></table>
+        <div class="box">
+            <div class="check" onclick="check()">正解確認</div>
+            <div class="remove" onclick="remove()">消す</div>
+        </div><br>
+        <h2></h2>
+        <p id="PassageArea">(ここにカウントが表示されます)</p>
+    </main>
     <div id="topSnack">
         <div class="topSnackMessege">
             <p>
@@ -28,9 +27,15 @@
         </div>
         <button id="topSnackClose">&#10005;</button>
     </div>
+    <div class="centering_parent">
+        <span class="centering_item">
+            <button id="fill-answers-button" class="btn btn-primary">すべての数字を埋める(答えを見る)</button>
+        </span>
+    </div>
     <center>
-        <button id="fill-answers-button" class="btn btn-primary">すべての数字を埋める</button>
+        <input type="button" value="カウント開始" id="startcount" onclick="startShowing();">
     </center>
+</body>
 @endsection
 @section('jQuery')
     <script type="text/javascript" src="{{ asset('Game/NumberPlate/JS/main.js') }}"></script>

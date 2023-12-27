@@ -261,12 +261,187 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="card">
+                        {{-- ピックアップ履歴 --}}
+                        <div class="card mb-3">
                             <div class="card-body">
                                 <div class="h5">ピックアップ履歴</div>
                                 <ul class="list-group">
                                     <div id="ViewPickUpHistory"></div>
                                 </ul>
+                            </div>
+                        </div>
+                        {{-- 三工技チャット --}}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="h5">三工技チャット プロフィール</div>
+                                {{-- 三工技チャット プロフィール所持有無 --}}
+                                @if($sankougi_chat_user)
+                                    <div class="card">
+                                        <div class="card-header p-0 border-0">
+                                            <div class="position-relative">
+                                                {{-- ヘッダー --}}
+                                                <img src=
+                                                "
+                                                    @if($sankougi_chat_user->image_header)
+                                                        {{ asset('storage/sankougichat_user/header/' . $sankougi_chat_user->image_header) }}
+                                                    @else
+                                                        {{ asset('Home/SankougiChat/header/sample_header.jpeg') }}
+                                                    @endif
+                                                " width="100%" alt="">
+                                                
+                                                <div class="position-absolute w-100" style="top: 5px; left: 0;">
+                                                    <div class="text-center">
+                                                        {{-- アバター --}}
+                                                        <img src=
+                                                        "
+                                                            @if($sankougi_chat_user->image_header)
+                                                                {{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_user->image_avatar) }}
+                                                            @else
+                                                                {{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}
+                                                            @endif
+                                                        " width="25%" class="rounded-circle" alt="">
+
+                                                        {{-- 登録名 --}}
+                                                        <div class="text-light">
+                                                            <div class="h3" style="font-weight: bold;">{{ $sankougi_chat_user->name }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-2">
+                                            <div class="row">
+                                                <div class="col-6 pe-1">
+                                                    <div class="card">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            基本情報
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatName" class="form-label m-0">登録名</label>
+                                                                <input type="text" class="form-control" id="SankougiChatName" value="{{ $sankougi_chat_user->name }}" disabled>
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatID" class="form-label m-0">登録ID</label>
+                                                                <input type="text" class="form-control" id="SankougiChatID" value="{{ '@' . $sankougi_chat_user->name_id }}" disabled>
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatPostCount" class="form-label m-0">合計投稿数</label>
+                                                                <input type="text" class="form-control" id="SankougiChatPostCount" value="{{ $sankougi_chats->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id)->count() . '件' }}" disabled>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-6 pe-1">
+                                                                    <label for="SankougiChatFollow" class="form-label m-0">フォロー計数</label>
+                                                                    <input type="text" class="form-control" id="SankougiChatFollow" value=
+                                                                        "{{ $sankougi_chat_follows->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id)->count() . '人' }}"
+                                                                    disabled>
+                                                                </div>
+                                                                <div class="col-6 ps-1">
+                                                                    <label for="SankougiChatFollow" class="form-label m-0">フォロワー計数</label>
+                                                                    <input type="text" class="form-control" id="SankougiChatFollow" value=
+                                                                        "{{ $sankougi_chat_follows->where('chat_user_name_id', '=', $sankougi_chat_user->name_id)->count() . '人' }}"
+                                                                    disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 ps-1">
+                                                    <div class="card mb-2">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            アクセス
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <a href="{{ route('Home.sankougichat') }}" class="btn btn-success p-1 mb-1 w-100">トップ</a>
+                                                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_user->name_id) }}" class="btn btn-primary p-1 w-100">プロフィール</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            スレッド 参加一覧
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <ul class="list-group">
+                                                                @foreach($sankougi_chat_thread_joins->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id) as $sankougi_chat_thread_join)
+                                                                    <li class="list-group-item p-1">
+                                                                        @foreach($sankougi_chat_threads->where('id', '=', $sankougi_chat_thread_join->sankougi_chat_thread_id) as $sankougi_chat_thread)
+                                                                            <div class="d-flex">
+                                                                                <div class="fs-6">{{ $sankougi_chat_thread->title }}</div>
+                                                                                <div class="text-secondary ms-2">{{ '(参加者' . $sankougi_chat_thread->join_count . '人)' }}</div>
+                                                                            </div>
+                                                                            @break
+                                                                        @endforeach
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <p class="m-0">プロフィールを作成する</p>
+                                                <a href="{{ route('Home.sankougichat.profile.adduser') }}" class="btn btn-primary">作成</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    {{-- ローカルメモ --}}
+                    <div class="col-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="h5">ローカルメモ</div>
+                                <div class="row">
+                                    @foreach($localmemos->where('user_id', '=', Auth::id()) as $localmemo)
+                                        {{-- カード --}}
+                                        <div class="col-3">
+                                            <div class="card btn border p-0" data-bs-toggle="modal" data-bs-target="#LocalMemoModal_{{ $localmemo->id }}">
+                                                <div class="card-header bg-light p-1">
+                                                    <div class="text-start">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                                        </svg>  {{ $localmemo->title }}
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    @if($localmemo->image)
+                                                        <div class="modal-header border-bottom p-0">
+                                                            <img src="{{ asset('storage/localmemo/' . $localmemo->image) }}" width="100%" alt="">
+                                                        </div>
+                                                    @endif
+                                                    <div class="text-start p-1">
+                                                        {!! nl2br(htmlspecialchars($localmemo->content)) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- モーダル --}}
+                                        <div class="modal fade" id="LocalMemoModal_{{ $localmemo->id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    @if($localmemo->image)
+                                                        <div class="modal-header p-0">
+                                                            <img src="{{ asset('storage/localmemo/' . $localmemo->image) }}" class="rounded-top" width="100%" alt="">
+                                                        </div>
+                                                    @endif
+                                                    <div class="modal-body p-1">
+                                                        <div class="h5 text-secondary">タイトル</div>
+                                                        <div class="h5 mb-3">{{ $localmemo->title }}</div>
+                                                        <div class="h5 text-secondary">内容</div>
+                                                        <div class="h5">{!! nl2br(htmlspecialchars($localmemo->content)) !!}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -275,7 +450,184 @@
         {{-- 一般権限 --}}
         @else
             <div class="col-12 mb-3">
+                <div class="row">
+                    {{-- 三工技チャット --}}
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="h5">三工技チャット プロフィール</div>
+                                {{-- 三工技チャット プロフィール所持有無 --}}
+                                @if($sankougi_chat_user)
+                                    <div class="card">
+                                        <div class="card-header p-0 border-0">
+                                            <div class="position-relative">
+                                                {{-- ヘッダー --}}
+                                                <img src=
+                                                "
+                                                    @if($sankougi_chat_user->image_header)
+                                                        {{ asset('storage/sankougichat_user/header/' . $sankougi_chat_user->image_header) }}
+                                                    @else
+                                                        {{ asset('Home/SankougiChat/header/sample_header.jpeg') }}
+                                                    @endif
+                                                " width="100%" alt="">
+                                                
+                                                <div class="position-absolute w-100" style="top: 5px; left: 0;">
+                                                    <div class="text-center">
+                                                        {{-- アバター --}}
+                                                        <img src=
+                                                        "
+                                                            @if($sankougi_chat_user->image_header)
+                                                                {{ asset('storage/sankougichat_user/avatar/' . $sankougi_chat_user->image_avatar) }}
+                                                            @else
+                                                                {{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}
+                                                            @endif
+                                                        " width="25%" class="rounded-circle" alt="">
 
+                                                        {{-- 登録名 --}}
+                                                        <div class="text-light">
+                                                            <div class="h3" style="font-weight: bold;">{{ $sankougi_chat_user->name }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-2">
+                                            <div class="row">
+                                                <div class="col-6 pe-1">
+                                                    <div class="card">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            基本情報
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatName" class="form-label m-0">登録名</label>
+                                                                <input type="text" class="form-control" id="SankougiChatName" value="{{ $sankougi_chat_user->name }}" disabled>
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatID" class="form-label m-0">登録ID</label>
+                                                                <input type="text" class="form-control" id="SankougiChatID" value="{{ '@' . $sankougi_chat_user->name_id }}" disabled>
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                <label for="SankougiChatPostCount" class="form-label m-0">合計投稿数</label>
+                                                                <input type="text" class="form-control" id="SankougiChatPostCount" value="{{ $sankougi_chats->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id)->count() . '件' }}" disabled>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-6 pe-1">
+                                                                    <label for="SankougiChatFollow" class="form-label m-0">フォロー計数</label>
+                                                                    <input type="text" class="form-control" id="SankougiChatFollow" value=
+                                                                        "{{ $sankougi_chat_follows->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id)->count() . '人' }}"
+                                                                    disabled>
+                                                                </div>
+                                                                <div class="col-6 ps-1">
+                                                                    <label for="SankougiChatFollow" class="form-label m-0">フォロワー計数</label>
+                                                                    <input type="text" class="form-control" id="SankougiChatFollow" value=
+                                                                        "{{ $sankougi_chat_follows->where('chat_user_name_id', '=', $sankougi_chat_user->name_id)->count() . '人' }}"
+                                                                    disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 ps-1">
+                                                    <div class="card mb-2">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            アクセス
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <a href="{{ route('Home.sankougichat') }}" class="btn btn-success p-1 mb-1 w-100">トップ</a>
+                                                            <a href="{{ route('Home.sankougichat.profile', $sankougi_chat_user->name_id) }}" class="btn btn-primary p-1 w-100">プロフィール</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card">
+                                                        <div class="card-header bg-light border-0 p-1">
+                                                            スレッド 参加一覧
+                                                        </div>
+                                                        <div class="card-body p-1">
+                                                            <ul class="list-group">
+                                                                @foreach($sankougi_chat_thread_joins->where('chat_user_id', '=', $sankougi_chat_user->chat_user_id) as $sankougi_chat_thread_join)
+                                                                    <li class="list-group-item p-1">
+                                                                        @foreach($sankougi_chat_threads->where('id', '=', $sankougi_chat_thread_join->sankougi_chat_thread_id) as $sankougi_chat_thread)
+                                                                            <div class="d-flex">
+                                                                                <div class="fs-6">{{ $sankougi_chat_thread->title }}</div>
+                                                                                <div class="text-secondary ms-2">{{ '(参加者' . $sankougi_chat_thread->join_count . '人)' }}</div>
+                                                                            </div>
+                                                                            @break
+                                                                        @endforeach
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <p class="m-0">プロフィールを作成する</p>
+                                                <a href="{{ route('Home.sankougichat.profile.adduser') }}" class="btn btn-primary">作成</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    {{-- ローカルメモ --}}
+                    <div class="col-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="h5">ローカルメモ</div>
+                                <div class="row">
+                                    @foreach($localmemos->where('user_id', '=', Auth::id()) as $localmemo)
+                                        {{-- カード --}}
+                                        <div class="col-3">
+                                            <div class="card btn border p-0" data-bs-toggle="modal" data-bs-target="#LocalMemoModal_{{ $localmemo->id }}">
+                                                <div class="card-header bg-light p-1">
+                                                    <div class="text-start">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                                        </svg>  {{ $localmemo->title }}
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    @if($localmemo->image)
+                                                        <div class="modal-header border-bottom p-0">
+                                                            <img src="{{ asset('storage/localmemo/' . $localmemo->image) }}" width="100%" alt="">
+                                                        </div>
+                                                    @endif
+                                                    <div class="text-start p-1">
+                                                        {!! nl2br(htmlspecialchars($localmemo->content)) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- モーダル --}}
+                                        <div class="modal fade" id="LocalMemoModal_{{ $localmemo->id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    @if($localmemo->image)
+                                                        <div class="modal-header p-0">
+                                                            <img src="{{ asset('storage/localmemo/' . $localmemo->image) }}" class="rounded-top" width="100%" alt="">
+                                                        </div>
+                                                    @endif
+                                                    <div class="modal-body p-1">
+                                                        <div class="h5 text-secondary">タイトル</div>
+                                                        <div class="h5 mb-3">{{ $localmemo->title }}</div>
+                                                        <div class="h5 text-secondary">内容</div>
+                                                        <div class="h5">{!! nl2br(htmlspecialchars($localmemo->content)) !!}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
