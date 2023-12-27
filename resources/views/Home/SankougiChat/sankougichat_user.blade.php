@@ -51,7 +51,7 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <p class="text-secondary m-0">ヘッダーを登録</p>
+                                        <p class="text-secondary m-0">ヘッダーを登録(任意)</p>
                                         {{-- ヘッダー --}}
                                         <div class="mb-3">
                                             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#HeaderBackdrop">クリック</button>
@@ -76,7 +76,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="text-secondary m-0">アバターを登録</p>
+                                        <p class="text-secondary m-0">アバターを登録(任意)</p>
                                         {{-- アバター --}}
                                         <div class="mb-3">
                                             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#AvatarBackdrop">クリック</button>
@@ -111,15 +111,26 @@
                                         {{-- プレビュー用カード --}}
                                         <div class="card w-100">
                                             <div class="card-header position-relative p-0">
-                                                <img id="PreviewHeader" src="{{ asset('Home/Images/Header.png') }}" alt="" width="100%">
-                                                <img id="PreviewAvatar" src="https://images-ext-1.discordapp.net/external/K_k8DiDzLRy2cWzIBpGtor-pkriHzDcUHFkdz1zUbio/https/pbs.twimg.com/media/F-DaMcyWUAAMKSA.png" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%">
+                                                <img id="PreviewHeader" src="{{ asset('Home/SankougiChat/header/sample_header.jpeg') }}" alt="" width="100%">
+                                                <img id="PreviewAvatar" src="{{ asset('Home/SankougiChat/avatar/sample_avatar.jpeg') }}" class="position-absolute rounded-circle border" style="top: 60%; left: 5%;" width="20%">
                                             </div>
                                             <div class="card-body">
                                                 <div class="ms-4">
-                                                    <div id="PreviewName" class="fs-3 mt-5 pt-3">ソビエト社会主義共和国連邦くん</div>
+                                                    <div id="PreviewName" class="fs-3 mt-5 pt-3">埼玉県立三郷工業技術高等学校</div>
                                                     <div id="PreviewNameID" class="fs-5 text-secondary"></div>
                                                     <div id="PreviewContent" class="mt-2">
-                                                        ソビエト（ロシア語: Совет [sɐˈvʲet] ( 音声ファイル)、発音は「サヴィェート」）は、ロシア革命時のロシア帝国において、社会主義者の働きかけもありながら、主として自然発生的に形成された労働者・農民・兵士の評議会（理事会）。もしくはそれらの（建前ないし名目上の）後継組織であるソビエト連邦の議会。ラテン文字表記や英語では「Soviet」が一般的である。日本語のカタカナ表記としては「ソビエト」や「ソヴィエト」が比較的よく用いられるが、古い資料などでは「ソヴェト」「ソヴェート」という表記もある。
+                                                        教育目標：健康で健全な技術者を育成する<br>
+                                                        1 豊かな心を育み、人間尊重の精神を培う<br>
+                                                        2 基礎基本となる知識・技術・技能を習得させ、創造性あふれる技術者を育成する<br>
+                                                        3 体を鍛えるとともに、社会の一員としての自覚を高めさせる<br>
+                                                        <br>
+                                                        目指す学校像<br>
+                                                        「ものづくりの精神」に基づき、豊かな人間性を育成するとともに、学力向上をとおして、生徒の自信を高め、地域に貢献できる技術者を育成する<br>
+                                                        <br>
+                                                        重点目標<br>
+                                                        1 基礎学力や専門知識・技術の習得を重視し、学習指導を充実させる<br>
+                                                        2 生徒指導及び進路指導の充実を図り、社会人基礎力を身につけさせる<br>
+                                                        3 開かれた学校づくりに取り組み、工業高校の魅力を積極的に発信する<br>
                                                     </div>
                                                     <div class="text-secondary mt-3 pb-3">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
@@ -261,7 +272,20 @@
 
     // 自己紹介の入力を非同期で反映
     $('#contentInput').on('input', function(){
-        var Base = 'ソビエト（ロシア語: Совет [sɐˈvʲet] ( 音声ファイル)、発音は「サヴィェート」）は、ロシア革命時のロシア帝国において、社会主義者の働きかけもありながら、主として自然発生的に形成された労働者・農民・兵士の評議会（理事会）。もしくはそれらの（建前ないし名目上の）後継組織であるソビエト連邦の議会。ラテン文字表記や英語では「Soviet」が一般的である。日本語のカタカナ表記としては「ソビエト」や「ソヴィエト」が比較的よく用いられるが、古い資料などでは「ソヴェト」「ソヴェート」という表記もある。';
+        var Base = `
+            教育目標：健康で健全な技術者を育成する<br>
+            1 豊かな心を育み、人間尊重の精神を培う<br>
+            2 基礎基本となる知識・技術・技能を習得させ、創造性あふれる技術者を育成する<br>
+            3 体を鍛えるとともに、社会の一員としての自覚を高めさせる<br>
+            <br>
+            目指す学校像<br>
+            「ものづくりの精神」に基づき、豊かな人間性を育成するとともに、学力向上をとおして、生徒の自信を高め、地域に貢献できる技術者を育成する<br>
+            <br>
+            重点目標<br>
+            1 基礎学力や専門知識・技術の習得を重視し、学習指導を充実させる<br>
+            2 生徒指導及び進路指導の充実を図り、社会人基礎力を身につけさせる<br>
+            3 開かれた学校づくりに取り組み、工業高校の魅力を積極的に発信する<br>
+        `;
         var Target = $('#PreviewContent');
         $(Target).html($(this).val().replace(/\r?\n/g, '<br>'));
         if($(this).val() === ''){
