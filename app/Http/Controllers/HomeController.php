@@ -27,6 +27,7 @@ use App\Models\SankougiChatUser;
 use App\Models\Calendar;
 use App\Models\JoinOut;
 use App\Models\JoinOutRoom;
+use App\Models\JoinOutLog;
 use App\Models\PickUp;
 use App\Models\PickUpRead;
 
@@ -1044,6 +1045,19 @@ class HomeController extends Controller
                 'last_date' => $request->last_date,
                 'flag' => true,
             ]);
+        }
+
+        // ログを記録
+        if(JoinOutLog::count() != 30)
+        {
+            $joinout_log = new JoinOutLog;
+            $joinout_log->joinout_id = JoinOut::where('user_id', '=', Auth::id())->first()->id;
+            $joinout_log->joinout_room_id = JoinOutRoom::where('room', '=', $request->EnteredRoom)->first()->id;
+            $joinout_log->save();
+        }
+        else
+        {
+            JoinOutLog::oldest()->first()->delete();
         }
 
         return redirect()->route('Home.home');

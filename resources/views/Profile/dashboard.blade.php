@@ -393,6 +393,78 @@
                             </div>
                         </div>
                     </div>
+                    {{-- 入退室のログ --}}
+                    <div class="col-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="h5">実習室等の入退室状況(最大30件まで保管)</div>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-1">
+                                                番号
+                                            </div>
+                                            <div class="col-4">
+                                                名前
+                                            </div>
+                                            <div class="col-3">
+                                                部屋名
+                                            </div>
+                                            <div class="col-2">
+                                                入室時刻
+                                            </div>
+                                            <div class="col-2">
+                                                退出状況
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @foreach($joinout_logs as $joinout_log)
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                {{-- 番号 --}}
+                                                <div class="col-1">
+                                                    {{ $joinout_log->id }}
+                                                </div>
+                                                {{-- 名前 --}}
+                                                <div class="col-4">
+                                                    @foreach($joinouts->where('id', '=', $joinout_log->joinout_id) as $joinout)
+                                                        {{ $joinout->first_name . $joinout->last_name }}
+                                                        @break
+                                                    @endforeach
+                                                </div>
+                                                {{-- 部屋名 --}}
+                                                <div class="col-3">
+                                                    @foreach($joinouts->where('joinout_room_id', '=', $joinout_log->joinout_room_id) as $joinout)
+                                                        @foreach($joinout_rooms->where('id', '=', $joinout->joinout_room_id) as $joinout_room)
+                                                            {{ $joinout_room->room }}
+                                                            @break
+                                                        @endforeach
+                                                        @break
+                                                    @endforeach
+                                                </div>
+                                                {{-- 入室時間 --}}
+                                                <div class="col-2">
+                                                    {{ $joinout_log->updated_at->format('Y年m月d日 H時i分') }}
+                                                </div>
+                                                {{-- 退出時間 --}}
+                                                <div class="col-2">
+                                                    @foreach($joinouts->where('id', '=', $joinout_log->joinout_id) as $joinout)
+                                                        @if($joinout->flag)
+                                                            入室中です
+                                                            @break
+                                                        @else
+                                                            退室済み
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     {{-- ローカルメモ --}}
                     <div class="col-12 mt-3">
                         <div class="card">

@@ -25,6 +25,7 @@ use App\Models\SankougiChatUser;
 use App\Models\Calendar;
 use App\Models\JoinOut;
 use App\Models\JoinOutRoom;
+use App\Models\JoinOutLog;
 use App\Models\PickUp;
 use App\Models\PickUpRead;
 
@@ -57,6 +58,9 @@ class ProfileController extends Controller
             'sankougi_chat_follows'      => SankougiChatFollow::get(),
             'sankougi_chat_threads'      => SankougiChatThread::get(),
             'sankougi_chat_thread_joins' => SankougiChatThreadJoin::get(),
+            'joinouts'                    => JoinOut::get(),
+            'joinout_rooms'              => JoinOutRoom::get(),
+            'joinout_logs'               => JoinOutLog::get(),
         ]);
     }
 
