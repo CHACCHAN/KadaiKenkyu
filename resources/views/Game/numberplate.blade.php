@@ -11,10 +11,9 @@
         <table class="main"></table>
         <table class="select"></table>
         <div class="box">
-            <div class="check" onclick="check()">正解確認</div>
-            <div class="remove" onclick="remove()">消す</div>
+            <center><div class="check" onclick="check()">答えを判定</div></center>
+            <h2></h2>
         </div><br>
-        <h2></h2>
         <p id="PassageArea">(ここにカウントが表示されます)</p>
     </main>
     <div id="topSnack">
