@@ -12,7 +12,7 @@
         <table class="select"></table>
         <div class="box">
             <div class="check" onclick="check()">正解確認</div>
-            <div class="remove" onclick="remove()">消す</div>
+            <div class="remove" onclick="remove()">消すあ</div>
         </div><br>
         <h2></h2>
         <p id="PassageArea">(ここにカウントが表示されます)</p>
