@@ -448,7 +448,7 @@
                         ), 
                         array(
                             'Card_Title'  => 'カレンダー',
-                            'Card_Body'   => 'Googleカレンダーとも連携!',
+                            'Card_Body'   => 'カレンダーを確認できます！',
                             'Card_Date'   => '最終更新日: 2023年11月01日',
                             'Card_Image'  => asset('Home/Images/Calender.jpg'),
                             'Card_Link'   => route('Home.calendar'),
